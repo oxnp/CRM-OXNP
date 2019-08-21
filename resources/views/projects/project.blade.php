@@ -9,8 +9,8 @@
             <input class="form-control" name="name" value="{{$project['name']}}"/>
 
             <label class="control-label">price</label>
-            <select name="price"class="form-control">
-                <option value="Hour" @if($project['price'] == 'Hour') selected @endif>Hour</option>
+            <select name="price" class="form-control">
+                <option value="Hourly" @if($project['price'] == 'Hourly') selected @endif>Hourly</option>
                 <option value="Fixed" @if($project['price'] == 'Fixed') selected @endif>Fixed</option>
             </select>
 
@@ -39,7 +39,15 @@
             <label class="control-label">accesses</label>
             <input class="form-control" name="accesses" value="{{$project['accesses']}}"/>
 
-            <input type="hidden" name="participants_id" value="{{$project['participants_id']}}">
+         <!--   <input type="hidden" name="participants_id" value="{{$project['participants_id']}}"> -->
+            <label class="control-label">participants</label>
+            <select name="participants_id[]" multiple class="form-control">
+                @php $participants = explode(',',$project['participants_id']); @endphp
+                @foreach($users as $user)
+                    <option value="{{$user['id']}}" @if(in_array($user['id'],$participants)) selected @endif>{{$user['name']}} - {{$user['position']}}</option>
+                @endforeach
+            </select>
+
             <input name="_method" type="hidden" value="PUT">
             {{csrf_field()}}
             <input type="submit" class="form-control btn btn-primary" value="Save"/>
@@ -62,7 +70,7 @@ Client data
         @endforeach
     </ul>
     </div>
-        <div class="col-md-4">
+        <div class="col-md-4 hide">
             All user
             <select name="users" multiple class="form-control">
                 @foreach($users as $user)

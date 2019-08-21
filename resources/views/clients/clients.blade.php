@@ -10,7 +10,15 @@
         <label class="control-label">country</label>
         <input class="form-control" name="country"/>
         <label class="control-label">timezone</label>
-        <input class="form-control" name="timezone"/>
+        <select class="form-control" name="timezone">
+            @for($i=-8;$i<=12;$i++)
+                @if($i<0)
+                    <option value="(GMT{{$i}})">(GMT{{$i}})</option>
+                    @else
+                    <option value="(GMT+{{$i}})">(GMT+{{$i}})</option>
+                @endif
+            @endfor
+        </select>
         <label class="control-label">email</label>
         <input class="form-control" name="email"/>
         <label class="control-label">messanger</label>

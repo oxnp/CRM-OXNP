@@ -32,7 +32,7 @@ class Clients extends Model
             'who_join_user_id'=> $request->who_join_user_id
         ]);
         if($create){
-            return $create;
+            return $create->toArray();
         }else{
             return false;
         }

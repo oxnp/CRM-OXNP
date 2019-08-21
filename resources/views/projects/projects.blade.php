@@ -9,8 +9,8 @@
                 <input class="form-control" name="name"/>
 
                 <label class="control-label">price</label>
-                <select name="price"class="form-control">
-                    <option value="Hour">Hour</option>
+                <select name="price" class="form-control">
+                    <option value="Hourly">Hourly</option>
                     <option value="Fixed">Fixed</option>
                 </select>
 

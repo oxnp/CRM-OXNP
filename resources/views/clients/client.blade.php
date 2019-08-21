@@ -3,15 +3,51 @@
 
 @section('content')
     <div class="col-md-6">
-        Info project
+        Info Client
     <form action="{{route('clients_update',$client['id'])}}" name="client_update" method="POST">
-
+<!--
         @foreach($client as $key=>$val)
             @if ($key != 'id' && $key != 'comm_status_id' && $key != 'trust_id' && $key != 'who_join_user_id' && $key != 'created_at' && $key != 'updated_at')
                 <label class="control-label">{{$key}}</label>
                 <input class="form-control" name="{{$key}}" value="{{$client[$key]}}"/>
             @endif
         @endforeach
+-->
+            <label class="control-label">first_name</label>
+            <input class="form-control" name="first_name" value="{{$client['first_name']}}"/>
+
+            <label class="control-label">last_name</label>
+            <input class="form-control" name="last_name" value="{{$client['last_name']}}"/>
+
+            <label class="control-label">country</label>
+            <input class="form-control" name="country" value="{{$client['country']}}"/>
+
+            <label class="control-label">timezone</label>
+            <select class="form-control" name="timezone">
+                @for($i=-8;$i<=12;$i++)
+                    @if($i<0)
+                        <option value="(GMT{{$i}})" @if($client['timezone'] == '(GMT'.$i.')') selected @endif >(GMT{{$i}})</option>
+                    @else
+                        <option value="(GMT+{{$i}})" @if($client['timezone'] == '(GMT+'.$i.')') selected @endif >(GMT+{{$i}})</option>
+                    @endif
+                @endfor
+            </select>
+
+            <label class="control-label">email</label>
+            <input class="form-control" name="email" value="{{$client['email']}}"/>
+
+            <label class="control-label">messanger</label>
+            <input class="form-control" name="messanger" value="{{$client['messanger']}}"/>
+
+            <label class="control-label">description_client</label>
+            <input class="form-control" name="description_client" value="{{$client['description_client']}}"/>
+
+            <label class="control-label">other_info</label>
+            <input class="form-control" name="other_info" value="{{$client['other_info']}}"/>
+
+            <label class="control-label">other_info</label>
+            <input class="form-control" name="other_info" value="{{$client['other_info']}}"/>
+
             <label class="control-label">comm_status</label>
             <select class="form-control" name="comm_status_id">
                 @foreach($clients_statuses as $status)

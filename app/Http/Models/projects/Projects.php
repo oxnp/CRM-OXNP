@@ -42,7 +42,7 @@ class Projects extends Model
         ]);
 
         if($create){
-            return $create;
+            return $create->toArray();
         }else{
             return false;
         }
@@ -57,7 +57,7 @@ class Projects extends Model
             'description'=> $request->description,
             'curr_website'=> $request->curr_website,
             'old_website'=> $request->old_website,
-            'participants_id'=> $request->participants_id,
+            'participants_id'=> implode(',',$request->participants_id),
             'accesses'=> $request->accesses,
             'updated_at'=> Carbon::now()
         ));

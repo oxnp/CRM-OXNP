@@ -18,6 +18,7 @@ class clientsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $err = array();
     public function index()
     {
         $projects = Projects::getProjects();
@@ -41,9 +42,13 @@ class clientsController extends Controller
      */
     public function create(Request $request)
     {
+        $err = array();
         $add_client = Clients::addClient($request);
         if($add_client){
-            return redirect()->route('clients_list');
+            return redirect()->to(route('clients_list').'/'.$add_client['id']);
+        }else{
+            $this->err['create'] = false;
+            return  response()->json($this->err);
         }
     }
 
@@ -102,9 +107,13 @@ class clientsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $err = array();
         $client_update = Clients::updateClientById($id,$request);
         if($client_update){
             return redirect()->route('clients_detail',$id);
+        }else{
+            $this->err['update'] = false;
+            return  response()->json($this->err);
         }
     }
 

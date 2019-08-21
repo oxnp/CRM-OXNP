@@ -17,6 +17,7 @@ class projectsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public  $err = array();
     public function index()
     {
         $projects = Projects::getProjects();
@@ -38,9 +39,13 @@ class projectsController extends Controller
      */
     public function create(Request $request)
     {
-        $add_client = Projects::addProject($request);
-        if($add_client){
-            return redirect()->route('projects_list');
+
+        $add_project = Projects::addProject($request);
+        if($add_project){
+            return redirect()->to(route('projects_list').'/'.$add_project['id']);
+        }else{
+            $this->err['create'] = false;
+            return  response()->json($this->err);
         }
     }
 
@@ -104,6 +109,9 @@ class projectsController extends Controller
         $project_update = Projects::updateProjectById($id,$request);
         if($project_update){
             return redirect()->route('projects_detail',$id);
+        }else{
+            $this->err['update'] = false;
+            return  response()->json($this->err);
         }
 
     }
