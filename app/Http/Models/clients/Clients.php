@@ -14,7 +14,7 @@ class Clients extends Model
         return $clients;
     }
     public static function getClientById($id){
-        $client = Clients::find($id)->toArray();
+        $client = Clients::findOrFail($id)->toArray();
         return $client;
     }
     public static function addClient($request){

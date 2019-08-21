@@ -63,7 +63,7 @@
             <label class="control-label">who join</label>
             <select class="form-control" name="who_join_user_id">
                 @foreach($users as $user)
-                    <option value="{{$user->id}}" @if($user->id == $client['who_join_user_id']) selected @endif>{{$user->name}}</option>
+                    <option value="{{$user['id']}}" @if($user['id'] == $client['who_join_user_id']) selected @endif>{{$user['name']}}</option>
                 @endforeach
             </select>
             <input name="_method" type="hidden" value="PUT">

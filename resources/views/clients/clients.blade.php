@@ -42,7 +42,7 @@
         <label class="control-label">who join</label>
         <select class="form-control" name="who_join_user_id">
             @foreach($users as $user)
-                <option value="{{$user->id}}">{{$user->name}}</option>
+                <option value="{{$user['id']}}">{{$user['name']}}</option>
             @endforeach
         </select>
         {{csrf_field()}}
@@ -52,7 +52,7 @@
     <div class="col-md-3">
     <ul>
     @foreach($clients as $client)
-            <li><a href="{{route('clients_detail',$client->id)}}">{{$client->first_name}} {{$client->last_name}}</a></li>
+            <li><a href="{{route('clients_detail',$client['id'])}}">{{$client['first_name']}} {{$client['last_name']}}</a></li>
     @endforeach
     </ul>
     </div>

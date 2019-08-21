@@ -5,11 +5,13 @@ namespace App\Http\Controllers\projects;
 use App\Http\Models\users\UsersTest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Models\projects\Projects;
 use App\Http\Models\projects\ProjectsStatuses;
 use App\Http\Models\clients\Clients;
 use App\Http\Models\projects\ProjectsAttachments;
-
+use App\Http\Models\projects\ProjectsCategories;
+use Session;
 class projectsController extends Controller
 {
     /**
@@ -17,7 +19,8 @@ class projectsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public  $err = array();
+    public $err = array();
+    public $result_action = array();
     public function index()
     {
         $projects = Projects::getProjects();
@@ -42,6 +45,9 @@ class projectsController extends Controller
 
         $add_project = Projects::addProject($request);
         if($add_project){
+
+            $this->storeAttachmentsByProjectId($request,$add_project['id']);
+
             return redirect()->to(route('projects_list').'/'.$add_project['id']);
         }else{
             $this->err['create'] = false;
@@ -55,9 +61,26 @@ class projectsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeAttachmentsByProjectId(Request $request, $id)
     {
-        //
+       // dd($request->file('files'));
+        $count = count($request->file('files'));
+        $files_added = 0;
+        foreach($request->file('files') as $file) {
+
+            $storage = $file->store('public/projects/' . $id);
+            $name_file = explode('/', $storage);
+            $storage = '/storage/app/public/projects/' . $id . '/' . $name_file[3];
+            $type_file = $file->getClientOriginalExtension();
+            $project_attach = ProjectsAttachments::setAttachmentsByProjectId($id, $type_file, $storage);
+            if ($project_attach) {
+                $files_added++;
+            } else {
+                $this->err['attach_file'] = false;
+                return response()->json($this->err);
+            }
+        }
+        return redirect()->to(route('projects_list') . '/' . $id)->with(['files_added'=>$files_added]);
     }
 
     /**
@@ -68,21 +91,24 @@ class projectsController extends Controller
      */
     public function show($id)
     {
-        $projects = Projects::getProjects();
+        $projects_categories= ProjectsCategories::getProjectsCategories();
         $project =  Projects::getProjectById($id);
         $client = Clients::getClientById($project['client_id']);
         $project_attachemnts = ProjectsAttachments::getAttachmentsByProjectId($id);
         $participants_user =  Projects::ProjectsParticipants($project['participants_id']);
         $project_statuses = ProjectsStatuses::getProjectsStatuses();
         $users = UsersTest::getUsers();
+        $this->result_action['files_added'] = Session::get('files_added');
+
         return view('projects.project')->with([
-            'projects'=>$projects,
+            'projects_categories'=>$projects_categories,
             'client'=>$client,
             'project'=>$project,
             'participants_user'=>$participants_user,
             'project_attachemnts'=>$project_attachemnts,
             'project_statuses'=>$project_statuses,
-            'users'=>$users
+            'users'=>$users,
+            'result_action'=>$this->result_action
         ]);
     }
 

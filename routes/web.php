@@ -16,6 +16,8 @@ Route::get('/projects/{id}', "projects\projectsController@show")->name('projects
 
 Route::post('/projects', "projects\projectsController@create")->name('projects_add');
 Route::put('/projects/{id}', "projects\projectsController@update")->name('projects_update');
+
+Route::post('/projects-attachments/{id}', "projects\projectsController@storeAttachmentsByProjectId")->name('projects_attachment_by_id');
 /*projects*/
 
 /*clients*/

@@ -10,11 +10,11 @@ class Projects extends Model
 {
     protected $fillable =['status_id','client_id','name','date_start','date_end','price','description','curr_website','old_website','participants_id','accesses','updated_at'];
     public static function getProjects(){
-        $projects = Projects::where('status_id','!=',5)->select('name','id')->get();
+        $projects = Projects::where('status_id','!=',5)->select('name','id')->get()->toArray();
         return $projects;
     }
     public static function getProjectById($id){
-        $project = Projects::find($id)->toArray();
+        $project = Projects::findOrFail($id)->toArray();
         return $project;
     }
     public static  function ProjectsByClient($id){
@@ -23,7 +23,8 @@ class Projects extends Model
     }
     public static  function ProjectsParticipants($participants_id)
     {
-        $participants = UsersTest::whereIn('id', explode(',',$participants_id))->get()->toArray();
+        $participants = UsersTest::whereIn('id', explode(',',$participants_id))
+            ->leftjoin('users_role','users_role.role_id','users_tests.role_id')->get()->toArray();
         return $participants;
     }
     public static function addProject($request){

@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-4">
             Project data
-            <form action="{{route('projects_add')}}" name="project_add" method="POST">
+            <form action="{{route('projects_add')}}" name="project_add" method="POST"  enctype="multipart/form-data">
                 <label class="control-label">name</label>
                 <input class="form-control" name="name"/>
 
@@ -48,19 +48,22 @@
                 <!--<input class="form-control" type="text" name="participants_id"/> -->
                 <select name="participants_id[]" multiple class="form-control">
                     @foreach($users as $user)
-                        <option value="{{$user['id']}}">{{$user['name']}} - {{$user['position']}}</option>
+                        <option value="{{$user['id']}}">{{$user['name']}} - {{$user['role_name']}}</option>
                     @endforeach
                 </select>
+                <input type="file" name="files[]" multiple/>
                 {{csrf_field()}}
+
+
                 <input type="submit" class="form-control btn btn-primary" value="Save"/>
             </form>
 
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 hide">
             All user
             <select name="users" multiple class="form-control">
                 @foreach($users as $user)
-                    <option value="{{$user['id']}}">{{$user['name']}} - {{$user['position']}}</option>
+                    <option value="{{$user['id']}}">{{$user['name']}} - {{$user['role_name']}}</option>
                 @endforeach
             </select>
         </div>

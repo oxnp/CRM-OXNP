@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@extends('layouts.projects-list-sidebar')
+@extends('layouts.categories-list-sidebar')
 @section('content')
     <div class="row">
     <div class="col-md-4">
@@ -44,7 +44,7 @@
             <select name="participants_id[]" multiple class="form-control">
                 @php $participants = explode(',',$project['participants_id']); @endphp
                 @foreach($users as $user)
-                    <option value="{{$user['id']}}" @if(in_array($user['id'],$participants)) selected @endif>{{$user['name']}} - {{$user['position']}}</option>
+                    <option value="{{$user['id']}}" @if(in_array($user['id'],$participants)) selected @endif>{{$user['name']}} - {{$user['role_name']}}</option>
                 @endforeach
             </select>
 
@@ -66,7 +66,7 @@ Client data
     Participants
     <ul>
         @foreach($participants_user as $user)
-            <li data-attr="{{$user['id']}}">{{$user['name']}} - {{$user['position']}}</li>
+            <li data-attr="{{$user['id']}}">{{$user['name']}} - {{$user['role_name']}}</li>
         @endforeach
     </ul>
     </div>
@@ -74,7 +74,7 @@ Client data
             All user
             <select name="users" multiple class="form-control">
                 @foreach($users as $user)
-                    <option value="{{$user['id']}}">{{$user['name']}} - {{$user['position']}}</option>
+                    <option value="{{$user['id']}}">{{$user['name']}} - {{$user['role_name']}}</option>
                 @endforeach
             </select>
         </div>
@@ -82,12 +82,22 @@ Client data
     <div class="col-md-4">
         <div class="col-md-12">Attachment</div>
         @foreach($project_attachemnts as $attach)
-            @if($attach['type_file'] == 'image')
+            @if($attach['type_file'] == 'jpg' || $attach['type_file'] == 'png' || $attach['type_file'] == 'jpeg')
                 <div class="col-md-3">
-                <img src="{{$attach['storage']}}" style="width:100%"/>
+                    <img src="{{$attach['storage']}}" style="width:100%"/>
                 </div>
             @endif
         @endforeach
+    </div>
+    <div class="col-md-12">
+        <form action="{{ route('projects_attachment_by_id',$project['id']) }}" method="POST" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <input type="file" name="files[]" multiple/>
+            <input type="submit" value="Save"/>
+            @if($result_action['files_added'])
+                Upload {{$result_action['files_added']}} files
+            @endif
+        </form>
     </div>
 
 @stop

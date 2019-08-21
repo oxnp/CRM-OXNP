@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div class="row">
     <div class="col-md-2">
-        @yield('projects_list')
+        @yield('left-sidebar')
     </div>
     <div class="col-md-10">
         @yield('content')
