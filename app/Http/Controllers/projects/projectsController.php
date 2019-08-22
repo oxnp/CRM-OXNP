@@ -6,7 +6,6 @@ use App\Http\Models\tasks\Tasks;
 use App\Http\Models\users\UsersTest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Models\projects\Projects;
 use App\Http\Models\projects\ProjectsStatuses;
 use App\Http\Models\clients\Clients;
@@ -118,6 +117,30 @@ class projectsController extends Controller
         }
         $tasks = Tasks::getTasksByProjectId($id);
 
+        $tree_category_and_task = array();
+
+
+            foreach ($categories_to_project as $key_category => $category) {
+                $tree_category_and_task[$category['name']][] ='';
+                if (!empty($tasks)) {
+                    foreach ($tasks as $key_task => $task) {
+                        if ($task['category_id'] == $category['category_id'] && $task['relative_task_id'] == '0') {
+                            $tree_category_and_task[$category['name']][$category['category_id']][$task['id']] = $task;
+                            foreach ($tasks as $k => $v) {
+                                if ($task['id'] == $v['relative_task_id'] && $task['category_id'] == $category['category_id']) {
+                                    $tree_category_and_task[$category['name']][$category['category_id']][$task['id']]['subtasks'][] = $v;
+                                }
+                            }
+                        }
+                    }
+
+                if ($task['category_id'] != $category['category_id']) {
+                    $tree_category_and_task[$category['name']] = '';
+                }
+            }
+            }
+
+
         $project = Projects::getProjectById($id);
         $client = Clients::getClientById($project['client_id']);
         $project_attachemnts = ProjectsAttachments::getAttachmentsByProjectId($id);
@@ -135,7 +158,7 @@ class projectsController extends Controller
             'project_attachemnts'=>$project_attachemnts,
             'project_statuses'=>$project_statuses,
             'users'=>$users,
-            'tasks'=>$tasks,
+            'tree_category_and_task'=>$tree_category_and_task,
             'result_action'=>$this->result_action
         ]);
     }

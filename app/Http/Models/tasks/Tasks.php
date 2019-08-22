@@ -37,7 +37,10 @@ class Tasks extends Model
     }
 
     public static function getTaskById($id){
-        $task = Tasks::find($id)->get()->toArray();
+        $task = Tasks::where('id',$id)->get()->toArray();
+
+        dd($task);
+
         return $task;
     }
 }

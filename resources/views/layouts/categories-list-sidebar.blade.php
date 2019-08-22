@@ -1,11 +1,34 @@
 @section('left-sidebar')
 
     {{$project['name']}}
+    <!--
     <ul>
         @foreach($categories_to_project as $category)
             <li>{{$category['name']}}</li>
         @endforeach
 
+    </ul>
+    -->
+    <ul>
+    @foreach($tree_category_and_task as $name_category=>$data)
+        @if(is_array($data))
+        @foreach($data as $k=>$v)
+                <!--id category:{{$k}} -->
+                    @if(is_array($v))
+                        <ul>
+                        @foreach($v as $kdata=>$vdata)
+                                <li> <a href="{{route('tasks_show_detail',[$project['id'],$k,$vdata['id']])}}">{{$vdata['name']}}</a></li>
+                            @foreach($vdata['subtasks'] as $subk=>$subv)
+                                    <a href="{{route('tasks_show_detail',[$project['id'],$k,$subv['id']])}}">{{$subv['name']}}</a> <br>
+                            @endforeach
+                        @endforeach
+                        </ul>
+                    @endif
+        @endforeach
+
+            @endif
+            <li>{{$name_category}}</li>
+    @endforeach
     </ul>
     Select category
 @if($projects_categories)

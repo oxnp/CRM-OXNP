@@ -72,9 +72,11 @@ class tasksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($project_id,$category_id,$task_id)
     {
-        $task = Tasks::getTaskById($id);
+
+
+        $task = Tasks::getTaskById($task_id);
         dd($task);
     }
 
