@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\projects;
 
+use App\Http\Models\tasks\Tasks;
 use App\Http\Models\users\UsersTest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,6 +12,7 @@ use App\Http\Models\projects\ProjectsStatuses;
 use App\Http\Models\clients\Clients;
 use App\Http\Models\projects\ProjectsAttachments;
 use App\Http\Models\projects\ProjectsCategories;
+use App\Http\Models\projects\CategoriesToProject;
 use Session;
 class projectsController extends Controller
 {
@@ -35,6 +37,22 @@ class projectsController extends Controller
         ]);
     }
 
+    public function addCategoryToProjectById(Request $request, $id){
+
+        if(is_numeric($request->categoriestoproject)){
+            $add_caegory_to_project = CategoriesToProject::addCategoryToProjectById($id, $request->categoriestoproject);
+        }else{
+            $add_caegory_to_project = CategoriesToProject::addCategoryToProject($id, $request->categoriestoproject);
+        }
+
+        if ($add_caegory_to_project) {
+            return redirect()->route('projects_detail',$id);
+        } else {
+            $this->err['add_category_to_project'] = false;
+            return response()->json($this->err);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -42,12 +60,9 @@ class projectsController extends Controller
      */
     public function create(Request $request)
     {
-
         $add_project = Projects::addProject($request);
         if($add_project){
-
             $this->storeAttachmentsByProjectId($request,$add_project['id']);
-
             return redirect()->to(route('projects_list').'/'.$add_project['id']);
         }else{
             $this->err['create'] = false;
@@ -63,24 +78,25 @@ class projectsController extends Controller
      */
     public function storeAttachmentsByProjectId(Request $request, $id)
     {
-       // dd($request->file('files'));
-        $count = count($request->file('files'));
-        $files_added = 0;
-        foreach($request->file('files') as $file) {
-
-            $storage = $file->store('public/projects/' . $id);
-            $name_file = explode('/', $storage);
-            $storage = '/storage/app/public/projects/' . $id . '/' . $name_file[3];
-            $type_file = $file->getClientOriginalExtension();
-            $project_attach = ProjectsAttachments::setAttachmentsByProjectId($id, $type_file, $storage);
-            if ($project_attach) {
-                $files_added++;
-            } else {
-                $this->err['attach_file'] = false;
-                return response()->json($this->err);
+        $count_files = count($request->file('files'));
+        if($count_files > 0) {
+            $files_added = 0;
+            foreach ($request->file('files') as $file) {
+                $storage = $file->store('public/projects/' . $id);
+                $name_file = explode('/', $storage);
+                $storage = '/storage/app/public/projects/' . $id . '/' . $name_file[3];
+                $type_file = $file->getClientOriginalExtension();
+                $project_attach = ProjectsAttachments::setAttachmentsByProjectId($id, $type_file, $storage);
+                if ($project_attach) {
+                    $files_added++;
+                } else {
+                    $this->err['attach_file'] = false;
+                    return response()->json($this->err);
+                }
             }
+            return redirect()->to(route('projects_list') . '/' . $id)->with(['files_added'=>$files_added]);
         }
-        return redirect()->to(route('projects_list') . '/' . $id)->with(['files_added'=>$files_added]);
+        return redirect()->to(route('projects_list') . '/' . $id);
     }
 
     /**
@@ -91,8 +107,18 @@ class projectsController extends Controller
      */
     public function show($id)
     {
-        $projects_categories= ProjectsCategories::getProjectsCategories();
-        $project =  Projects::getProjectById($id);
+        $projects_categories = ProjectsCategories::getProjectsCategories();
+        $categories_to_project = CategoriesToProject::getCategoriesToProjectById($id);
+
+        foreach($projects_categories as $key=>$projects_category){
+            foreach($categories_to_project as $project_to_category)
+                if($projects_category['name'] == $project_to_category['name']) {
+                    unset($projects_categories[$key]);
+                }
+        }
+        $tasks = Tasks::getTasksByProjectId($id);
+
+        $project = Projects::getProjectById($id);
         $client = Clients::getClientById($project['client_id']);
         $project_attachemnts = ProjectsAttachments::getAttachmentsByProjectId($id);
         $participants_user =  Projects::ProjectsParticipants($project['participants_id']);
@@ -102,12 +128,14 @@ class projectsController extends Controller
 
         return view('projects.project')->with([
             'projects_categories'=>$projects_categories,
+            'categories_to_project'=>$categories_to_project,
             'client'=>$client,
             'project'=>$project,
             'participants_user'=>$participants_user,
             'project_attachemnts'=>$project_attachemnts,
             'project_statuses'=>$project_statuses,
             'users'=>$users,
+            'tasks'=>$tasks,
             'result_action'=>$this->result_action
         ]);
     }

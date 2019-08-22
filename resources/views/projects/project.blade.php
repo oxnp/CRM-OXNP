@@ -62,7 +62,7 @@ Client data
         @endforeach
     </ul>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 hide">
     Participants
     <ul>
         @foreach($participants_user as $user)
@@ -79,6 +79,7 @@ Client data
             </select>
         </div>
     </div>
+    <div class="row">
     <div class="col-md-4">
         <div class="col-md-12">Attachment</div>
         @foreach($project_attachemnts as $attach)
@@ -89,15 +90,18 @@ Client data
             @endif
         @endforeach
     </div>
-    <div class="col-md-12">
+    </div>
+    <div class="row">
+    <div class="col-md-4">
         <form action="{{ route('projects_attachment_by_id',$project['id']) }}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
             <input type="file" name="files[]" multiple/>
-            <input type="submit" value="Save"/>
+            <input type="submit" value="Upload"/>
             @if($result_action['files_added'])
                 Upload {{$result_action['files_added']}} files
             @endif
         </form>
+    </div>
     </div>
 
 @stop
