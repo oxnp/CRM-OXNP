@@ -18,9 +18,11 @@
                         <ul>
                         @foreach($v as $kdata=>$vdata)
                                 <li> <a href="{{route('tasks_show_detail',[$project['id'],$k,$vdata['id']])}}">{{$vdata['name']}}</a></li>
-                            @foreach($vdata['subtasks'] as $subk=>$subv)
-                                    <a href="{{route('tasks_show_detail',[$project['id'],$k,$subv['id']])}}">{{$subv['name']}}</a> <br>
-                            @endforeach
+                            @if(isset($vdata['subtasks']))
+                                @foreach($vdata['subtasks'] as $subk=>$subv)
+                                        <a href="{{route('tasks_show_detail',[$project['id'],$k,$subv['id']])}}">{{$subv['name']}}</a> <br>
+                                @endforeach
+                            @endif
                         @endforeach
                         </ul>
                     @endif

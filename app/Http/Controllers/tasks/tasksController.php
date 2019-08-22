@@ -23,15 +23,50 @@ class tasksController extends Controller
     }
 
     public function showAddTaskForm($project_id,$category_id){
+      //  $projects_categories = ProjectsCategories::getProjectsCategories();
+       // $categories_to_project = CategoriesToProject::getCategoriesToProjectById($project_id);
+
         $projects_categories = ProjectsCategories::getProjectsCategories();
         $categories_to_project = CategoriesToProject::getCategoriesToProjectById($project_id);
+
+        foreach($projects_categories as $key=>$projects_category){
+            foreach($categories_to_project as $project_to_category)
+                if($projects_category['name'] == $project_to_category['name']) {
+                    unset($projects_categories[$key]);
+                }
+        }
+        $tasks = Tasks::getTasksByProjectId($project_id);
+
+        $tree_category_and_task = array();
+
+
+        foreach ($categories_to_project as $key_category => $category) {
+            $tree_category_and_task[$category['name']][] ='';
+            if (!empty($tasks)) {
+                foreach ($tasks as $key_task => $task) {
+                    if ($task['category_id'] == $category['category_id'] && $task['relative_task_id'] == '0') {
+                        $tree_category_and_task[$category['name']][$category['category_id']][$task['id']] = $task;
+                        foreach ($tasks as $k => $v) {
+                            if ($task['id'] == $v['relative_task_id'] && $task['category_id'] == $category['category_id']) {
+                                $tree_category_and_task[$category['name']][$category['category_id']][$task['id']]['subtasks'][] = $v;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
         $project = Projects::getProjectById($project_id);
         return view('tasks.addtask')->with([
             'project_id'=>$project_id,
             'category_id'=>$category_id,
             'projects_categories'=>$projects_categories,
             'categories_to_project'=> $categories_to_project,
-            'project' => $project
+            'project' => $project,
+            'tree_category_and_task' =>$tree_category_and_task
         ]);
     }
 

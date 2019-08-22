@@ -119,7 +119,6 @@ class projectsController extends Controller
 
         $tree_category_and_task = array();
 
-
             foreach ($categories_to_project as $key_category => $category) {
                 $tree_category_and_task[$category['name']][] ='';
                 if (!empty($tasks)) {
@@ -133,10 +132,6 @@ class projectsController extends Controller
                             }
                         }
                     }
-
-                if ($task['category_id'] != $category['category_id']) {
-                    $tree_category_and_task[$category['name']] = '';
-                }
             }
             }
 
