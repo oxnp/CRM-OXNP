@@ -11,17 +11,26 @@
     -->
     <ul>
     @foreach($tree_category_and_task as $name_category=>$data)
+            <li>{{$name_category}} <a href="{{route('show_add_task_form',[$project['id'],array_key_first($data)])}}">+</a></li>
         @if(is_array($data))
         @foreach($data as $k=>$v)
                 <!--id category:{{$k}} -->
-                    @if(is_array($v))
+                    @if(is_array($v) && !empty($v))
                         <ul>
+
                         @foreach($v as $kdata=>$vdata)
-                                <li> <a href="{{route('tasks_show_detail',[$project['id'],$k,$vdata['id']])}}">{{$vdata['name']}}</a></li>
+
+                            @if(isset($vdata['id']))
+                                <li> <a href="{{route('tasks_show_detail',[$project['id'],$k,$vdata['id']])}}">{{$vdata['name']}}</a>
+                                    <a href="{{route('show_add_sub_task_form',[$project['id'],$k,$vdata['id']])}}">+</a>
+                                </li>
+                                @endif
                             @if(isset($vdata['subtasks']))
+                                <ul>
                                 @foreach($vdata['subtasks'] as $subk=>$subv)
-                                        <a href="{{route('tasks_show_detail',[$project['id'],$k,$subv['id']])}}">{{$subv['name']}}</a> <br>
+                                        <li><a href="{{route('subtasks_show_detail',[$project['id'],$k,$subv['id']])}}">{{$subv['name']}}</a></li>
                                 @endforeach
+                                </ul>
                             @endif
                         @endforeach
                         </ul>
@@ -29,7 +38,8 @@
         @endforeach
 
             @endif
-            <li>{{$name_category}}</li>
+
+
     @endforeach
     </ul>
     Select category

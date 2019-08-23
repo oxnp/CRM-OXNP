@@ -34,6 +34,13 @@ Route::put('/clients/{id}', 'clients\clientsController@update')->name('clients_u
 Route::get('/projects/{project_id}/category/{category_id}/add-task', 'tasks\tasksController@showAddTaskForm')->name('show_add_task_form');
 Route::post('/projects/{project_id}/category/{category_id}/add-task', 'tasks\tasksController@addTaskByProjectIdAndCategoryId')->name('tasks_add');
 
-Route::get('/projects/{project_id}/category/{category_id}/task/{task_id}', 'tasks\tasksController@show')->name('tasks_show_detail');
+Route::get('/projects/{project_id}/category/{category_id}/task/{task_id}/add-subtask', 'tasks\tasksController@showSubAddTaskForm')->name('show_add_sub_task_form');
+Route::post('/projects/{project_id}/category/{category_id}/task/{task_id}/add-subtask', 'tasks\tasksController@SubAddTask')->name('add_sub_task');
+
+Route::get('/projects/{project_id}/category/{category_id}/task/{task_id}', 'tasks\tasksController@showTask')->name('tasks_show_detail');
+Route::post('/projects/{project_id}/category/{category_id}/task/{task_id}', 'tasks\tasksController@updateTask')->name('tasks_update');
+
+Route::get('/projects/{project_id}/category/{category_id}/subtask/{task_id}', 'tasks\tasksController@showSubTask')->name('subtasks_show_detail');
+//Route::post('/projects/{project_id}/category/{category_id}/subtask/{task_id}', 'tasks\tasksController@updateSubTask')->name('subtasks_update');
 
 /*tasks*/

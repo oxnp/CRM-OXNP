@@ -10,4 +10,9 @@ class UsersTest extends Model
         $users = UsersTest::leftjoin('users_role','users_role.role_id','users_tests.role_id')->get()->toArray();
         return $users;
     }
+
+    public static  function getUsersByParticipantsId($participant_id){
+        $users = UsersTest::whereIn('id',explode(',',$participant_id))->leftjoin('users_role','users_role.role_id','users_tests.role_id')->get()->toArray();
+        return $users;
+    }
 }

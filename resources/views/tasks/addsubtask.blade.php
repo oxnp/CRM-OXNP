@@ -2,7 +2,8 @@
 @extends('layouts.categories-list-sidebar')
 @section('content')
     <div class="col-md-4">
-    <form action="{{route('tasks_add',[$project_id,$category_id])}}" method="POST">
+        Parent Task {{$task['name']}}
+    <form action="{{route('add_sub_task',[$project_id,$category_id,$task['id']])}}" method="POST">
         <label class="control-label">Name task</label>
         <input type="text" name="name"  class="form-control"/>
 
@@ -14,9 +15,9 @@
 
         <label class="control-label">executor_id</label>
         <select type="text" name="executor_id"  class="form-control">
-        @foreach($users_by_project as $user)
-            <option value="{{$user['id']}}">{{$user['name']}} - {{$user['role_name']}}</option>
-        @endforeach
+            @foreach($users_by_project as $user)
+                <option value="{{$user['id']}}">{{$user['name']}} - {{$user['role_name']}}</option>
+            @endforeach
         </select>
 
         <label class="control-label">dead_line</label>
