@@ -9,39 +9,68 @@
 
     </ul>
     -->
-    <ul>
-    @foreach($tree_category_and_task as $name_category=>$data)
-            <li>{{$name_category}} <a href="{{route('show_add_task_form',[$project['id'],array_key_first($data)])}}">+</a></li>
-        @if(is_array($data))
-        @foreach($data as $k=>$v)
+
+    <ul class="menu">
+        @foreach($tree_category_and_task as $name_category=>$data)
+            <li class="list"><a href="#">{{$name_category}}</a>
+            @if(is_array($data))
+                @foreach($data as $k=>$v)
                 <!--id category:{{$k}} -->
                     @if(is_array($v) && !empty($v))
-                        <ul>
+                        <ul class="items">
+                            <a href="{{route('show_add_task_form',[$project['id'],array_key_first($data)])}}"><i class="fa fa-plus"></i> Add task</a>
+                            <a href="{{route('show_add_bug_form',[$project['id'],$k])}}"><i class="fa fa-plus"></i> Add bug</a>
+                            @if (isset($tree_category_and_task[$name_category][$k]['tasks']))
+                                <li class="list tasks"><a href="#">Tasks</a>
+                                    <ul class="items">
+                                    @foreach($v as $kdata=>$vdata)
+                                        @if($kdata == 'tasks' && isset($tree_category_and_task[$name_category][$k]['tasks']))
+                                            @foreach ($tree_category_and_task[$name_category][$k]['tasks'] as $key=>$task)
+                                                    @if(isset($task['subtasks']))
+                                                    <li class="list files"> <a href="{{route('tasks_show_detail',[$project['id'],$k,$task['id']])}}">{{$task['name']}}</a> <a href="{{route('show_add_sub_task_form',[$project['id'],$k,$task['id']])}}"><i class="fa fa-plus"></i> Add sub-task</a>
+                                                        <ul class="items">
+                                                            @foreach($task['subtasks'] as $subk=>$subv)
+                                                                <li><a href="{{route('subtasks_show_detail',[$project['id'],$k,$subv['id']])}}">{{$subv['name']}}</a></li>
+                                                            @endforeach
+                                                        </ul>
+                                                        @php unset($task['subtasks']) @endphp
+                                                    @else
+                                                        <li class="list files"><a href="{{route('tasks_show_detail',[$project['id'],$k,$task['id']])}}">{{$task['name']}}</a>
+                                                            <ul class="items">
+                                                                <li><a href="{{route('show_add_sub_task_form',[$project['id'],$k,$task['id']])}}"><i class="fa fa-plus"></i>  Add sub-task</a></li>
+                                                            </ul>
+                                                    @endif
+                                                    </li>
+                                            @endforeach
+                                        @endif
+                                        @php unset($tree_category_and_task[$name_category][$k]['tasks']) @endphp
+                                    @endforeach
+                                </ul>
+                            @else
 
-                        @foreach($v as $kdata=>$vdata)
-
-                            @if(isset($vdata['id']))
-                                <li> <a href="{{route('tasks_show_detail',[$project['id'],$k,$vdata['id']])}}">{{$vdata['name']}}</a>
-                                    <a href="{{route('show_add_sub_task_form',[$project['id'],$k,$vdata['id']])}}">+</a>
-                                </li>
-                                @endif
-                            @if(isset($vdata['subtasks']))
-                                <ul>
-                                @foreach($vdata['subtasks'] as $subk=>$subv)
-                                        <li><a href="{{route('subtasks_show_detail',[$project['id'],$k,$subv['id']])}}">{{$subv['name']}}</a></li>
-                                @endforeach
+                            @endif
+                            @if (isset($tree_category_and_task[$name_category][$k]['bugs']))
+                                    <li class="list bugs"><a href="#">Bugs</a>
+                                    <ul class="items">
+                                    @foreach($v as $kdata=>$vdata)
+                                        @if($kdata == 'bugs' && isset($tree_category_and_task[$name_category][$k]['bugs']))
+                                            @foreach ($tree_category_and_task[$name_category][$k]['bugs'] as $bug)
+                                                <li class="list-bugs files"><a href="{{route('show_bug',[$project['id'],$k,$bug['id']])}}">{{$bug['name']}}</a></li>
+                                            @endforeach
+                                            @php unset($tree_category_and_task[$name_category][$k]['bugs']) @endphp
+                                        @endif
+                                    @endforeach
                                 </ul>
                             @endif
-                        @endforeach
-                        </ul>
+                            </li>
                     @endif
-        @endforeach
-
+                        </ul>
+                @endforeach
             @endif
-
-
-    @endforeach
+        @endforeach
     </ul>
+
+
     Select category
 @if($projects_categories)
     <form name="add-category-to-project" action="{{route('add_category_to_project',$project['id'])}}" method="POST">

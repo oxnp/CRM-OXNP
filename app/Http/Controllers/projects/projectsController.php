@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\projects;
 
 use App\Http\Models\tasks\Tasks;
+use App\Http\Models\bugs\Bugs;
 use App\Http\Models\users\UsersTest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -109,9 +110,10 @@ class projectsController extends Controller
     {
         $projects_categories = ProjectsCategories::getProjectsCategories();
         $categories_to_project = CategoriesToProject::getCategoriesToProjectById($id);
+        $bugs = Bugs::getBugsByProjectId($id);
         $projects_categories = SupportLeftSideBar::getDiffCategory($categories_to_project,$projects_categories);
         $tasks = Tasks::getTasksByProjectId($id);
-        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks);
+        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
 
         $project = Projects::getProjectById($id);
         $client = Clients::getClientById($project['client_id']);

@@ -13,6 +13,13 @@
         <input type="text" name="sprint_id"  class="form-control" value="{{$task['sprint_id']}}"/>
 
         <label class="control-label">executor_id</label>
+        <select type="text" name="director_id"  class="form-control">
+            @foreach($users as $user)
+                <option value="{{$user['id']}}" @if($task['director_id'] == $user['id']) selected @endif >{{$user['name']}} - {{$user['role_name']}}</option>
+            @endforeach
+        </select>
+
+        <label class="control-label">executor_id</label>
         <select type="text" name="executor_id"  class="form-control">
             @foreach($users_by_project as $user)
                 <option value="{{$user['id']}}" @if($task['executor_id'] == $user['id']) selected @endif >{{$user['name']}} - {{$user['role_name']}}</option>
@@ -39,7 +46,7 @@
 
         <label class="control-label">time_tracker</label>
         <input type="text" name="time_tracker"  class="form-control" value="{{$task['time_tracker']}}"/>
-
+        <input name="_method" type="hidden" value="PUT">
         {{csrf_field()}}
         <input type="submit" class="form-control btn btn-primary" value="Add Task"/>
     </form>

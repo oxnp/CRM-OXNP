@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class Tasks extends Model
 {
-    protected $fillable =['name','description','sprint_id','executor_id','dead_line','project_id','category_id','relative_task_id','status_id','priority_id','time_estimate','time_tracker','created_at','updated_at'];
+    protected $fillable =['name','description','sprint_id','executor_id','director_id','dead_line','project_id','category_id','relative_task_id','status_id','priority_id','time_estimate','time_tracker','created_at','updated_at'];
     public static function addTask($request,$project_id,$category_id,$main_task = 0){
 
         $add_task = Tasks::create([
@@ -15,6 +15,7 @@ class Tasks extends Model
         'description'=>$request->description,
         'sprint_id'=>$request->sprint_id,
         'executor_id'=>$request->executor_id,
+        'director_id'=>$request->director_id,
         'dead_line'=>$request->dead_line,
         'project_id'=>$project_id,
         'category_id'=>$category_id,
@@ -32,12 +33,13 @@ class Tasks extends Model
         }
     }
 
-    public static function updateTask($request,$id){
+    public static function updateTask($request,$category_id,$id){
         $update = Tasks::find($id)->update(array(
             'name'=>$request->name,
             'description'=>$request->description,
             'sprint_id'=>$request->sprint_id,
             'executor_id'=>$request->executor_id,
+            'director_id'=>$request->director_id,
             'dead_line'=>$request->dead_line,
             'status_id'=>$request->status_id,
             'priority_id'=>$request->priority_id,

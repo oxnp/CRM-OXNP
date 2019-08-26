@@ -13,6 +13,13 @@
         <label class="control-label">sprint_id</label>
         <input type="text" name="sprint_id"  class="form-control"/>
 
+        <label class="control-label">director_id</label>
+        <select type="text" name="director_id"  class="form-control">
+            @foreach($users as $user)
+                <option value="{{$user['id']}}">{{$user['name']}} - {{$user['role_name']}}</option>
+            @endforeach
+        </select>
+
         <label class="control-label">executor_id</label>
         <select type="text" name="executor_id"  class="form-control">
             @foreach($users_by_project as $user)

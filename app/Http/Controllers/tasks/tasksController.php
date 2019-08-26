@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\tasks;
 
 
+use App\Http\Models\bugs\Bugs;
 use App\Http\Models\projects\CategoriesToProject;
 use App\Http\Models\projects\Projects;
 use App\Http\Models\users\UsersTest;
@@ -26,14 +27,16 @@ class tasksController extends Controller
         //
     }
 
-    public function showSubAddTaskForm($project_id, $category_id,$task_id){
+    public function showAddSubTaskForm($project_id, $category_id,$task_id){
         $projects_categories = ProjectsCategories::getProjectsCategories();
         $categories_to_project = CategoriesToProject::getCategoriesToProjectById($project_id);
+        $bugs = Bugs::getBugsByProjectId($project_id);
         $projects_categories = SupportLeftSideBar::getDiffCategory($categories_to_project,$projects_categories);
         $tasks = Tasks::getTasksByProjectId($project_id);
-        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks);
+        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
+        $users = UsersTest::getUsers();
 
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $tasks_priority = TasksPriority::geTasksPriority();
@@ -46,6 +49,7 @@ class tasksController extends Controller
             'categories_to_project'=> $categories_to_project,
             'project' => $project,
             'task'=>$task,
+            'users'=>$users,
             'users_by_project'=>$users_by_project,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
@@ -58,12 +62,14 @@ class tasksController extends Controller
     public function showAddTaskForm($project_id,$category_id){
         $projects_categories = ProjectsCategories::getProjectsCategories();
         $categories_to_project = CategoriesToProject::getCategoriesToProjectById($project_id);
+        $bugs = Bugs::getBugsByProjectId($project_id);
         $projects_categories = SupportLeftSideBar::getDiffCategory($categories_to_project,$projects_categories);
         $tasks = Tasks::getTasksByProjectId($project_id);
-        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks);
+        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
 
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
+        $users = UsersTest::getUsers();
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
 
@@ -74,13 +80,14 @@ class tasksController extends Controller
             'categories_to_project'=>$categories_to_project,
             'project'=>$project,
             'users_by_project'=>$users_by_project,
+            'users'=>$users,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
             'tree_category_and_task'=>$tree_category_and_task
         ]);
     }
 
-    public function addTaskByProjectIdAndCategoryId(Request $request,$project_id,$category_id){
+    public function addTask(Request $request,$project_id,$category_id){
         $add_task = Tasks::addTask($request,$project_id,$category_id);
         if ($add_task){
             return redirect()->to(route('projects_list').'/'.$project_id);
@@ -136,10 +143,12 @@ class tasksController extends Controller
         $projects_categories = ProjectsCategories::getProjectsCategories();
         $categories_to_project = CategoriesToProject::getCategoriesToProjectById($project_id);
         $projects_categories = SupportLeftSideBar::getDiffCategory($categories_to_project,$projects_categories);
+        $bugs = Bugs::getBugsByProjectId($project_id);
         $tasks = Tasks::getTasksByProjectId($project_id);
-        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks);
+        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
+        $users = UsersTest::getUsers();
 
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $tasks_priority = TasksPriority::geTasksPriority();
@@ -152,6 +161,7 @@ class tasksController extends Controller
             'categories_to_project'=>$categories_to_project,
             'project'=>$project,
             'task'=>$task,
+            'users'=>$users,
             'users_by_project'=>$users_by_project,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
@@ -167,12 +177,14 @@ class tasksController extends Controller
         $projects_categories = ProjectsCategories::getProjectsCategories();
         $categories_to_project = CategoriesToProject::getCategoriesToProjectById($project_id);
         $projects_categories = SupportLeftSideBar::getDiffCategory($categories_to_project,$projects_categories);
+        $bugs = Bugs::getBugsByProjectId($project_id);
         $tasks = Tasks::getTasksByProjectId($project_id);
-        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks);
+        $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
 
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
+        $users = UsersTest::getUsers();
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
 
@@ -186,6 +198,7 @@ class tasksController extends Controller
             'project'=>$project,
             'task'=>$task,
             'users_by_project'=>$users_by_project,
+            'users'=>$users,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
             'tree_category_and_task'=>$tree_category_and_task
@@ -193,8 +206,8 @@ class tasksController extends Controller
     }
 
     public function updateTask(Request $request,$project_id,$category_id,$id)
-    {
-        $task_update = Tasks::updateTask($request,$id);
+    { 
+        $task_update = Tasks::updateTask($request,$category_id,$id);
         if($task_update){
             return redirect()->route('projects_detail',$project_id);
         }else{

@@ -32,15 +32,23 @@ Route::put('/clients/{id}', 'clients\clientsController@update')->name('clients_u
 
 /*tasks*/
 Route::get('/projects/{project_id}/category/{category_id}/add-task', 'tasks\tasksController@showAddTaskForm')->name('show_add_task_form');
-Route::post('/projects/{project_id}/category/{category_id}/add-task', 'tasks\tasksController@addTaskByProjectIdAndCategoryId')->name('tasks_add');
+Route::post('/projects/{project_id}/category/{category_id}/add-task', 'tasks\tasksController@addTask')->name('tasks_add');
 
-Route::get('/projects/{project_id}/category/{category_id}/task/{task_id}/add-subtask', 'tasks\tasksController@showSubAddTaskForm')->name('show_add_sub_task_form');
+Route::get('/projects/{project_id}/category/{category_id}/task/{task_id}/add-subtask', 'tasks\tasksController@showAddSubTaskForm')->name('show_add_sub_task_form');
 Route::post('/projects/{project_id}/category/{category_id}/task/{task_id}/add-subtask', 'tasks\tasksController@SubAddTask')->name('add_sub_task');
 
 Route::get('/projects/{project_id}/category/{category_id}/task/{task_id}', 'tasks\tasksController@showTask')->name('tasks_show_detail');
-Route::post('/projects/{project_id}/category/{category_id}/task/{task_id}', 'tasks\tasksController@updateTask')->name('tasks_update');
+Route::put('/projects/{project_id}/category/{category_id}/task/{task_id}', 'tasks\tasksController@updateTask')->name('tasks_update');
 
 Route::get('/projects/{project_id}/category/{category_id}/subtask/{task_id}', 'tasks\tasksController@showSubTask')->name('subtasks_show_detail');
 //Route::post('/projects/{project_id}/category/{category_id}/subtask/{task_id}', 'tasks\tasksController@updateSubTask')->name('subtasks_update');
 
 /*tasks*/
+
+/*bugs*/
+Route::get('/projects/{project_id}/category/{category_id}/bug', 'bugs\bugsController@showAddBugForm')->name('show_add_bug_form');
+Route::get('/projects/{project_id}/category/{category_id}/bug/{bug_id}', 'bugs\bugsController@showBug')->name('show_bug');
+
+Route::post('/projects/{project_id}/category/{category_id}/bug', 'bugs\bugsController@addBug')->name('add_bug');
+Route::put('/projects/{project_id}/category/{category_id}/bug/{bug_id}', 'bugs\bugsController@updateBug')->name('update_bug');
+/*bugs*/
