@@ -51,16 +51,14 @@
         <input type="submit" class="form-control btn btn-primary" value="Save"/>
     </form>
         <div class="row">
-
                 <div class="col-md-12">Attachment</div>
-                @foreach($tasks_attachemnts as $attach)
+                @foreach($task_attachments as $attach)
                     @if($attach['type_file'] == 'jpg' || $attach['type_file'] == 'png' || $attach['type_file'] == 'jpeg')
                         <div class="col-md-3">
                             <img src="{{$attach['storage']}}" style="width:100%"/>
                         </div>
                     @endif
                 @endforeach
-
         </div>
         <form action="{{ route('tasks_attachment_by_id',[$project_id,$task['id']])}}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}

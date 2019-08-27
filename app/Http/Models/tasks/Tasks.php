@@ -26,8 +26,12 @@ class Tasks extends Model
         'time_tracker'=>$request->time_tracker
         ]);
 
+
+
         if($add_task){
+
             return $add_task->toArray();
+
         }else{
             return false;
         }

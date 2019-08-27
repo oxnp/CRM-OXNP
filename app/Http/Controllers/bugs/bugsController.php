@@ -12,11 +12,40 @@ use App\Http\Models\bugs\BugsStatuses;
 use App\Http\Models\users\UsersTest;
 use Illuminate\Http\Request;
 use App\Http\Models\bugs\Bugs;
+use App\Http\Models\bugs\BugsAttachments;
 use App\Http\Controllers\Controller;
-
+use Session;
 class bugsController extends Controller
 {
     public $err = array();
+
+    public function storeAttachmentsByBugId(Request $request,$project_id, $bug_id)
+    {
+
+        $count_files = count($request->file('files'));
+
+        if($count_files > 0) {
+            $files_added = 0;
+            foreach ($request->file('files') as $file) {
+                $storage = $file->store('public/projects/'.$project_id.'/bugs/' . $bug_id);
+                $name_file = explode('/', $storage);
+
+                $storage = '/storage/app/public/projects/'.$project_id.'/bugs/'. $bug_id .'/'. $name_file[5];
+
+                $type_file = $file->getClientOriginalExtension();
+                $project_attach = BugsAttachments::setAttachmentsByBugId($bug_id, $type_file, $storage);
+                if ($project_attach) {
+                    $files_added++;
+                } else {
+                    $this->err['attach_file'] = false;
+                    return response()->json($this->err);
+                }
+            }
+            return back()->with(['files_added'=>$files_added]);
+        }
+        return back();
+    }
+
     public function showAddBugForm($project_id,$category_id){
         $projects_categories = ProjectsCategories::getProjectsCategories();
         $categories_to_project = CategoriesToProject::getCategoriesToProjectById($project_id);
@@ -57,6 +86,8 @@ class bugsController extends Controller
         $users = UsersTest::getUsers();
         $bugs_statuses = BugsStatuses::getBugsStatuses();
         $bugs_priorities = BugsPriorities::getBugsPriorities();
+        $bugs_attachments = BugsAttachments::getAttachmentsByBugId($bug_id);
+        $this->result_action['files_added'] = Session::get('files_added');
 
         return view('bugs.showbugs')->with([
             'project_id'=>$project_id,
@@ -65,17 +96,20 @@ class bugsController extends Controller
             'categories_to_project'=> $categories_to_project,
             'project' => $project,
             'bug'=>$bug,
+            'bugs_attachments'=>$bugs_attachments,
             'users'=>$users,
             'users_by_project'=>$users_by_project,
             'bugs_statuses'=>$bugs_statuses,
             'bugs_priorities'=>$bugs_priorities,
-            'tree_category_and_task' =>$tree_category_and_task
+            'tree_category_and_task' =>$tree_category_and_task,
+            'result_action'=>$this->result_action
         ]);
     }
 
     public function addBug(Request $request,$project_id,$category_id){
         $add_bug = Bugs::addBug($request,$project_id,$category_id);
         if ($add_bug){
+            $this->storeAttachmentsByBugId($request,$project_id,$add_bug['id']);
             return redirect()->to(route('projects_list').'/'.$project_id);
         }else{
             $this->err['create_bug'] = false;

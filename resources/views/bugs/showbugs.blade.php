@@ -58,6 +58,23 @@
             {{csrf_field()}}
             <input type="submit" class="form-control btn btn-primary" value="Update bug"/>
         </form>
-
+        <div class="row">
+            <div class="col-md-12">Attachment</div>
+            @foreach($bugs_attachments as $attach)
+                @if($attach['type_file'] == 'jpg' || $attach['type_file'] == 'png' || $attach['type_file'] == 'jpeg')
+                    <div class="col-md-3">
+                        <img src="{{$attach['storage']}}" style="width:100%"/>
+                    </div>
+                @endif
+            @endforeach
+        </div>
+        <form action="{{ route('bugs_attachment_by_id',[$project_id,$bug['id']])}}" method="POST" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <input type="file" name="files[]" multiple/>
+            <input type="submit" value="Upload"/>
+            @if($result_action['files_added'])
+                Upload {{$result_action['files_added']}} files
+            @endif
+        </form>
     </div>
 @stop

@@ -13,11 +13,13 @@ class TasksAttachments extends Model
         return $attachments;
     }
     public static function setAttachmentsByTaskId($id,$type_file,$storage){
+
         $task_attach = TasksAttachments::create([
             'task_id'=>$id,
             'type_file'=>$type_file,
             'storage'=>$storage,
         ]);
+
         if($task_attach){
             return $task_attach->toArray();
         }else{

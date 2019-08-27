@@ -3,7 +3,7 @@
 @section('content')
     <div class="col-md-4">
         Parent Task {{$task['name']}}
-    <form action="{{route('add_sub_task',[$project_id,$category_id,$task['id']])}}" method="POST">
+    <form action="{{route('add_sub_task',[$project_id,$category_id,$task['id']])}}" method="POST" enctype="multipart/form-data">
         <label class="control-label">Name task</label>
         <input type="text" name="name"  class="form-control"/>
 
@@ -48,7 +48,7 @@
 
         <label class="control-label">time_tracker</label>
         <input type="text" name="time_tracker"  class="form-control"/>
-
+        <input type="file" name="files[]" multiple/>
         {{csrf_field()}}
         <input type="submit" class="form-control btn btn-primary" value="Add Task"/>
     </form>

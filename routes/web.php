@@ -54,6 +54,8 @@ Route::get('/projects/{project_id}/category/{category_id}/bug/{bug_id}', 'bugs\b
 
 Route::post('/projects/{project_id}/category/{category_id}/bug', 'bugs\bugsController@addBug')->name('add_bug');
 Route::put('/projects/{project_id}/category/{category_id}/bug/{bug_id}', 'bugs\bugsController@updateBug')->name('update_bug');
+
+Route::post('/bugs-attachments/projects/{project_id}/bug/{bug_id}', 'bugs\bugsController@storeAttachmentsByBugId')->name('bugs_attachment_by_id');
 /*bugs*/
 
 /*attachments*/

@@ -2,7 +2,7 @@
 @extends('layouts.categories-list-sidebar')
 @section('content')
     <div class="col-md-4">
-        <form action="{{route('add_bug',[$project_id,$category_id])}}" method="POST">
+        <form action="{{route('add_bug',[$project_id,$category_id])}}" method="POST" enctype="multipart/form-data">
             <label class="control-label">name</label>
             <input name="name" class="form-control"/>
 
@@ -54,7 +54,7 @@
 
             <label class="control-label">arounds</label>
             <input name="arounds" class="form-control"/>
-
+            <input type="file" name="files[]" multiple/>
             {{csrf_field()}}
             <input type="submit" class="form-control btn btn-primary" value="Add Bug"/>
         </form>
