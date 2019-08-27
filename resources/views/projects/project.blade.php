@@ -93,7 +93,7 @@ Client data
     </div>
     <div class="row">
     <div class="col-md-4">
-        <form action="{{ route('projects_attachment_by_id',$project['id']) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('projects_attachment_by_id',$project['id'])}}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
             <input type="file" name="files[]" multiple/>
             <input type="submit" value="Upload"/>

@@ -41,7 +41,10 @@ Route::get('/projects/{project_id}/category/{category_id}/task/{task_id}', 'task
 Route::put('/projects/{project_id}/category/{category_id}/task/{task_id}', 'tasks\tasksController@updateTask')->name('tasks_update');
 
 Route::get('/projects/{project_id}/category/{category_id}/subtask/{task_id}', 'tasks\tasksController@showSubTask')->name('subtasks_show_detail');
-//Route::post('/projects/{project_id}/category/{category_id}/subtask/{task_id}', 'tasks\tasksController@updateSubTask')->name('subtasks_update');
+
+Route::post('/projects/{project_id}/category/{category_id}/subtask/{task_id}', 'tasks\tasksController@updateSubTask')->name('subtasks_update');
+
+Route::post('/tasks-attachments/projects/{project_id}/task/{task_id}', 'tasks\tasksController@storeAttachmentsByTaskId')->name('tasks_attachment_by_id');
 
 /*tasks*/
 
@@ -52,3 +55,7 @@ Route::get('/projects/{project_id}/category/{category_id}/bug/{bug_id}', 'bugs\b
 Route::post('/projects/{project_id}/category/{category_id}/bug', 'bugs\bugsController@addBug')->name('add_bug');
 Route::put('/projects/{project_id}/category/{category_id}/bug/{bug_id}', 'bugs\bugsController@updateBug')->name('update_bug');
 /*bugs*/
+
+/*attachments*/
+
+/*attachments*/

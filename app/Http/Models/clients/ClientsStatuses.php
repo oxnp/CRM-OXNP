@@ -9,5 +9,5 @@ class ClientsStatuses extends Model
    public static function getClientsStatuses(){
        $clients_statuses = ClientsStatuses::all();
        return $clients_statuses;
-}
+    }
 }

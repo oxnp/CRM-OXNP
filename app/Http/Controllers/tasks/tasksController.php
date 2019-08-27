@@ -14,6 +14,8 @@ use App\Http\Models\tasks\TasksPriority;
 use App\Http\Models\tasks\TasksStatuses;
 use App\Http\Models\projects\ProjectsCategories;
 use App\Http\Models\supporting_function\SupportLeftSideBar;
+use App\Http\Models\tasks\TasksAttachments;
+use Session;
 class tasksController extends Controller
 {
     /**
@@ -22,9 +24,34 @@ class tasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public $err = array();
+    public $result_action = array();
     public function index()
     {
         //
+    }
+    public function storeAttachmentsByTaskId(Request $request,$project_id, $task_id)
+    {
+        $count_files = count($request->file('files'));
+        if($count_files > 0) {
+            $files_added = 0;
+            foreach ($request->file('files') as $file) {
+                $storage = $file->store('public/projects/'.$project_id.'/tasks/' . $task_id);
+                $name_file = explode('/', $storage);
+
+                //dd($name_file);
+                $storage = '/storage/app/public/projects/'.$project_id.'/tasks/'. $task_id .'/'. $name_file[5];
+                $type_file = $file->getClientOriginalExtension();
+                $project_attach = TasksAttachments::setAttachmentsByTaskId($task_id, $type_file, $storage);
+                if ($project_attach) {
+                    $files_added++;
+                } else {
+                    $this->err['attach_file'] = false;
+                    return response()->json($this->err);
+                }
+            }
+            return back()->with(['files_added'=>$files_added]);
+        }
+        return back();
     }
 
     public function showAddSubTaskForm($project_id, $category_id,$task_id){
@@ -182,12 +209,13 @@ class tasksController extends Controller
         $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
+        $tasks_attachemnts = TasksAttachments::getAttachmentsByTaskId($task_id);
 
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $users = UsersTest::getUsers();
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
-
+        $this->result_action['files_added'] = Session::get('files_added');
 
 
         return view('tasks.showtask')->with([
@@ -197,11 +225,13 @@ class tasksController extends Controller
             'categories_to_project'=>$categories_to_project,
             'project'=>$project,
             'task'=>$task,
+            'tasks_attachemnts'=>$tasks_attachemnts,
             'users_by_project'=>$users_by_project,
             'users'=>$users,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
-            'tree_category_and_task'=>$tree_category_and_task
+            'tree_category_and_task'=>$tree_category_and_task,
+            'result_action'=>$this->result_action
         ]);
     }
 

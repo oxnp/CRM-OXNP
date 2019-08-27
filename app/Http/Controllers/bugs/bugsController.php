@@ -7,8 +7,8 @@ use App\Http\Models\projects\Projects;
 use App\Http\Models\projects\ProjectsCategories;
 use App\Http\Models\supporting_function\SupportLeftSideBar;
 use App\Http\Models\tasks\Tasks;
-use App\Http\Models\tasks\TasksPriority;
-use App\Http\Models\tasks\TasksStatuses;
+use App\Http\Models\bugs\BugsPriorities;
+use App\Http\Models\bugs\BugsStatuses;
 use App\Http\Models\users\UsersTest;
 use Illuminate\Http\Request;
 use App\Http\Models\bugs\Bugs;
@@ -27,6 +27,8 @@ class bugsController extends Controller
         $project = Projects::getProjectById($project_id);
         $users = UsersTest::getUsers();
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
+        $bugs_statuses = BugsStatuses::getBugsStatuses();
+        $bugs_priorities = BugsPriorities::getBugsPriorities();
 
         return view('bugs.addbugs')->with([
             'project_id'=>$project_id,
@@ -36,6 +38,8 @@ class bugsController extends Controller
             'project' => $project,
             'users'=>$users,
             'users_by_project'=>$users_by_project,
+            'bugs_statuses'=>$bugs_statuses,
+            'bugs_priorities'=>$bugs_priorities,
             'tree_category_and_task' =>$tree_category_and_task
         ]);
     }
@@ -51,6 +55,9 @@ class bugsController extends Controller
         $project = Projects::getProjectById($project_id);
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $users = UsersTest::getUsers();
+        $bugs_statuses = BugsStatuses::getBugsStatuses();
+        $bugs_priorities = BugsPriorities::getBugsPriorities();
+
         return view('bugs.showbugs')->with([
             'project_id'=>$project_id,
             'category_id'=>$category_id,
@@ -60,6 +67,8 @@ class bugsController extends Controller
             'bug'=>$bug,
             'users'=>$users,
             'users_by_project'=>$users_by_project,
+            'bugs_statuses'=>$bugs_statuses,
+            'bugs_priorities'=>$bugs_priorities,
             'tree_category_and_task' =>$tree_category_and_task
         ]);
     }
@@ -75,8 +84,6 @@ class bugsController extends Controller
     }
 
     public function updateBug(Request $request,$project_id,$category_id,$bug_id){
-
-
         $update_bug = Bugs::updateBug($request,$project_id,$category_id,$bug_id);
         if ($update_bug){
             return redirect()->to(route('projects_list').'/'.$project_id);
