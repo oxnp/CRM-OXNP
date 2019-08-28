@@ -69,6 +69,43 @@
             @endif
         @endforeach
     </ul>
+    By Sprints
+    <ul class="menu">
+        @foreach($tree_by_sprints as $name_sprint=>$sprint_category)
+            <li class="list"><a href="#">{{$name_sprint}}</a>
+                <ul class="items">
+            @foreach($sprint_category as $category_name=>$tasks_bugs)
+                        <li class="list"><a href="#">{{$category_name}}</a>
+                            <ul class="items">
+                        @foreach($tasks_bugs as $k=>$v)
+                                    <li class="list {{$k}}"><a href="#">{{$k}}</a>
+                                        <ul class="items">
+                                            @foreach($tasks_bugs[$k] as $item)
+                                                @if(isset($item['subtasks']))
+                                                    <li class="list"><a href="{{route('tasks_show_detail',[$item['project_id'],$item['category_id'],$item['id']])}}">{{$item['name']}}</a>
+                                                        <ul class="items">
+                                                    @foreach($item['subtasks'] as $subtask)
+                                                                <li><a href="{{route('subtasks_show_detail',[$subtask['project_id'],$subtask['category_id'],$subtask['id']])}}">{{$subtask['name']}}</a>
+                                                    @endforeach
+                                                        </ul>
+                                                @else
+                                                    @if($k == 'tasks')
+                                                        <li><a href="{{route('tasks_show_detail',[$item['project_id'],$item['category_id'],$item['id']])}}">{{$item['name']}}</a>
+                                                    @else
+                                                        <li><a href="{{route('show_bug',[$item['project_id'],$item['category_id'],$item['id']])}}">{{$item['name']}}</a>
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                        @endforeach
+                            </ul>
+                        </li>
+            @endforeach
+                </ul>
+
+            </li>
+        @endforeach
+    </ul>
 
 
     Select category

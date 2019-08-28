@@ -58,7 +58,7 @@ class bugsController extends Controller
         $bugs_statuses = BugsStatuses::getBugsStatuses();
         $bugs_priorities = BugsPriorities::getBugsPriorities();
         $sprints = Sprints::getSprintsByProjectId($project_id);
-
+        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
         return view('bugs.addbugs')->with([
             'project_id'=>$project_id,
             'category_id'=>$category_id,
@@ -70,7 +70,8 @@ class bugsController extends Controller
             'users_by_project'=>$users_by_project,
             'bugs_statuses'=>$bugs_statuses,
             'bugs_priorities'=>$bugs_priorities,
-            'tree_category_and_task' =>$tree_category_and_task
+            'tree_category_and_task' =>$tree_category_and_task,
+            'tree_by_sprints'=>$tree_by_sprints,
         ]);
     }
 
@@ -89,6 +90,7 @@ class bugsController extends Controller
         $bugs_statuses = BugsStatuses::getBugsStatuses();
         $bugs_priorities = BugsPriorities::getBugsPriorities();
         $bugs_attachments = BugsAttachments::getAttachmentsByBugId($bug_id);
+        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
         $this->result_action['files_added'] = Session::get('files_added');
 
         return view('bugs.showbugs')->with([
@@ -105,6 +107,7 @@ class bugsController extends Controller
             'bugs_statuses'=>$bugs_statuses,
             'bugs_priorities'=>$bugs_priorities,
             'tree_category_and_task' =>$tree_category_and_task,
+            'tree_by_sprints'=>$tree_by_sprints,
             'result_action'=>$this->result_action
         ]);
     }

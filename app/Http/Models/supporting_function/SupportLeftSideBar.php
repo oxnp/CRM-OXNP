@@ -68,7 +68,7 @@ class SupportLeftSideBar extends Model
         }
         return $projects_categories;
     }
-
+    /*
     public static function getTreeTasksAndBugsBySprints($tasks,$bugs,$sprints){
     $tree = array();
         foreach($sprints as $key=>$sprint){
@@ -89,6 +89,44 @@ class SupportLeftSideBar extends Model
                 }
             }
         }
+        return $tree;
+    }
+    */
+    public static function getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints){
+
+        $tree = array();
+        foreach($sprints as $key=>$sprint){
+
+            foreach($categories_to_project as $categories){
+
+                foreach($tasks as $keytask=>$task){
+                   // echo $task['sprint_id']."==".$sprint['id'].'&&'.$task['relative_task_id'].'=='.$task['category_id'];
+
+                    if($task['sprint_id'] == $sprint['id'] && $categories['id'] == $task['category_id']){
+                        $tree[$sprint['name']][$categories['name']]['tasks'][$task['id']] = $task;
+
+                        //dd($tree);
+                        foreach($tasks as $key=>$value){
+                            if ($task['id'] == $value['relative_task_id']){
+                                $tree[$sprint['name']][$categories['name']]['tasks'][$task['id']]['subtasks'][] = $value;
+                            }
+                        }
+                    }
+                    //unset($tasks[$keytask]);
+                }
+
+                foreach($bugs as $keybug=>$bug){
+                    if($bug['sprint_id'] == $sprint['id']  && $categories['id'] == $bug['category_id']){
+                        $tree[$sprint['name']][$categories['name']]['bugs'][] = $bug;
+                    }
+                }
+
+            }
+
+
+
+        }
+
         return $tree;
     }
 

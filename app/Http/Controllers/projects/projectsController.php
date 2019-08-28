@@ -116,7 +116,7 @@ class projectsController extends Controller
         $tasks = Tasks::getTasksByProjectId($id);
         $sprints = Sprints::getSprintsByProjectId($id);
         $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
-        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($tasks,$bugs,$sprints);
+        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
 
         $project = Projects::getProjectById($id);
         $client = Clients::getClientById($project['client_id']);

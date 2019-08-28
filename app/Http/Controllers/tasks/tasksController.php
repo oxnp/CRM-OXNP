@@ -64,10 +64,12 @@ class tasksController extends Controller
         $projects_categories = SupportLeftSideBar::getDiffCategory($categories_to_project,$projects_categories);
         $tasks = Tasks::getTasksByProjectId($project_id);
         $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
+
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
         $users = UsersTest::getUsers();
         $sprints = Sprints::getSprintsByProjectId($project_id);
+        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
 
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $tasks_priority = TasksPriority::geTasksPriority();
@@ -85,7 +87,8 @@ class tasksController extends Controller
             'users_by_project'=>$users_by_project,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
-            'tree_category_and_task' =>$tree_category_and_task
+            'tree_category_and_task' =>$tree_category_and_task,
+            'tree_by_sprints'=>$tree_by_sprints
         ]);
 
     }
@@ -105,7 +108,7 @@ class tasksController extends Controller
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
         $sprints = Sprints::getSprintsByProjectId($project_id);
-
+        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
         return view('tasks.addtask')->with([
             'project_id'=>$project_id,
             'category_id'=>$category_id,
@@ -117,7 +120,8 @@ class tasksController extends Controller
             'sprints'=>$sprints,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
-            'tree_category_and_task'=>$tree_category_and_task
+            'tree_category_and_task'=>$tree_category_and_task,
+            'tree_by_sprints'=>$tree_by_sprints
         ]);
     }
 
@@ -189,7 +193,7 @@ class tasksController extends Controller
         $task = Tasks::getTaskById($task_id);
         $users = UsersTest::getUsers();
         $sprints = Sprints::getSprintsByProjectId($project_id);
-
+        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
@@ -210,6 +214,7 @@ class tasksController extends Controller
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
             'tree_category_and_task'=>$tree_category_and_task,
+            'tree_by_sprints'=>$tree_by_sprints,
             'result_action'=>$this->result_action
         ]);
     }
@@ -234,6 +239,7 @@ class tasksController extends Controller
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
         $sprints = Sprints::getSprintsByProjectId($project_id);
+        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
         $this->result_action['files_added'] = Session::get('files_added');
 
 
@@ -251,6 +257,7 @@ class tasksController extends Controller
             'tasks_statuses'=>$tasks_statuses,
             'sprints'=>$sprints,
             'tree_category_and_task'=>$tree_category_and_task,
+            'tree_by_sprints'=>$tree_by_sprints,
             'result_action'=>$this->result_action
         ]);
     }
