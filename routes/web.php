@@ -58,6 +58,6 @@ Route::put('/projects/{project_id}/category/{category_id}/bug/{bug_id}', 'bugs\b
 Route::post('/bugs-attachments/projects/{project_id}/bug/{bug_id}', 'bugs\bugsController@storeAttachmentsByBugId')->name('bugs_attachment_by_id');
 /*bugs*/
 
-/*attachments*/
-
-/*attachments*/
+/*sprints*/
+Route::post('/projects/{project_id}/sprints/add-sprint', 'sprints\sprintsController@addSprint')->name('sprints_add');
+/*sprints*/

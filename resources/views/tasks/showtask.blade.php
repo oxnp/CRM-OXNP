@@ -10,7 +10,11 @@
         <input type="text" name="description"  class="form-control" value="{{$task['description']}}"/>
 
         <label class="control-label">sprint_id</label>
-        <input type="text" name="sprint_id"  class="form-control" value="{{$task['sprint_id']}}"/>
+        <select type="text" name="sprint_id"  class="form-control">
+            @foreach($sprints as $sprint)
+                <option value="{{$sprint['id']}}"  @if($task['sprint_id'] == $sprint['id']) selected @endif>{{$sprint['name']}}</option>
+            @endforeach
+        </select>
 
         <label class="control-label">director_id</label>
         <select type="text" name="director_id"  class="form-control">

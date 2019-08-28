@@ -69,4 +69,27 @@ class SupportLeftSideBar extends Model
         return $projects_categories;
     }
 
+    public static function getTreeTasksAndBugsBySprints($tasks,$bugs,$sprints){
+    $tree = array();
+        foreach($sprints as $key=>$sprint){
+            foreach($tasks as $keytask=>$task){
+                if($task['sprint_id'] == $sprint['id'] && $task['relative_task_id'] == '0'){
+                        $tree[$sprint['name']]['tasks'][$task['id']] = $task;
+                        foreach($tasks as $key=>$value){
+                            if ($task['id'] == $value['relative_task_id']){
+                                $tree[$sprint['name']]['tasks'][$task['id']]['subtasks'][] = $value;
+                            }
+                        }
+                    }
+
+                }
+            foreach($bugs as $keybug=>$bug){
+                if($bug['sprint_id'] == $sprint['id']){
+                    $tree[$sprint['name']]['bugs'][] = $bug;
+                }
+            }
+        }
+        return $tree;
+    }
+
 }

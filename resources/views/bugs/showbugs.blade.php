@@ -50,7 +50,11 @@
             </select>
 
             <label class="control-label">sprint_id</label>
-            <input name="sprint_id" value="{{$bug['sprint_id']}}"  class="form-control"/>
+            <select type="text" name="sprint_id"  class="form-control">
+                @foreach($sprints as $sprint)
+                    <option value="{{$sprint['id']}}"  @if($bug['sprint_id'] == $sprint['id']) selected @endif>{{$sprint['name']}}</option>
+                @endforeach
+            </select>
 
             <label class="control-label">arounds</label>
             <input name="arounds" value="{{$bug['arounds']}}"  class="form-control"/>

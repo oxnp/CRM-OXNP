@@ -6,6 +6,7 @@ namespace App\Http\Controllers\tasks;
 use App\Http\Models\bugs\Bugs;
 use App\Http\Models\projects\CategoriesToProject;
 use App\Http\Models\projects\Projects;
+use App\Http\Models\sprints\Sprints;
 use App\Http\Models\users\UsersTest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -66,6 +67,7 @@ class tasksController extends Controller
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
         $users = UsersTest::getUsers();
+        $sprints = Sprints::getSprintsByProjectId($project_id);
 
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $tasks_priority = TasksPriority::geTasksPriority();
@@ -79,6 +81,7 @@ class tasksController extends Controller
             'project' => $project,
             'task'=>$task,
             'users'=>$users,
+            'sprints'=>$sprints,
             'users_by_project'=>$users_by_project,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
@@ -101,6 +104,7 @@ class tasksController extends Controller
         $users = UsersTest::getUsers();
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
+        $sprints = Sprints::getSprintsByProjectId($project_id);
 
         return view('tasks.addtask')->with([
             'project_id'=>$project_id,
@@ -110,6 +114,7 @@ class tasksController extends Controller
             'project'=>$project,
             'users_by_project'=>$users_by_project,
             'users'=>$users,
+            'sprints'=>$sprints,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
             'tree_category_and_task'=>$tree_category_and_task
@@ -183,6 +188,7 @@ class tasksController extends Controller
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
         $users = UsersTest::getUsers();
+        $sprints = Sprints::getSprintsByProjectId($project_id);
 
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $tasks_priority = TasksPriority::geTasksPriority();
@@ -199,6 +205,7 @@ class tasksController extends Controller
             'task'=>$task,
             'task_attachemnts'=>$task_attachemnts,
             'users'=>$users,
+            'sprints'=>$sprints,
             'users_by_project'=>$users_by_project,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
@@ -226,6 +233,7 @@ class tasksController extends Controller
         $users = UsersTest::getUsers();
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
+        $sprints = Sprints::getSprintsByProjectId($project_id);
         $this->result_action['files_added'] = Session::get('files_added');
 
 
@@ -241,6 +249,7 @@ class tasksController extends Controller
             'users'=>$users,
             'tasks_priority'=>$tasks_priority,
             'tasks_statuses'=>$tasks_statuses,
+            'sprints'=>$sprints,
             'tree_category_and_task'=>$tree_category_and_task,
             'result_action'=>$this->result_action
         ]);

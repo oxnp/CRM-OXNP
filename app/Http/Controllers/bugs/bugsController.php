@@ -5,6 +5,7 @@ namespace App\Http\Controllers\bugs;
 use App\Http\Models\projects\CategoriesToProject;
 use App\Http\Models\projects\Projects;
 use App\Http\Models\projects\ProjectsCategories;
+use App\Http\Models\sprints\Sprints;
 use App\Http\Models\supporting_function\SupportLeftSideBar;
 use App\Http\Models\tasks\Tasks;
 use App\Http\Models\bugs\BugsPriorities;
@@ -29,9 +30,7 @@ class bugsController extends Controller
             foreach ($request->file('files') as $file) {
                 $storage = $file->store('public/projects/'.$project_id.'/bugs/' . $bug_id);
                 $name_file = explode('/', $storage);
-
                 $storage = '/storage/app/public/projects/'.$project_id.'/bugs/'. $bug_id .'/'. $name_file[5];
-
                 $type_file = $file->getClientOriginalExtension();
                 $project_attach = BugsAttachments::setAttachmentsByBugId($bug_id, $type_file, $storage);
                 if ($project_attach) {
@@ -58,6 +57,7 @@ class bugsController extends Controller
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $bugs_statuses = BugsStatuses::getBugsStatuses();
         $bugs_priorities = BugsPriorities::getBugsPriorities();
+        $sprints = Sprints::getSprintsByProjectId($project_id);
 
         return view('bugs.addbugs')->with([
             'project_id'=>$project_id,
@@ -66,6 +66,7 @@ class bugsController extends Controller
             'categories_to_project'=> $categories_to_project,
             'project' => $project,
             'users'=>$users,
+            'sprints'=>$sprints,
             'users_by_project'=>$users_by_project,
             'bugs_statuses'=>$bugs_statuses,
             'bugs_priorities'=>$bugs_priorities,
@@ -84,6 +85,7 @@ class bugsController extends Controller
         $project = Projects::getProjectById($project_id);
         $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
         $users = UsersTest::getUsers();
+        $sprints = Sprints::getSprintsByProjectId($project_id);
         $bugs_statuses = BugsStatuses::getBugsStatuses();
         $bugs_priorities = BugsPriorities::getBugsPriorities();
         $bugs_attachments = BugsAttachments::getAttachmentsByBugId($bug_id);
@@ -98,6 +100,7 @@ class bugsController extends Controller
             'bug'=>$bug,
             'bugs_attachments'=>$bugs_attachments,
             'users'=>$users,
+            'sprints'=>$sprints,
             'users_by_project'=>$users_by_project,
             'bugs_statuses'=>$bugs_statuses,
             'bugs_priorities'=>$bugs_priorities,

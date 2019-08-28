@@ -11,7 +11,11 @@
         <input type="text" name="description"  class="form-control"/>
 
         <label class="control-label">sprint_id</label>
-        <input type="text" name="sprint_id"  class="form-control"/>
+        <select type="text" name="sprint_id"  class="form-control">
+            @foreach($sprints as $sprint)
+                <option value="{{$sprint['id']}}">{{$sprint['name']}}</option>
+            @endforeach
+        </select>
 
         <label class="control-label">director_id</label>
         <select type="text" name="director_id"  class="form-control">

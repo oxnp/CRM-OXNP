@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\projects;
 
+use App\Http\Models\sprints\Sprints;
 use App\Http\Models\tasks\Tasks;
 use App\Http\Models\bugs\Bugs;
 use App\Http\Models\users\UsersTest;
@@ -113,7 +114,9 @@ class projectsController extends Controller
         $bugs = Bugs::getBugsByProjectId($id);
         $projects_categories = SupportLeftSideBar::getDiffCategory($categories_to_project,$projects_categories);
         $tasks = Tasks::getTasksByProjectId($id);
+        $sprints = Sprints::getSprintsByProjectId($id);
         $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
+        $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($tasks,$bugs,$sprints);
 
         $project = Projects::getProjectById($id);
         $client = Clients::getClientById($project['client_id']);
@@ -132,7 +135,9 @@ class projectsController extends Controller
             'project_attachemnts'=>$project_attachemnts,
             'project_statuses'=>$project_statuses,
             'users'=>$users,
+            'sprints'=>$sprints,
             'tree_category_and_task'=>$tree_category_and_task,
+            'tree_by_sprints'=>$tree_by_sprints,
             'result_action'=>$this->result_action
         ]);
     }

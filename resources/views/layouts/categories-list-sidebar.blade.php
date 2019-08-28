@@ -90,4 +90,17 @@
         <input type="submit" class="form-control btn btn-primary" value="Add category"/>
     </form>
 
+    Add sprint
+    <form name="add-sprint" action="{{route('sprints_add',$project['id'])}}" method="POST">
+        <label class="control-label">name</label>
+        <input type="text" name="name" class="form-control"/>
+        <label class="control-label">date_from</label>
+        <input type="text" name="date_from" class="form-control"/>
+        <label class="control-label">date_to</label>
+        <input type="text" name="date_to" class="form-control"/>
+
+        {{csrf_field()}}
+        <input type="submit" class="form-control btn btn-primary" value="Add Sprint"/>
+    </form>
+
 @stop
