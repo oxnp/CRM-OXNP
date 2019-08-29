@@ -33,8 +33,7 @@
 
 
         <label class="control-label">dead_line</label>
-        <input type="text" name="dead_line"  class="form-control"/>
-
+        <input type="datetime-local" data-date="" data-date-format="YYYY-MM-DD" name="dead_line"  class="form-control"/>
         <label class="control-label">status_id</label>
         <select type="text" name="status_id"  class="form-control">
             @foreach($tasks_statuses as $status)

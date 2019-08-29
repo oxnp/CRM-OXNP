@@ -33,7 +33,7 @@
             </select>
 
             <label class="control-label">dead line</label>
-            <input name="dead_line" value="{{$bug['dead_line']}}"  class="form-control"/>
+            <input type="datetime-local" data-date="" data-date-format="YYYY-MM-DD" name="dead_line"  class="form-control"  value="{{$bug['dead_line']}}"/>
 
             <label class="control-label">priority_id</label>
             <select type="text" name="priority_id" class="form-control">

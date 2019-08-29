@@ -88,6 +88,7 @@
                                                                 <li><a href="{{route('subtasks_show_detail',[$subtask['project_id'],$subtask['category_id'],$subtask['id']])}}">{{$subtask['name']}}</a>
                                                     @endforeach
                                                         </ul>
+                                                    @break
                                                 @else
                                                     @if($k == 'tasks')
                                                         <li><a href="{{route('tasks_show_detail',[$item['project_id'],$item['category_id'],$item['id']])}}">{{$item['name']}}</a>
