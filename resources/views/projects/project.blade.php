@@ -17,7 +17,7 @@
             <label class="control-label">status</label>
             <select class="form-control" name="status_id">
                 @foreach($project_statuses as $status)
-                    <option value="{{$status->id}}" @if($status->id == $project['status_id']) selected @endif>{{$status->name_status}}</option>
+                    <option value="{{$status['id']}}" @if($status['id'] == $project['status_id']) selected @endif>{{$status['name_status']}}</option>
                 @endforeach
             </select>
 

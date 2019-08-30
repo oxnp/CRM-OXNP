@@ -10,7 +10,8 @@ use App\Http\Models\supporting_function\SupportLeftSideBar;
 use App\Http\Models\tasks\Tasks;
 use App\Http\Models\bugs\BugsPriorities;
 use App\Http\Models\bugs\BugsStatuses;
-use App\Http\Models\users\UsersTest;
+use App\Http\Models\users\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Models\bugs\Bugs;
 use App\Http\Models\bugs\BugsAttachments;
@@ -53,8 +54,8 @@ class bugsController extends Controller
         $tasks = Tasks::getTasksByProjectId($project_id);
         $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
-        $users = UsersTest::getUsers();
-        $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
+        $users = User::getUsers();
+        $users_by_project = User::getUsersByParticipantsId($project['participants_id']);
         $bugs_statuses = BugsStatuses::getBugsStatuses();
         $bugs_priorities = BugsPriorities::getBugsPriorities();
         $sprints = Sprints::getSprintsByProjectId($project_id);
@@ -84,8 +85,8 @@ class bugsController extends Controller
         $tasks = Tasks::getTasksByProjectId($project_id);
         $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
-        $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
-        $users = UsersTest::getUsers();
+        $users_by_project = User::getUsersByParticipantsId($project['participants_id']);
+        $users = User::getUsers();
         $sprints = Sprints::getSprintsByProjectId($project_id);
         $bugs_statuses = BugsStatuses::getBugsStatuses();
         $bugs_priorities = BugsPriorities::getBugsPriorities();
@@ -112,26 +113,29 @@ class bugsController extends Controller
         ]);
     }
 
-    public function addBug(Request $request,$project_id,$category_id){
-        $add_bug = Bugs::addBug($request,$project_id,$category_id);
-        if ($add_bug){
-            $this->storeAttachmentsByBugId($request,$project_id,$add_bug['id']);
-            return redirect()->to(route('projects_list').'/'.$project_id);
-        }else{
-            $this->err['create_bug'] = false;
-            return  response()->json($this->err);
+    public function addBug(Request $request, $project_id, $category_id)
+    {
+        try {
+            $add_bug = Bugs::addBug($request, $project_id, $category_id);
+            $this->storeAttachmentsByBugId($request, $project_id, $add_bug['id']);
+            return redirect()->to(route('projects_list') . '/' . $project_id);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No added bug';
+            return response()->json($this->err);
         }
+
     }
 
-    public function updateBug(Request $request,$project_id,$category_id,$bug_id){
-        $update_bug = Bugs::updateBug($request,$project_id,$category_id,$bug_id);
-        if ($update_bug){
-            return redirect()->to(route('projects_list').'/'.$project_id);
-        }else{
-            $this->err['update_bug'] = false;
-            return  response()->json($this->err);
+    public function updateBug(Request $request, $project_id, $category_id, $bug_id)
+    {
+        try {
+            $update_bug = Bugs::updateBug($request, $project_id, $category_id, $bug_id);
+            $this->storeAttachmentsByBugId($request, $project_id, $bug_id);
+            return redirect()->to(route('projects_list') . '/' . $project_id);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No update bug';
+            return response()->json($this->err);
         }
     }
-
 
 }

@@ -30,13 +30,13 @@
         <label class="control-label">comm_status</label>
         <select class="form-control" name="comm_status_id">
             @foreach($clients_statuses as $status)
-                <option value="{{$status->id}}">{{$status->name}}</option>
+                <option value="{{$status['id']}}">{{$status['name']}}</option>
                 @endforeach
         </select>
         <label class="control-label">trust</label>
         <select class="form-control" name="trust_id">
             @foreach($clients_trust as $trust)
-                <option value="{{$trust->id}}">{{$trust->name}}</option>
+                <option value="{{$trust['id']}}">{{$trust['name']}}</option>
             @endforeach
         </select>
         <label class="control-label">who join</label>

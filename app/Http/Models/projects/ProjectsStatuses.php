@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectsStatuses extends Model
 {
-    public static function getProjectsStatuses(){
-       $project_statuses = ProjectsStatuses::all();
+    /*get project statuses*/
+    public static function getProjectsStatuses():array{
+       $project_statuses = ProjectsStatuses::all()->toArray();
        return $project_statuses;
     }
 }

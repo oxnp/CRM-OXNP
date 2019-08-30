@@ -2,32 +2,41 @@
 
 namespace App\Http\Models\projects;
 
-use App\Http\Models\users\UsersTest;
+use App\Http\Models\users\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Projects extends Model
 {
     protected $fillable =['status_id','client_id','name','date_start','date_end','price','description','curr_website','old_website','participants_id','accesses','updated_at'];
-    public static function getProjects(){
+    /*get projects*/
+    public static function getProjects():array
+    {
         $projects = Projects::where('status_id','!=',5)->select('name','id')->get()->toArray();
         return $projects;
     }
-    public static function getProjectById($id){
+    /*get detail project by ID*/
+    public static function getProjectById($id):array
+    {
         $project = Projects::findOrFail($id)->toArray();
         return $project;
     }
-    public static  function ProjectsByClient($id){
+    /*get project by clients ID*/
+    public static  function ProjectsByClient($id):array
+    {
         $projects = Projects::where('client_id',$id)->get()->toArray();
         return $projects;
     }
-    public static  function ProjectsParticipants($participants_id)
+    /*get participants to project by IDs user 1,2,3...*/
+    public static  function ProjectsParticipants($participants_ids):array
     {
-        $participants = UsersTest::whereIn('id', explode(',',$participants_id))
-            ->leftjoin('users_role','users_role.role_id','users_tests.role_id')->get()->toArray();
+        $participants = User::whereIn('id', explode(',',$participants_ids))
+            ->leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
         return $participants;
     }
-    public static function addProject($request){
+    /*add project*/
+    public static function addProject($request)
+    {
         $create = Projects::create([
             'status_id'=> $request->status_id,
             'client_id'=> $request->client_id,
@@ -48,7 +57,9 @@ class Projects extends Model
             return false;
         }
     }
-    public static function updateProjectById($id,$request){
+    /*update project by ID*/
+    public static function updateProjectById($id,$request):bool
+    {
         $update = Projects::find($id)->update(array(
             'status_id'=> $request->status_id,
             'name'=> $request->name,
@@ -64,7 +75,7 @@ class Projects extends Model
         ));
 
         if($update){
-            return $update;
+            return true;
         }else{
             return false;
         }

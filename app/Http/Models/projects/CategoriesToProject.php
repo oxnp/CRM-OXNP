@@ -12,6 +12,7 @@ class CategoriesToProject extends Model
     public $timestamps = false;
     protected $fillable = ['project_id','category_id'];
 
+    /* Add category to project and to list category*/
     public static function addCategoryToProject($id,$name){
         $add_category = ProjectsCategories::create([
             'name'=> $name
@@ -23,9 +24,9 @@ class CategoriesToProject extends Model
         }else{
             return false;
         }
-
     }
 
+    /* Add category to project and to list category by id */
     public static function addCategoryToProjectById($id,$category_id){
         $add_category_to_project = CategoriesToProject::create([
             'project_id'=>$id,
@@ -37,15 +38,16 @@ class CategoriesToProject extends Model
             return false;
         }
     }
-    public static function getCategoriesToProjectById($id){
+    /* get categories by project ID*/
+    public static function getCategoriesToProjectById($id):array{
         $categories_to_project = CategoriesToProject::where('project_id',$id)
             ->leftjoin(parent::getProjectsCategoriesTableName(),parent::getProjectsCategoriesTableName().'.id','=','category_id')
             ->get()->toArray();
          return $categories_to_project;
 
     }
-
-    public function getProjectsCategoriesTableName() {
+    /* get table name*/
+    public function getProjectsCategoriesTableName():string {
         return  with(new ProjectsCategories)->getTable();
     }
 }

@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClientsStatuses extends Model
 {
-   public static function getClientsStatuses(){
-       $clients_statuses = ClientsStatuses::all();
+    /*get client statuses*/
+   public static function getClientsStatuses():array{
+       $clients_statuses = ClientsStatuses::all()->toArray();
        return $clients_statuses;
     }
 }

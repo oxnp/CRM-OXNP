@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectsAttachments extends Model
 {
     protected $fillable =['project_id','type_file','storage','updated_at'];
-    public static function getAttachmentsByProjectId($id){
+
+    /*get attachments by project ID*/
+    public static function getAttachmentsByProjectId($id):array{
        $attachments = ProjectsAttachments::where('project_id',$id)->get()->toArray();
         return $attachments;
     }
+    /*set attachments by project ID*/
     public static function setAttachmentsByProjectId($id,$type_file,$storage){
         $project_attach = ProjectsAttachments::create([
             'project_id'=>$id,

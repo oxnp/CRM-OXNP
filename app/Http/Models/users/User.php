@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Http\Models\users;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,4 +26,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static  function getUsers(){
+        $users = User::leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
+        return $users;
+    }
+
+    public static  function getUsersByParticipantsId($participant_id){
+        $users = User::whereIn('id',explode(',',$participant_id))->leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
+        return $users;
+    }
 }

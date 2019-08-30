@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\clients;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Models\clients\Clients;
 use App\Http\Models\clients\ClientsStatuses;
 use App\Http\Models\clients\ClientsTrust;
 use App\Http\Models\projects\Projects;
-use App\Http\Models\users\UsersTest;
+use App\Http\Models\users\User;
 
 
 class clientsController extends Controller
@@ -25,7 +26,7 @@ class clientsController extends Controller
         $clients = Clients::getClients();
         $clients_statuses = ClientsStatuses::getClientsStatuses();
         $clients_trust = ClientsTrust::getTrustStatuses();
-        $users = UsersTest::getUsers();
+        $users = User::getUsers();
         return view('clients.clients')->with([
             'clients'=>$clients,
             'projects'=>$projects,
@@ -42,13 +43,12 @@ class clientsController extends Controller
      */
     public function create(Request $request)
     {
-        $err = array();
-        $add_client = Clients::addClient($request);
-        if($add_client){
-            return redirect()->to(route('clients_list').'/'.$add_client['id']);
-        }else{
-            $this->err['create'] = false;
-            return  response()->json($this->err);
+        try {
+            $add_client = Clients::addClient($request);
+            return redirect()->to(route('clients_list') . '/' . $add_client['id']);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No added client';
+            return response()->json($this->err);
         }
     }
 
@@ -75,7 +75,7 @@ class clientsController extends Controller
         $client = Clients::getClientById($id);
         $clients_statuses = ClientsStatuses::getClientsStatuses();
         $clients_trust = ClientsTrust::getTrustStatuses();
-        $users = UsersTest::getUsers();
+        $users = User::getUsers();
         $projects_by_client = Projects::ProjectsByClient($id);
         return view('clients.client')->with([
             'client'=>$client,
@@ -107,13 +107,12 @@ class clientsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $err = array();
-        $client_update = Clients::updateClientById($id,$request);
-        if($client_update){
-            return redirect()->route('clients_detail',$id);
-        }else{
-            $this->err['update'] = false;
-            return  response()->json($this->err);
+        try {
+            Clients::updateClientById($id, $request);
+            return redirect()->route('clients_detail', $id);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'Not update client';
+            return response()->json($this->err);
         }
     }
 

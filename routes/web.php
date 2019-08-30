@@ -10,6 +10,9 @@
 | contains the 'web' middleware group. Now create something great!
 |
 */
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
 /*projects*/
 Route::get('/projects', 'projects\projectsController@index')->name('projects_list');
 Route::get('/projects/{id}', 'projects\projectsController@show')->name('projects_detail');
@@ -61,3 +64,4 @@ Route::post('/bugs-attachments/projects/{project_id}/bug/{bug_id}', 'bugs\bugsCo
 /*sprints*/
 Route::post('/projects/{project_id}/sprints/add-sprint', 'sprints\sprintsController@addSprint')->name('sprints_add');
 /*sprints*/
+

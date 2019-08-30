@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TasksPriority extends Model
 {
-    public static function geTasksPriority(){
+    /*get task priorities*/
+    public static function geTasksPriority():array{
         $tasks_priority = TasksPriority::all()->toArray();
         return $tasks_priority;
     }

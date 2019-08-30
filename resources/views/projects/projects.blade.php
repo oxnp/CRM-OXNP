@@ -17,7 +17,7 @@
                 <label class="control-label">status</label>
                 <select class="form-control" name="status_id">
                     @foreach($project_statuses as $status)
-                        <option value="{{$status->id}}">{{$status->name_status}}</option>
+                        <option value="{{$status['id']}}">{{$status['name_status']}}</option>
                     @endforeach
                 </select>
                 <label class="control-label">client</label>

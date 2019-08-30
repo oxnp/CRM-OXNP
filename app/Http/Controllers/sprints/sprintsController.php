@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\sprints;
 
 use App\Http\Models\sprints\Sprints;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -19,19 +20,14 @@ class sprintsController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function addSprint(Request $request,$project_id)
     {
-        $add_sprint = Sprints::addSprint($request,$project_id);
-        if ($add_sprint){
-            return redirect()->to(route('projects_list').'/'.$project_id);
-        }else{
-            $this->err['create_sprint'] = false;
-            return  response()->json($this->err);
+        try {
+            Sprints::addSprint($request, $project_id);
+            return redirect()->to(route('projects_list') . '/' . $project_id);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No added sprint';
+            return response()->json($this->err);
         }
     }
 

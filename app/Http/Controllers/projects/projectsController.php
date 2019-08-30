@@ -5,7 +5,7 @@ namespace App\Http\Controllers\projects;
 use App\Http\Models\sprints\Sprints;
 use App\Http\Models\tasks\Tasks;
 use App\Http\Models\bugs\Bugs;
-use App\Http\Models\users\UsersTest;
+use App\Http\Models\users\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Models\projects\Projects;
@@ -30,7 +30,7 @@ class projectsController extends Controller
         $projects = Projects::getProjects();
         $clients = Clients::getClients();
         $project_statuses = ProjectsStatuses::getProjectsStatuses();
-        $users = UsersTest::getUsers();
+        $users = User::getUsers();
         return view('projects.projects')->with([
             'projects'=>$projects,
             'clients'=>$clients,
@@ -123,7 +123,7 @@ class projectsController extends Controller
         $project_attachemnts = ProjectsAttachments::getAttachmentsByProjectId($id);
         $participants_user =  Projects::ProjectsParticipants($project['participants_id']);
         $project_statuses = ProjectsStatuses::getProjectsStatuses();
-        $users = UsersTest::getUsers();
+        $users = User::getUsers();
         $this->result_action['files_added'] = Session::get('files_added');
 
         return view('projects.project')->with([

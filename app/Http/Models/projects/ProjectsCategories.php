@@ -8,7 +8,8 @@ class ProjectsCategories extends Model
 {
     protected $fillable = ['name'];
     public $timestamps = false;
-    public static function getProjectsCategories(){
+    /*get project categories*/
+    public static function getProjectsCategories():array{
        $projects_categories = ProjectsCategories::all()->toArray();
         return $projects_categories;
     }

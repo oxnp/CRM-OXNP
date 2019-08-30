@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class ClientsTrust extends Model
 {
     protected $table = 'clients_trust';
-    public static function getTrustStatuses(){
-        $trust_statuses = ClientsTrust::all();
+    /*get trust statuses*/
+    public static function getTrustStatuses():array{
+        $trust_statuses = ClientsTrust::all()->toArray();
         return $trust_statuses;
     }
 }

@@ -7,7 +7,8 @@ use App\Http\Models\bugs\Bugs;
 use App\Http\Models\projects\CategoriesToProject;
 use App\Http\Models\projects\Projects;
 use App\Http\Models\sprints\Sprints;
-use App\Http\Models\users\UsersTest;
+use App\Http\Models\users\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Models\tasks\Tasks;
@@ -32,9 +33,7 @@ class tasksController extends Controller
     }
     public function storeAttachmentsByTaskId(Request $request,$project_id, $task_id)
     {
-
         $count_files = count($request->file('files'));
-
         if($count_files > 0) {
             $files_added = 0;
             foreach ($request->file('files') as $file) {
@@ -67,11 +66,11 @@ class tasksController extends Controller
 
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
-        $users = UsersTest::getUsers();
+        $users = User::getUsers();
         $sprints = Sprints::getSprintsByProjectId($project_id);
         $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
 
-        $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
+        $users_by_project = User::getUsersByParticipantsId($project['participants_id']);
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
 
@@ -103,8 +102,8 @@ class tasksController extends Controller
         $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
 
-        $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
-        $users = UsersTest::getUsers();
+        $users_by_project = User::getUsersByParticipantsId($project['participants_id']);
+        $users = User::getUsers();
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
         $sprints = Sprints::getSprintsByProjectId($project_id);
@@ -126,27 +125,24 @@ class tasksController extends Controller
     }
 
     public function addTask(Request $request,$project_id,$category_id){
-
-
-        $add_task = Tasks::addTask($request,$project_id,$category_id);
-        if ($add_task){
-
-            $this->storeAttachmentsByTaskId($request,$project_id,$add_task['id']);
-            return redirect()->to(route('projects_list').'/'.$project_id);
-        }else{
-            $this->err['create_task'] = false;
-            return  response()->json($this->err);
+        try {
+            $add_task = Tasks::addTask($request, $project_id, $category_id);
+            $this->storeAttachmentsByTaskId($request, $project_id, $add_task['id']);
+            return redirect()->to(route('projects_list') . '/' . $project_id);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No added task';
+            return response()->json($this->err);
         }
     }
 
     public function SubAddTask(Request $request,$project_id,$category_id,$task_id){
-        $add_sub_task = Tasks::addTask($request,$project_id,$category_id,$task_id);
-        if ($add_sub_task){
-            $this->storeAttachmentsByTaskId($request,$project_id,$add_sub_task['id']);
-            return redirect()->to(route('projects_list').'/'.$project_id);
-        }else{
-            $this->err['create_sub_task'] = false;
-            return  response()->json($this->err);
+        try {
+            $add_sub_task = Tasks::addTask($request,$project_id,$category_id,$task_id);
+            $this->storeAttachmentsByTaskId($request, $project_id, $add_sub_task['id']);
+            return redirect()->to(route('projects_list') . '/' . $project_id);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No added subtask';
+            return response()->json($this->err);
         }
     }
 
@@ -191,10 +187,10 @@ class tasksController extends Controller
         $tree_category_and_task = SupportLeftSideBar::getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs);
         $project = Projects::getProjectById($project_id);
         $task = Tasks::getTaskById($task_id);
-        $users = UsersTest::getUsers();
+        $users = User::getUsers();
         $sprints = Sprints::getSprintsByProjectId($project_id);
         $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
-        $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
+        $users_by_project = User::getUsersByParticipantsId($project['participants_id']);
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
         $task_attachemnts = TasksAttachments::getAttachmentsByTaskId($task_id);
@@ -218,9 +214,6 @@ class tasksController extends Controller
             'result_action'=>$this->result_action
         ]);
     }
-    public function updateSubTask(){
-
-    }
 
     public function showTask($project_id,$category_id,$task_id)
     {
@@ -234,8 +227,8 @@ class tasksController extends Controller
         $task = Tasks::getTaskById($task_id);
         $task_attachments = TasksAttachments::getAttachmentsByTaskId($task_id);
 
-        $users_by_project = UsersTest::getUsersByParticipantsId($project['participants_id']);
-        $users = UsersTest::getUsers();
+        $users_by_project = User::getUsersByParticipantsId($project['participants_id']);
+        $users = User::getUsers();
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
         $sprints = Sprints::getSprintsByProjectId($project_id);
@@ -264,13 +257,14 @@ class tasksController extends Controller
 
     public function updateTask(Request $request,$project_id,$category_id,$id)
     {
-        $task_update = Tasks::updateTask($request,$category_id,$id);
-        if($task_update){
-            return redirect()->route('projects_detail',$project_id);
-        }else{
-            $this->err['task_update'] = false;
-            return  response()->json($this->err);
+        try {
+            $task_update = Tasks::updateTask($request, $category_id, $id);
+            return redirect()->route('projects_detail', $project_id);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No update subtask/task';
+            return response()->json($this->err);
         }
+
     }
 
     /**

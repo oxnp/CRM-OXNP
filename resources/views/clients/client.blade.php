@@ -45,19 +45,16 @@
             <label class="control-label">other_info</label>
             <input class="form-control" name="other_info" value="{{$client['other_info']}}"/>
 
-            <label class="control-label">other_info</label>
-            <input class="form-control" name="other_info" value="{{$client['other_info']}}"/>
-
             <label class="control-label">comm_status</label>
             <select class="form-control" name="comm_status_id">
                 @foreach($clients_statuses as $status)
-                    <option value="{{$status->id}}" @if($status->id == $client['comm_status_id']) selected @endif>{{$status->name}}</option>
+                    <option value="{{$status['id']}}" @if($status['id'] == $client['comm_status_id']) selected @endif>{{$status['name']}}</option>
                 @endforeach
             </select>
             <label class="control-label">trust</label>
             <select class="form-control" name="trust_id">
                 @foreach($clients_trust as $trust)
-                    <option value="{{$trust->id}}" @if($trust->id == $client['trust_id']) selected @endif>{{$trust->name}}</option>
+                    <option value="{{$trust['id']}}" @if($trust['id'] == $client['trust_id']) selected @endif>{{$trust['name']}}</option>
                 @endforeach
             </select>
             <label class="control-label">who join</label>
