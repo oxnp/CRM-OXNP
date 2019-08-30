@@ -2,7 +2,7 @@
 @extends('layouts.projects-list-sidebar')
 @section('content')
     <div class="col-md-3">
-    <form action="{{route('clients_add')}}" name="client_add" method="POST">
+    <form action="{{route('clients.store')}}" name="client_add" method="POST">
         <label class="control-label">first_name</label>
         <input class="form-control" name="first_name"/>
         <label class="control-label">last_name</label>
@@ -52,7 +52,7 @@
     <div class="col-md-3">
     <ul>
     @foreach($clients as $client)
-            <li><a href="{{route('clients_detail',$client['id'])}}">{{$client['first_name']}} {{$client['last_name']}}</a></li>
+            <li><a href="{{route('clients.show',$client['id'])}}">{{$client['first_name']}} {{$client['last_name']}}</a></li>
     @endforeach
     </ul>
     </div>

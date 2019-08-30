@@ -4,15 +4,8 @@
 @section('content')
     <div class="col-md-6">
         Info Client
-    <form action="{{route('clients_update',$client['id'])}}" name="client_update" method="POST">
-<!--
-        @foreach($client as $key=>$val)
-            @if ($key != 'id' && $key != 'comm_status_id' && $key != 'trust_id' && $key != 'who_join_user_id' && $key != 'created_at' && $key != 'updated_at')
-                <label class="control-label">{{$key}}</label>
-                <input class="form-control" name="{{$key}}" value="{{$client[$key]}}"/>
-            @endif
-        @endforeach
--->
+    <form action="{{route('clients.update',$client['id'])}}" name="client_update" method="POST">
+
             <label class="control-label">first_name</label>
             <input class="form-control" name="first_name" value="{{$client['first_name']}}"/>
 
@@ -72,7 +65,7 @@
     Projects by client
         <ul>
             @foreach($projects_by_client as $project)
-                <li><a href="{{route('projects_detail',$project['id'])}}">{{$project['name']}}</a></li>
+                <li><a href="{{route('projects.show',$project['id'])}}">{{$project['name']}}</a></li>
             @endforeach
         </ul>
     </div>

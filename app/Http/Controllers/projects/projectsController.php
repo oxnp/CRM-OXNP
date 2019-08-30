@@ -6,6 +6,7 @@ use App\Http\Models\sprints\Sprints;
 use App\Http\Models\tasks\Tasks;
 use App\Http\Models\bugs\Bugs;
 use App\Http\Models\users\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Models\projects\Projects;
@@ -39,20 +40,20 @@ class projectsController extends Controller
         ]);
     }
 
-    public function addCategoryToProjectById(Request $request, $id){
-
-        if(is_numeric($request->categoriestoproject)){
-            $add_caegory_to_project = CategoriesToProject::addCategoryToProjectById($id, $request->categoriestoproject);
-        }else{
-            $add_caegory_to_project = CategoriesToProject::addCategoryToProject($id, $request->categoriestoproject);
-        }
-
-        if ($add_caegory_to_project) {
-            return redirect()->route('projects_detail',$id);
-        } else {
-            $this->err['add_category_to_project'] = false;
+    public function addCategoryToProjectById(Request $request, $id)
+    {
+        try {
+            if (is_numeric($request->categoriestoproject)) {
+                $add_caegory_to_project = CategoriesToProject::addCategoryToProjectById($id, $request->categoriestoproject);
+            } else {
+                $add_caegory_to_project = CategoriesToProject::addCategoryToProject($id, $request->categoriestoproject);
+            }
+            return redirect()->route('projects.show', $id);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No add category to project';
             return response()->json($this->err);
         }
+
     }
 
     /**
@@ -60,15 +61,15 @@ class projectsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
-        $add_project = Projects::addProject($request);
-        if($add_project){
-            $this->storeAttachmentsByProjectId($request,$add_project['id']);
-            return redirect()->to(route('projects_list').'/'.$add_project['id']);
-        }else{
-            $this->err['create'] = false;
-            return  response()->json($this->err);
+        try {
+            $add_project = Projects::addProject($request);
+            $this->storeAttachmentsByProjectId($request, $add_project['id']);
+            return redirect()->route('projects.show', $add_project['id']);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No add project';
+            return response()->json($this->err);
         }
     }
 
@@ -96,9 +97,9 @@ class projectsController extends Controller
                     return response()->json($this->err);
                 }
             }
-            return redirect()->to(route('projects_list') . '/' . $id)->with(['files_added'=>$files_added]);
+            return redirect()->route('projects.show',$id)->with(['files_added'=>$files_added]);
         }
-        return redirect()->to(route('projects_list') . '/' . $id);
+        return redirect()->route('projects.show',$id);
     }
 
     /**
@@ -164,7 +165,7 @@ class projectsController extends Controller
     {
         $project_update = Projects::updateProjectById($id,$request);
         if($project_update){
-            return redirect()->route('projects_detail',$id);
+            return redirect()->route('projects.show',$id);
         }else{
             $this->err['update'] = false;
             return  response()->json($this->err);

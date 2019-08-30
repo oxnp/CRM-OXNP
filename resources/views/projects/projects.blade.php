@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-4">
             Project data
-            <form action="{{route('projects_add')}}" name="project_add" method="POST"  enctype="multipart/form-data">
+            <form action="{{route('projects.store')}}" name="project_add" method="POST"  enctype="multipart/form-data">
                 <label class="control-label">name</label>
                 <input class="form-control" name="name"/>
 

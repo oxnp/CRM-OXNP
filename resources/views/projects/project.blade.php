@@ -4,7 +4,7 @@
     <div class="row">
     <div class="col-md-4">
     Project data
-        <form action="{{route('projects_update',$project['id'])}}" name="project_update" method="POST">
+        <form action="{{route('projects.update',$project['id'])}}" name="project_update" method="POST">
             <label class="control-label">name</label>
             <input class="form-control" name="name" value="{{$project['name']}}"/>
 

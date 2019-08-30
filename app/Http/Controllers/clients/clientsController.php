@@ -43,13 +43,7 @@ class clientsController extends Controller
      */
     public function create(Request $request)
     {
-        try {
-            $add_client = Clients::addClient($request);
-            return redirect()->to(route('clients_list') . '/' . $add_client['id']);
-        } catch (QueryException $exception) {
-            $this->err['errors'] = 'No added client';
-            return response()->json($this->err);
-        }
+
     }
 
     /**
@@ -60,7 +54,13 @@ class clientsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $add_client = Clients::addClient($request);
+            return redirect()->route('clients.show', $add_client['id']);
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'No added client';
+            return response()->json($this->err);
+        }
     }
 
     /**
@@ -109,7 +109,7 @@ class clientsController extends Controller
     {
         try {
             Clients::updateClientById($id, $request);
-            return redirect()->route('clients_detail', $id);
+            return redirect()->route('clients.show', $id);
         } catch (QueryException $exception) {
             $this->err['errors'] = 'Not update client';
             return response()->json($this->err);
