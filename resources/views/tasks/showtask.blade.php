@@ -74,4 +74,20 @@
             @endif
         </form>
     </div>
+    <div class="col-md-4">
+        <table>
+            <thead>
+            <th>Name</th>
+            <th>Track time</th>
+            <th>Action</th>
+            </thead>
+        @foreach($schedules as $schedule)
+                <tr>
+                    <td>{{Auth::user()->name}}</td>
+                    <td>{{$schedule['total_min']}}</td>
+                    <td>action</td>
+                </tr>
+        @endforeach
+        </table>
+    </div>
 @stop

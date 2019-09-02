@@ -17,6 +17,8 @@ use App\Http\Models\tasks\TasksStatuses;
 use App\Http\Models\projects\ProjectsCategories;
 use App\Http\Models\supporting_function\SupportLeftSideBar;
 use App\Http\Models\tasks\TasksAttachments;
+use App\Http\Models\tracker\SchedulesToUsers;
+use Auth;
 use Session;
 class tasksController extends Controller
 {
@@ -233,6 +235,8 @@ class tasksController extends Controller
         $tasks_statuses = TasksStatuses::geTasksStatuses();
         $sprints = Sprints::getSprintsByProjectId($project_id);
         $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
+        $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(),$task_id);
+
         $this->result_action['files_added'] = Session::get('files_added');
 
 
@@ -251,6 +255,7 @@ class tasksController extends Controller
             'sprints'=>$sprints,
             'tree_category_and_task'=>$tree_category_and_task,
             'tree_by_sprints'=>$tree_by_sprints,
+            'schedules'=>$schedules,
             'result_action'=>$this->result_action
         ]);
     }
