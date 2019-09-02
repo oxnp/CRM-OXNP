@@ -9,12 +9,18 @@ class Sprints extends Model
 {
     protected $fillable =['name','project_id','date_from','date_to','created_at','updated_at'];
 
-    /*get sprints by project*/
+    /*get sprints by project
+    * @param int $project_id
+    * @return array or false
+    */
     public static function getSprintsByProjectId($project_id):array{
         $sprints = Sprints::where('project_id',$project_id)->get()->toArray();
         return $sprints;
     }
-    /*add sprint*/
+    /*add sprint
+    * @param Request $request
+    * @return array or false
+    */
     public static function addSprint($request){
         $add_sprint= Sprints::create([
            'name'=> $request->name,

@@ -9,32 +9,47 @@ use Illuminate\Database\Eloquent\Model;
 class Projects extends Model
 {
     protected $fillable =['status_id','client_id','name','date_start','date_end','price','description','curr_website','old_website','participants_id','accesses','updated_at'];
-    /*get projects*/
+    /*get projects
+    * @param
+    * @return array
+    */
     public static function getProjects():array
     {
         $projects = Projects::where('status_id','!=',5)->select('name','id')->get()->toArray();
         return $projects;
     }
-    /*get detail project by ID*/
+    /*get detail project by ID
+    * @param int $id
+    * @return array
+    */
     public static function getProjectById($id):array
     {
         $project = Projects::findOrFail($id)->toArray();
         return $project;
     }
-    /*get project by clients ID*/
+    /*get project by clients ID
+    * @param int $id
+    * @return array
+    */
     public static  function ProjectsByClient($id):array
     {
         $projects = Projects::where('client_id',$id)->get()->toArray();
         return $projects;
     }
-    /*get participants to project by IDs user 1,2,3...*/
+    /*get participants to project by IDs user 1,2,3...
+    * @param string $participants_ids
+    * @return array
+    */
     public static  function ProjectsParticipants($participants_ids):array
     {
         $participants = User::whereIn('id', explode(',',$participants_ids))
             ->leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
         return $participants;
     }
-    /*add project*/
+    /*add project
+    * @param Request $request
+    * @return array or false
+    */
     public static function addProject($request)
     {
         $create = Projects::create([
@@ -57,7 +72,10 @@ class Projects extends Model
             return false;
         }
     }
-    /*update project by ID*/
+    /*update project by ID
+    * @param int $id, Request $request
+    * @return bool
+    */
     public static function updateProjectById($id,$request):bool
     {
         $update = Projects::find($id)->update(array(

@@ -8,17 +8,26 @@ use Carbon\Carbon;
 class Clients extends Model
 {
     protected $fillable = ['first_name','last_name','country','timezone','email','messanger','description_client','other_info','comm_status_id','trust_id','who_join_user_id','updated_at'];
-    /*get clients*/
+    /*get clients
+    * @param
+    * @return array
+    */
     public static function getClients():array{
         $clients = Clients::all()->toArray();
         return $clients;
     }
-    /*get clients by ID*/
+    /*get clients by ID
+    * @param  int $id
+    * @return array
+    */
     public static function getClientById($id):array{
         $client = Clients::findOrFail($id)->toArray();
         return $client;
     }
-    /*add client*/
+    /*add client
+    * @param  Request $request
+    * @return array or false
+    */
     public static function addClient($request){
         $create = Clients::create([
             'first_name'=> $request->first_name,
@@ -40,7 +49,10 @@ class Clients extends Model
         }
 
     }
-    /*update client*/
+    /*update client
+    * @param  int $id, Request $request
+    * @return bool
+    */
     public static function updateClientById($id, $request):bool{
         $update = Clients::find($id)->update(array(
             'first_name'=> $request->first_name,

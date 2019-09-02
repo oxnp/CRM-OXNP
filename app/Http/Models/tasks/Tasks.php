@@ -8,7 +8,10 @@ use Carbon\Carbon;
 class Tasks extends Model
 {
     protected $fillable =['name','description','sprint_id','executor_id','director_id','dead_line','project_id','category_id','relative_task_id','status_id','priority_id','time_estimate','time_tracker','created_at','updated_at'];
-    /*add task and subtask*/
+    /*add task and subtask
+     * @param Request $request, int $project_id, int $category_id, int $main_task=0
+    * @return array or false
+    */
     public static function addTask($request,$project_id,$category_id,$main_task = 0){
         $add_task = Tasks::create([
         'name'=>$request->name,
@@ -33,7 +36,10 @@ class Tasks extends Model
         }
     }
 
-    /*update task and subtask by ID*/
+    /*update task and subtask by ID
+     * @param Request $request, int $category_id, int $id
+    * @return bool
+    */
     public static function updateTask($request,$category_id,$id):bool{
         $update = Tasks::find($id)->update(array(
             'name'=>$request->name,
@@ -55,12 +61,19 @@ class Tasks extends Model
             return false;
         }
     }
-    /*get tasks by project ID*/
+    /*get tasks by project ID
+     * @param int $id
+     * @return array
+     */
+
     public static function getTasksByProjectId($id):array{
         $tasks = Tasks::where('project_id',$id)->get()->toArray();
         return $tasks;
     }
-    /*get task by ID*/
+    /*get task by ID
+     * @param int $id
+     * @return array
+    */
     public static function getTaskById($id):array{
         $task = Tasks::find($id)->toArray();
         return $task;

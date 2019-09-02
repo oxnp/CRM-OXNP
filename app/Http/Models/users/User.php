@@ -26,12 +26,18 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
+   /* get all users
+    * @param
+    * @return array
+    */
     public static  function getUsers(){
         $users = User::leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
         return $users;
     }
-
+    /* get user by ID
+     * @param int $participant_id
+     * @return array
+     */
     public static  function getUsersByParticipantsId($participant_id){
         $users = User::whereIn('id',explode(',',$participant_id))->leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
         return $users;

@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class SupportLeftSideBar extends Model
 {
-    /*get left tree menu*/
+    /*get left tree menu
+    * @param array $categories_to_project, array $tasks, array $bugs
+    * @return array
+    */
     public static function getTreeCategoryAndTasks($categories_to_project,$tasks,$bugs):array{
         $tree_category_and_task = array();
         foreach ($categories_to_project as $key_category => $category) {
@@ -32,7 +35,10 @@ class SupportLeftSideBar extends Model
         }
         return $tree_category_and_task;
     }
-    /*get different category on list category and project category*/
+    /*get different category on list category and project category
+    * @param array $categories_to_project, array $projects_categories
+    * @return array
+    */
     public static function getDiffCategory($categories_to_project,$projects_categories):array{
         foreach($projects_categories as $key=>$projects_category){
             foreach($categories_to_project as $project_to_category)
@@ -42,7 +48,10 @@ class SupportLeftSideBar extends Model
         }
         return $projects_categories;
     }
-    /*get left tree menu by sprint*/
+    /*get left tree menu by sprint
+    * @param array $categories_to_project, array $tasks, array $bugs, array $sprints
+    * @return array
+    */
     public static function getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints)
     {
         $tree = array();
