@@ -24,7 +24,7 @@ class sprintsController extends Controller
     {
         try {
             Sprints::addSprint($request, $project_id);
-            return redirect()->to(route('projects_list') . '/' . $project_id);
+            return redirect()->route('projects.show',$project_id);
         } catch (QueryException $exception) {
             $this->err['errors'] = 'No added sprint';
             return response()->json($this->err);

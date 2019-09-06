@@ -83,9 +83,9 @@
             </thead>
         @foreach($schedules as $schedule)
                 <tr>
-                    <td>{{Auth::user()->name}}</td>
+                    <td>{{$schedule['name']}}</td>
                     <td>{{$schedule['total_min']}}</td>
-                    <td>action</td>
+                    <td>@if($schedule['user_id'] == Auth::user()->id && $schedule['flag_in_progress_th'] == 1) stop btn @endif</td>
                 </tr>
         @endforeach
         </table>

@@ -49,3 +49,7 @@ Route::post('/bugs-attachments/projects/{project_id}/bug/{bug_id}', 'bugs\bugsCo
 Route::post('/projects/{project_id}/sprints/add-sprint', 'sprints\sprintsController@addSprint')->name('sprints_add');
 /*sprints*/
 
+/*tracker*/
+//Route::post('/projects/{project_id}/task/{task_id}/tracker/start', 'sprints\sprintsController@addSprint')->name('sprints_add');
+/*tracker*/
+

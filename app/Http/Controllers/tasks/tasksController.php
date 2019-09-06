@@ -264,7 +264,7 @@ class tasksController extends Controller
     {
         try {
             $task_update = Tasks::updateTask($request, $category_id, $id);
-            return redirect()->route('projects_detail', $project_id);
+            return redirect()->route('projects.show',$project_id);
         } catch (QueryException $exception) {
             $this->err['errors'] = 'No update subtask/task';
             return response()->json($this->err);

@@ -41,7 +41,10 @@ class Tasks extends Model
     * @return bool
     */
     public static function updateTask($request,$category_id,$id):bool{
-        $update = Tasks::find($id)->update(array(
+
+        $task = Tasks::find($id);
+
+        $update = $task->update(array(
             'name'=>$request->name,
             'description'=>$request->description,
             'sprint_id'=>$request->sprint_id,
@@ -54,7 +57,14 @@ class Tasks extends Model
             'time_tracker'=>$request->time_tracker,
             'updated_at'=> Carbon::now()
         ));
-
+/*
+        if($task->only('relative_task_id')['relative_task_id'] == 0){
+            $subtasks = Tasks::where('relative_task_id',$id)->update([
+                'sprint_id' => $request->sprint_id
+            ]);
+        }
+        uncomment for change sprint to all subtask if change sprint on main task
+*/
         if($update){
             return true;
         }else{
