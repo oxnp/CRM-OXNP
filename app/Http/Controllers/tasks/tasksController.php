@@ -237,6 +237,17 @@ class tasksController extends Controller
         $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
         $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(),$task_id);
 
+        date_default_timezone_set('Europe/Kiev');
+        $curr_date = date_create(date('Y-m-d H:i:s'));
+        foreach($schedules as $shcedule){
+            if ($shcedule['flag_in_progress_th'] == 1){
+                $track_from  = date_create($shcedule['track_from']);
+                $diff = date_diff($track_from, $curr_date);
+                $curr_track_for_task = $diff->format('%H:%I:%S');
+            }
+        }
+
+
         $this->result_action['files_added'] = Session::get('files_added');
 
 
@@ -256,6 +267,7 @@ class tasksController extends Controller
             'tree_category_and_task'=>$tree_category_and_task,
             'tree_by_sprints'=>$tree_by_sprints,
             'schedules'=>$schedules,
+            'curr_track_for_task'=>$curr_track_for_task,
             'result_action'=>$this->result_action
         ]);
     }

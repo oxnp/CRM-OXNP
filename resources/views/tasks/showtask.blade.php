@@ -77,17 +77,17 @@
     <div class="col-md-4">
         <table>
             <thead>
-            <th>Name</th>
-            <th>Track time</th>
-            <th>Action</th>
+                <th>Name</th>
+                <th>Track time</th>
+                <th>Action</th>
             </thead>
-        @foreach($schedules as $schedule)
-                <tr>
-                    <td>{{$schedule['name']}}</td>
-                    <td>{{$schedule['total_min']}}</td>
-                    <td>@if($schedule['user_id'] == Auth::user()->id && $schedule['flag_in_progress_th'] == 1) stop btn @endif</td>
-                </tr>
-        @endforeach
+            @foreach($schedules as $schedule)
+                    <tr>
+                        <td>{{$schedule['name']}}</td>
+                        <td>{{$schedule['total_min']}}</td>
+                        <td>@if($schedule['user_id'] == Auth::user()->id && $schedule['flag_in_progress_th'] == 1) {{$curr_track_for_task}} stop btn @endif</td>
+                    </tr>
+            @endforeach
         </table>
     </div>
 @stop
