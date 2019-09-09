@@ -28,7 +28,7 @@ class Tracker extends Model
         $schedule->update([
             'total_track_time'=> $total_track_time
         ]);
-
+ 
 
        return $track;
     }

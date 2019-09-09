@@ -45,7 +45,11 @@ class SchedulesToUsers extends Model
             $hours = floor($seconds/3600);
             $seconds -= $hours*3600;
             $minutes  = floor($seconds/60);
+
             $seconds -= $minutes*60;
+            if ((int)$seconds <10){
+                $seconds = sprintf("%02d", (int)$seconds);
+            }
             return "{$hours}:{$minutes}:{$seconds}";
 
 
