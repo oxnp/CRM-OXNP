@@ -50,6 +50,7 @@ Route::post('/projects/{project_id}/sprints/add-sprint', 'sprints\sprintsControl
 /*sprints*/
 
 /*tracker*/
-//Route::post('/projects/{project_id}/task/{task_id}/tracker/start', 'sprints\sprintsController@addSprint')->name('sprints_add');
+Route::put('/projects/{project_id}/task/{task_id}/tracker/{track_id}/stop', 'tracker\trackerController@stopTrack')->name('stop_track');
+Route::post('/projects/{project_id}/task/{task_id}/tracker/start', 'tracker\trackerController@startTrack')->name('start_track');
 /*tracker*/
 

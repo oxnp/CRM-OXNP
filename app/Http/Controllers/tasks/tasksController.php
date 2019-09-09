@@ -16,6 +16,7 @@ use App\Http\Models\tasks\TasksPriority;
 use App\Http\Models\tasks\TasksStatuses;
 use App\Http\Models\projects\ProjectsCategories;
 use App\Http\Models\supporting_function\SupportLeftSideBar;
+use App\Http\Models\supporting_function\SupportTimer;
 use App\Http\Models\tasks\TasksAttachments;
 use App\Http\Models\tracker\SchedulesToUsers;
 use Auth;
@@ -237,16 +238,13 @@ class tasksController extends Controller
         $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
         $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(),$task_id);
 
-        date_default_timezone_set('Europe/Kiev');
-        $curr_date = date_create(date('Y-m-d H:i:s'));
-        foreach($schedules as $shcedule){
-            if ($shcedule['flag_in_progress_th'] == 1){
-                $track_from  = date_create($shcedule['track_from']);
-                $diff = date_diff($track_from, $curr_date);
-                $curr_track_for_task = $diff->format('%H:%I:%S');
+        $curr_track_for_task = '';
+
+        foreach($schedules as $schedule){
+            if ($schedule['flag_in_progress_th'] == 1){
+                $curr_track_for_task = SupportTimer::getTimeToTask($schedule['track_from']);
             }
         }
-
 
         $this->result_action['files_added'] = Session::get('files_added');
 
