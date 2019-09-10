@@ -13,7 +13,8 @@ class Tracker extends Model
 {
     protected $table = "schedule_track_history";
     protected $fillable =['id','schedule_to_users_id','user_id','track_from','track_to','flag_in_progress_th','total_time','created_at','updated_at'];
-    public static function stopTracker ($category_id, $task_id, $track_id){
+    public static function stopTracker ($category_id = 0, $task_id, $track_id,$type){
+
        $track = Tracker::find($track_id);
 
        $track_from = $track->track_from;
@@ -23,26 +24,38 @@ class Tracker extends Model
        $track->total_time = SupportTimer::getTimeToTask($track_from);
        $track->save();
 
-        $total_track_time = SchedulesToUsers::sumTimeTrackByTaskByUserId($task_id,Auth::id());
-        $schedule = SchedulesToUsers::where('schedule_id',$task_id);
+        $total_track_time = SupportTimer::sumTimeTrackByTaskByUserId($task_id,Auth::id(),$type);
+        $schedule = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type);
         $schedule->update([
-            'total_track_time'=> $total_track_time
+            'total_track_time'=> $total_track_time,
+            'flag_in_progress' => 0
         ]);
  
 
        return $track;
     }
 
-    public static function startTracker ($category_id, $task_id){
+    public static function startTracker ($category_id, $task_id,$type){
 
-        $shedule_to_user = SchedulesToUsers::where('schedule_id',$task_id)->select('id')->get()->toArray();
 
+        $schedule_in_progress = Tracker::where('schedule_track_history.user_id',Auth::id())
+            ->where('schedule_track_history.flag_in_progress_th',1)
+            ->leftjoin('schedules_to_users','schedules_to_users.id','schedule_track_history.schedule_to_users_id')
+            ->select('schedule_track_history.id as track_id','schedules_to_users.schedule_id as schedule_id','schedules_to_users.type')
+            ->get()->toArray();
+
+        if(!empty($schedule_in_progress)){
+            self::stopTracker(0,$schedule_in_progress[0]['schedule_id'],$schedule_in_progress[0]['track_id'],$schedule_in_progress[0]['type']);
+        }
+
+        $shedule_to_user = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type)->select('id')->get()->toArray();
 
         if($shedule_to_user == null){
             $schedule = SchedulesToUsers::create([
                 'schedule_id'=>$task_id,
                 'flag_in_progress'=>1,
                 'user_id'=>Auth::id(),
+                'type'=>$type,
                 'total_track_min'=> '00:00:00'
             ]);
         }
@@ -65,6 +78,9 @@ class Tracker extends Model
                 'flag_in_progress_th' => 1,
                 'total_time' => '00:00:00',
             ]);
+
+            $update_progress = SchedulesToUsers::where('type',$type)->where('user_id',Auth::id())->where('id', $shedule_to_user[0]['id']);
+            $update_progress->update(['flag_in_progress' => 1]);
         }
 
     }

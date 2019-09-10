@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Models\tracker\Tracker;
 class SchedulesToUsers extends Model
 {
-    protected $fillable =['id','schedule_id','user_id','flag_in_progress','total_track_time'];
+    protected $fillable =['id','schedule_id','user_id','flag_in_progress','total_track_time','type'];
     public $timestamps = false;
-    public static function getSchedulesToUserById($user_id,$schedule_id){
+    public static function getSchedulesToUserById($user_id,$schedule_id,$type){
         $schedules = SchedulesToUsers::where('schedules_to_users.user_id',$user_id)
+            ->where('schedules_to_users.type',$type)
             ->where('schedules_to_users.schedule_id',$schedule_id)
             ->join('schedule_track_history','schedule_track_history.schedule_to_users_id','schedules_to_users.id')
             ->join('users','users.id','schedule_track_history.user_id')->select(
@@ -28,9 +29,11 @@ class SchedulesToUsers extends Model
         return $schedules;
     }
 
-    public static function sumTimeTrackByTaskByUserId($task_id, $user_id){
-        $schedules_to_users = SchedulesToUsers::where('schedule_track_history.user_id',$user_id)->where('schedules_to_users.schedule_id',$task_id)->
-            leftjoin('schedule_track_history','schedule_track_history.schedule_to_users_id','schedules_to_users.id')
+    public static function sumTimeTrackByTaskByUserId($task_id, $user_id, $type){
+        $schedules_to_users = SchedulesToUsers::where('schedule_track_history.user_id',$user_id)
+            ->where('schedules_to_users.schedule_id',$task_id)
+            ->where('schedules_to_users.type',$type)
+            ->leftjoin('schedule_track_history','schedule_track_history.schedule_to_users_id','schedules_to_users.id')
             ->select('total_time')->get();
 
             $times = $schedules_to_users->toArray();
@@ -43,15 +46,19 @@ class SchedulesToUsers extends Model
                 $seconds += $second;
             }
             $hours = floor($seconds/3600);
+            if ((int)$hours <10){
+                $hours = sprintf("%02d", (int)$hours);
+            }
             $seconds -= $hours*3600;
-            $minutes  = floor($seconds/60);
 
+            $minutes  = floor($seconds/60);
+            if ((int)$minutes <10){
+                $minutes = sprintf("%02d", (int)$minutes);
+            }
             $seconds -= $minutes*60;
             if ((int)$seconds <10){
                 $seconds = sprintf("%02d", (int)$seconds);
             }
             return "{$hours}:{$minutes}:{$seconds}";
-
-
     }
 }

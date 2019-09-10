@@ -131,7 +131,8 @@ class tasksController extends Controller
         try {
             $add_task = Tasks::addTask($request, $project_id, $category_id);
             $this->storeAttachmentsByTaskId($request, $project_id, $add_task['id']);
-            return redirect()->to(route('projects_list') . '/' . $project_id);
+            return redirect()->to(route('projects.show',$project_id));
+            //return back();
         } catch (QueryException $exception) {
             $this->err['errors'] = 'No added task';
             return response()->json($this->err);
@@ -142,7 +143,7 @@ class tasksController extends Controller
         try {
             $add_sub_task = Tasks::addTask($request,$project_id,$category_id,$task_id);
             $this->storeAttachmentsByTaskId($request, $project_id, $add_sub_task['id']);
-            return redirect()->to(route('projects_list') . '/' . $project_id);
+            return redirect()->to(route('projects.show',$project_id));
         } catch (QueryException $exception) {
             $this->err['errors'] = 'No added subtask';
             return response()->json($this->err);
@@ -197,6 +198,15 @@ class tasksController extends Controller
         $tasks_priority = TasksPriority::geTasksPriority();
         $tasks_statuses = TasksStatuses::geTasksStatuses();
         $task_attachemnts = TasksAttachments::getAttachmentsByTaskId($task_id);
+        $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(), $task_id,'task');
+
+        $curr_track_for_task = '';
+
+        foreach($schedules as $schedule){
+            if ($schedule['flag_in_progress_th'] == 1){
+                $curr_track_for_task = SupportTimer::getTimeToTask($schedule['track_from']);
+            }
+        }
         $this->result_action['files_added'] = Session::get('files_added');
 
         return view('tasks.showsubtask')->with([
@@ -214,6 +224,8 @@ class tasksController extends Controller
             'tasks_statuses'=>$tasks_statuses,
             'tree_category_and_task'=>$tree_category_and_task,
             'tree_by_sprints'=>$tree_by_sprints,
+            'schedules'=>$schedules,
+            'curr_track_for_task'=>$curr_track_for_task,
             'result_action'=>$this->result_action
         ]);
     }
@@ -236,7 +248,7 @@ class tasksController extends Controller
         $tasks_statuses = TasksStatuses::geTasksStatuses();
         $sprints = Sprints::getSprintsByProjectId($project_id);
         $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
-        $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(),$task_id);
+        $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(),$task_id,'task');
 
         $curr_track_for_task = '';
 
@@ -274,7 +286,8 @@ class tasksController extends Controller
     {
         try {
             $task_update = Tasks::updateTask($request, $category_id, $id);
-            return redirect()->route('projects.show',$project_id);
+           // return redirect()->route('projects.show',$project_id);
+            return back();
         } catch (QueryException $exception) {
             $this->err['errors'] = 'No update subtask/task';
             return response()->json($this->err);

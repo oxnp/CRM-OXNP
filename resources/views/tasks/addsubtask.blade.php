@@ -30,6 +30,8 @@
                 <option value="{{$user['id']}}">{{$user['name']}} - {{$user['role_name']}}</option>
             @endforeach
         </select>
+        <label class="control-label">date_start</label>
+        <input type="datetime-local" data-date="" data-date-format="YYYY-MM-DD" name="date_start"  class="form-control"/>
 
         <label class="control-label">dead_line</label>
         <input type="datetime-local" data-date="" data-date-format="YYYY-MM-DD" name="dead_line"  class="form-control"/>

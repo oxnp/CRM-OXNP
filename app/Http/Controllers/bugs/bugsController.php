@@ -7,9 +7,11 @@ use App\Http\Models\projects\Projects;
 use App\Http\Models\projects\ProjectsCategories;
 use App\Http\Models\sprints\Sprints;
 use App\Http\Models\supporting_function\SupportLeftSideBar;
+use App\Http\Models\supporting_function\SupportTimer;
 use App\Http\Models\tasks\Tasks;
 use App\Http\Models\bugs\BugsPriorities;
 use App\Http\Models\bugs\BugsStatuses;
+use App\Http\Models\tracker\SchedulesToUsers;
 use App\Http\Models\users\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -17,6 +19,7 @@ use App\Http\Models\bugs\Bugs;
 use App\Http\Models\bugs\BugsAttachments;
 use App\Http\Controllers\Controller;
 use Session;
+use Auth;
 class bugsController extends Controller
 {
     public $err = array();
@@ -92,6 +95,17 @@ class bugsController extends Controller
         $bugs_priorities = BugsPriorities::getBugsPriorities();
         $bugs_attachments = BugsAttachments::getAttachmentsByBugId($bug_id);
         $tree_by_sprints = SupportLeftSideBar::getTreeTasksAndBugsBySprints($categories_to_project,$tasks,$bugs,$sprints);
+
+        $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(), $bug_id,'bug');
+
+        $curr_track_for_task = '';
+
+        foreach($schedules as $schedule){
+            if ($schedule['flag_in_progress_th'] == 1){
+                $curr_track_for_task = SupportTimer::getTimeToTask($schedule['track_from']);
+            }
+        }
+
         $this->result_action['files_added'] = Session::get('files_added');
 
         return view('bugs.showbugs')->with([
@@ -109,6 +123,8 @@ class bugsController extends Controller
             'bugs_priorities'=>$bugs_priorities,
             'tree_category_and_task' =>$tree_category_and_task,
             'tree_by_sprints'=>$tree_by_sprints,
+            'schedules'=>$schedules,
+            'curr_track_for_task'=>$curr_track_for_task,
             'result_action'=>$this->result_action
         ]);
     }
@@ -118,7 +134,8 @@ class bugsController extends Controller
         try {
             $add_bug = Bugs::addBug($request, $project_id, $category_id);
             $this->storeAttachmentsByBugId($request, $project_id, $add_bug['id']);
-            return redirect()->to(route('projects_list') . '/' . $project_id);
+           // return redirect()->to(route('projects.show') . '/' . $project_id);
+            return back();
         } catch (QueryException $exception) {
             $this->err['errors'] = 'No added bug';
             return response()->json($this->err);
@@ -131,7 +148,8 @@ class bugsController extends Controller
         try {
             $update_bug = Bugs::updateBug($request, $project_id, $category_id, $bug_id);
             $this->storeAttachmentsByBugId($request, $project_id, $bug_id);
-            return redirect()->to(route('projects_list') . '/' . $project_id);
+           // return redirect()->to(route('projects.show') . '/' . $project_id);
+            return  back();
         } catch (QueryException $exception) {
             $this->err['errors'] = 'No update bug';
             return response()->json($this->err);

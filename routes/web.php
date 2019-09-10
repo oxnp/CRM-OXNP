@@ -37,6 +37,7 @@ Route::post('/tasks-attachments/projects/{project_id}/task/{task_id}', 'tasks\ta
 /*tasks*/
 
 /*bugs*/
+
 Route::get('/projects/{project_id}/category/{category_id}/bug', 'bugs\bugsController@showAddBugForm')->name('show_add_bug_form');
 Route::get('/projects/{project_id}/category/{category_id}/bug/{bug_id}', 'bugs\bugsController@showBug')->name('show_bug');
 Route::post('/projects/{project_id}/category/{category_id}/bug', 'bugs\bugsController@addBug')->name('add_bug');
@@ -50,7 +51,7 @@ Route::post('/projects/{project_id}/sprints/add-sprint', 'sprints\sprintsControl
 /*sprints*/
 
 /*tracker*/
-Route::put('/projects/{project_id}/task/{task_id}/tracker/{track_id}/stop', 'tracker\trackerController@stopTrack')->name('stop_track');
-Route::post('/projects/{project_id}/task/{task_id}/tracker/start', 'tracker\trackerController@startTrack')->name('start_track');
+Route::put('/projects/{project_id}/task/{task_id}/tracker/{track_id}/type/{type}/stop', 'tracker\trackerController@stopTrack')->name('stop_track');
+Route::post('/projects/{project_id}/task/{task_id}/tracker/type/{type}/start', 'tracker\trackerController@startTrack')->name('start_track');
 /*tracker*/
 

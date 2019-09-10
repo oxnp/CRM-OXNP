@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class Tasks extends Model
 {
-    protected $fillable =['name','description','sprint_id','executor_id','director_id','dead_line','project_id','category_id','relative_task_id','status_id','priority_id','time_estimate','time_tracker','created_at','updated_at'];
+    protected $fillable =['name','description','sprint_id','executor_id','director_id','date_start','dead_line','project_id','category_id','relative_task_id','status_id','priority_id','time_estimate','time_tracker','created_at','updated_at'];
     /*add task and subtask
      * @param Request $request, int $project_id, int $category_id, int $main_task=0
     * @return array or false
@@ -19,6 +19,7 @@ class Tasks extends Model
         'sprint_id'=>$request->sprint_id,
         'executor_id'=>$request->executor_id,
         'director_id'=>$request->director_id,
+        'date_start'=>$request->date_start,
         'dead_line'=>$request->dead_line,
         'project_id'=>$project_id,
         'category_id'=>$category_id,
@@ -50,6 +51,7 @@ class Tasks extends Model
             'sprint_id'=>$request->sprint_id,
             'executor_id'=>$request->executor_id,
             'director_id'=>$request->director_id,
+            'date_start'=>$request->date_start,
             'dead_line'=>$request->dead_line,
             'status_id'=>$request->status_id,
             'priority_id'=>$request->priority_id,

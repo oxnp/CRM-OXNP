@@ -30,10 +30,12 @@
         @endforeach
         </select>
 
-
+        <label class="control-label">date_start</label>
+        <input type="datetime-local" data-date="" data-date-format="YYYY-MM-DD" name="date_start"  class="form-control"/>
 
         <label class="control-label">dead_line</label>
         <input type="datetime-local" data-date="" data-date-format="YYYY-MM-DD" name="dead_line"  class="form-control"/>
+
         <label class="control-label">status_id</label>
         <select type="text" name="status_id"  class="form-control">
             @foreach($tasks_statuses as $status)

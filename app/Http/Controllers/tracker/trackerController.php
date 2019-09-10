@@ -23,9 +23,10 @@ class trackerController extends Controller
      * @param  int  $category_id, int  $task_id, int $track_id
      * @return redirect back
      */
-    public function startTrack(Request $request, $project_id, $task_id)
+    public function startTrack(Request $request, $project_id, $task_id, $type)
     {
-        Tracker::startTracker($project_id, $task_id);
+
+        Tracker::startTracker($project_id, $task_id,$type);
         return back();
     }
     /**
@@ -34,9 +35,9 @@ class trackerController extends Controller
      * @param  int  $category_id, int  $task_id, int $track_id
      * @return redirect back
      */
-    public function stopTrack(Request $request, $project_id, $task_id, $track_id)
+    public function stopTrack(Request $request, $project_id, $task_id, $track_id,$type)
     {
-       Tracker::stopTracker($project_id, $task_id, $track_id);
+       Tracker::stopTracker($project_id, $task_id, $track_id,$type);
         return back();
     }
 
