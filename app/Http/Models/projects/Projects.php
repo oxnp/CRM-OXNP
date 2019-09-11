@@ -5,10 +5,45 @@ namespace App\Http\Models\projects;
 use App\Http\Models\users\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Models\tracker\SchedulesToUsers;
+use App\Http\Models\tracker\Tracker;
+use App\Http\Models\tasks\Tasks;
+use DB;
 
 class Projects extends Model
 {
     protected $fillable =['status_id','client_id','name','date_start','date_end','price','description','curr_website','old_website','participants_id','accesses','updated_at'];
+
+    public static function getFullTimeForProjectById($id){
+        $tasks = Tasks::where('tasks.project_id',$id)
+            ->leftjoin('schedules_to_users','schedules_to_users.schedule_id','tasks.id')
+            ->leftjoin('users','users.id','schedules_to_users.user_id')
+            ->leftjoin('users_role','users_role.role_id','users.role_id')
+            ->where('schedules_to_users.type','task')
+            ->select('schedules_to_users.total_track_time','schedules_to_users.user_id','users.name','users_role.role_name');
+
+        $bug = Tasks::where('tasks.project_id',$id)
+            ->leftjoin('schedules_to_users','schedules_to_users.schedule_id','tasks.id')
+            ->leftjoin('users','users.id','schedules_to_users.user_id')
+            ->leftjoin('users_role','users_role.role_id','users.role_id')
+            ->where('schedules_to_users.type','bug')
+            ->select('schedules_to_users.total_track_time','schedules_to_users.user_id','users.name','users_role.role_name')
+            ->union($tasks->orderBy('schedules_to_users.user_id','asc'))
+        ->get();
+
+
+        $data = array();
+        foreach($bug->toArray() as $key=>$value){
+            $data[$value['user_id']]['role'] = $value['role_name'];
+            $data[$value['user_id']]['name'] = $value['name'];
+            $data[$value['user_id']]['total_track_time'][] = $value['total_track_time'];
+        }
+        foreach($data as $key=>$value) {
+            $data[$key]['total_track_time'] = SchedulesToUsers::sumTimeTrackForProject($data[$key]['total_track_time']);
+        }
+      //  dd($data);
+    }
+
     /*get projects
     * @param
     * @return array

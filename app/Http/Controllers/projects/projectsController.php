@@ -125,6 +125,9 @@ class projectsController extends Controller
         $participants_user =  Projects::ProjectsParticipants($project['participants_id']);
         $project_statuses = ProjectsStatuses::getProjectsStatuses();
         $users = User::getUsers();
+
+        $total_time_for_project = Projects::getFullTimeForProjectById($id);
+       // dd($total_time_for_project);
         $this->result_action['files_added'] = Session::get('files_added');
 
         return view('projects.project')->with([

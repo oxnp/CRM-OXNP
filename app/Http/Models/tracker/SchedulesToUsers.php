@@ -9,8 +9,8 @@ class SchedulesToUsers extends Model
     protected $fillable =['id','schedule_id','user_id','flag_in_progress','total_track_time','type'];
     public $timestamps = false;
     public static function getSchedulesToUserById($user_id,$schedule_id,$type){
-        $schedules = SchedulesToUsers::where('schedules_to_users.user_id',$user_id)
-            ->where('schedules_to_users.type',$type)
+        $schedules = SchedulesToUsers::/*where('schedules_to_users.user_id',$user_id) uncomment if need show only my track time in task
+            ->*/where('schedules_to_users.type',$type)
             ->where('schedules_to_users.schedule_id',$schedule_id)
             ->join('schedule_track_history','schedule_track_history.schedule_to_users_id','schedules_to_users.id')
             ->join('users','users.id','schedule_track_history.user_id')->select(
@@ -60,5 +60,31 @@ class SchedulesToUsers extends Model
                 $seconds = sprintf("%02d", (int)$seconds);
             }
             return "{$hours}:{$minutes}:{$seconds}";
+    }
+
+    public static function sumTimeTrackForProject($times){
+        $seconds = 0;
+        foreach ($times as $time)
+        {
+            list($hour,$minute,$second) = explode(':', $time);
+            $seconds += $hour*3600;
+            $seconds += $minute*60;
+            $seconds += $second;
+        }
+        $hours = floor($seconds/3600);
+        if ((int)$hours <10){
+            $hours = sprintf("%02d", (int)$hours);
+        }
+        $seconds -= $hours*3600;
+
+        $minutes  = floor($seconds/60);
+        if ((int)$minutes <10){
+            $minutes = sprintf("%02d", (int)$minutes);
+        }
+        $seconds -= $minutes*60;
+        if ((int)$seconds <10){
+            $seconds = sprintf("%02d", (int)$seconds);
+        }
+        return "{$hours}:{$minutes}:{$seconds}";
     }
 }
