@@ -41,7 +41,7 @@ class Projects extends Model
         foreach($data as $key=>$value) {
             $data[$key]['total_track_time'] = SchedulesToUsers::sumTimeTrackForProject($data[$key]['total_track_time']);
         }
-      //  dd($data);
+      return $data;
     }
 
     /*get projects

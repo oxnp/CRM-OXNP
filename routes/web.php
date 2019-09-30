@@ -24,7 +24,7 @@ Route::post('/projects-category/{id}', 'projects\projectsController@addCategoryT
 Route::resource('clients', 'clients\clientsController');
 /*clients*/
 
-/*tasks*/
+/*tasks */
 Route::get('/projects/{project_id}/category/{category_id}/add-task', 'tasks\tasksController@showAddTaskForm')->name('show_add_task_form');
 Route::post('/projects/{project_id}/category/{category_id}/add-task', 'tasks\tasksController@addTask')->name('tasks_add');
 Route::get('/projects/{project_id}/category/{category_id}/task/{task_id}/add-subtask', 'tasks\tasksController@showAddSubTaskForm')->name('show_add_sub_task_form');

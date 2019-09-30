@@ -78,6 +78,27 @@ Client data
                 @endforeach
             </select>
         </div>
+
+        <div class="col-md-4">
+            Participants
+            <table width="100%">
+                <thead>
+                <tr><th>Position</th>
+                    <th>Name</th>
+                    <th>Track time</th>
+                </tr>
+                </thead>
+                @foreach($total_time_for_project as $user_id => $user)
+                    <tr data-attr="{{$user_id}}">
+                        <td>{{$user['role']}}</td>
+                        <td>{{$user['name']}}</td>
+                        <td>{{$user['total_track_time']}}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+
+
     </div>
     <div class="row">
     <div class="col-md-4">

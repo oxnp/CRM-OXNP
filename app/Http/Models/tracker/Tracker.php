@@ -2,6 +2,8 @@
 
 namespace App\Http\Models\tracker;
 
+use App\Http\Models\bugs\Bugs;
+use App\Http\Models\tasks\Tasks;
 use http\Env\Request;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -25,11 +27,29 @@ class Tracker extends Model
        $track->save();
 
         $total_track_time = SupportTimer::sumTimeTrackByTaskByUserId($task_id,Auth::id(),$type);
-        $schedule = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type);
+        $schedule = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type)->where('user_id',Auth::id());
         $schedule->update([
             'total_track_time'=> $total_track_time,
             'flag_in_progress' => 0
         ]);
+
+        $total_time_task = SupportTimer::getSumTimerByTaskId($task_id,$type);
+
+
+
+        if ($type == 'task'){
+            $task = Tasks::find($task_id);
+            $task->update([
+                'time_tracker'=>$total_time_task
+            ]);
+        }
+
+        if ($type == 'bug'){
+            $bug = Bugs::find($task_id);
+            $bug->update([
+                'time_tracker'=>$total_time_task
+            ]);
+        }
  
 
        return $track;
@@ -48,7 +68,7 @@ class Tracker extends Model
             self::stopTracker(0,$schedule_in_progress[0]['schedule_id'],$schedule_in_progress[0]['track_id'],$schedule_in_progress[0]['type']);
         }
 
-        $shedule_to_user = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type)->select('id')->get()->toArray();
+        $shedule_to_user = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type)->where('user_id',Auth::id())->select('id')->get()->toArray();
 
         if($shedule_to_user == null){
             $schedule = SchedulesToUsers::create([

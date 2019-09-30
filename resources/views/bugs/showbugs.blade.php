@@ -35,6 +35,12 @@
             <label class="control-label">dead line</label>
             <input type="datetime-local" data-date="" data-date-format="YYYY-MM-DD" name="dead_line"  class="form-control"  value="{{$bug['dead_line']}}"/>
 
+            <label class="control-label">time_tracker</label>
+            <input type="text" name="time_tracker"  class="form-control"  value="{{$bug['time_tracker']}}"/>
+
+            <label class="control-label">time_estimate</label>
+            <input type="text" name="time_estimate"  class="form-control"  value="{{$bug['time_estimate']}}"/>
+
             <label class="control-label">priority_id</label>
             <select type="text" name="priority_id" class="form-control">
                 @foreach($bugs_priorities as $priority)

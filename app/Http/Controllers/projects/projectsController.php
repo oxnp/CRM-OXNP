@@ -140,6 +140,7 @@ class projectsController extends Controller
             'project_statuses'=>$project_statuses,
             'users'=>$users,
             'sprints'=>$sprints,
+            'total_time_for_project'=>$total_time_for_project,
             'tree_category_and_task'=>$tree_category_and_task,
             'tree_by_sprints'=>$tree_by_sprints,
             'result_action'=>$this->result_action

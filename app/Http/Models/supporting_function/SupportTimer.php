@@ -23,13 +23,26 @@ class SupportTimer extends Model
 
 
     public static function sumTimeTrackByTaskByUserId($task_id, $user_id, $type){
-        $schedules_to_users = SchedulesToUsers::where('schedule_track_history.user_id',$user_id)
-            ->where('schedules_to_users.schedule_id',$task_id)
-            ->where('schedules_to_users.type',$type)
-            ->leftjoin('schedule_track_history','schedule_track_history.schedule_to_users_id','schedules_to_users.id')
-            ->select('total_time')->get();
 
-        $times = $schedules_to_users->toArray();
+            $schedules_to_users = SchedulesToUsers::where('schedule_track_history.user_id', $user_id)
+                ->where('schedules_to_users.schedule_id', $task_id)
+                ->where('schedules_to_users.type', $type)
+                ->leftjoin('schedule_track_history', 'schedule_track_history.schedule_to_users_id', 'schedules_to_users.id')
+                ->select('total_time')->get();
+
+            $times = $schedules_to_users->toArray();
+
+        return self::sumTimer($times);
+    }
+
+    public static function getSumTimerByTaskId($task_id,$type){
+            $schedules_to_users = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type)->select('total_track_time as total_time')->get();
+            $times= $schedules_to_users->toArray();
+
+        return self::sumTimer($times);
+    }
+
+    public static function sumTimer($times){
         $seconds = 0;
         foreach ($times as $time)
         {
