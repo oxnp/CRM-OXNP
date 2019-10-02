@@ -55,3 +55,7 @@ Route::put('/projects/{project_id}/task/{task_id}/tracker/{track_id}/type/{type}
 Route::post('/projects/{project_id}/task/{task_id}/tracker/type/{type}/start', 'tracker\trackerController@startTrack')->name('start_track');
 /*tracker*/
 
+/*inventory*/
+Route::resource('inventories', 'inventories\inventoriesController');
+/*inventory*/
+

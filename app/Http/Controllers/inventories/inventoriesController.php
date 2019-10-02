@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\tracker;
+namespace App\Http\Controllers\inventories;
 
+use App\Http\Models\inventories\Inventories;
+use App\Http\Models\inventories\InventoryCategories;
+use App\Http\Models\users\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Models\tracker\Tracker;
 
-class trackerController extends Controller
+class inventoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,30 +18,14 @@ class trackerController extends Controller
      */
     public function index()
     {
-        //
-    }
-    /**
-     * Start tracker .
-     *
-     * @param  int  $category_id, int  $task_id, int $track_id
-     * @return redirect back
-     */
-    public function startTrack(Request $request, $project_id, $task_id, $type)
-    {
-
-        Tracker::startTracker($project_id, $task_id,$type);
-        return back();
-    }
-    /**
-     * Stop tracker .
-     *
-     * @param  int  $category_id, int  $task_id, int $track_id
-     * @return redirect back
-     */
-    public function stopTrack(Request $request, $project_id, $task_id, $track_id,$type)
-    {
-       Tracker::stopTracker($project_id, $task_id, $track_id,$type);
-       return back();
+        $inventory_categories = InventoryCategories::getCategoriesTree();
+        $users = User::getUsers();
+        $inventories_list = Inventories::getInventories();
+        return view('inventories.list')->with([
+            'inventories_list'=>$inventories_list,
+            'inventory_categories'=>$inventory_categories,
+            'users'=>$users,
+        ]);
     }
 
     /**
@@ -59,7 +46,8 @@ class trackerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Inventories::addInventory($request);
+        return back();
     }
 
     /**
@@ -93,7 +81,13 @@ class trackerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            Inventories::updateInventory($request,$id);
+            return back();
+        } catch (QueryException $exception) {
+            $this->err['errors'] = 'Not update client';
+            return response()->json($this->err);
+        }
     }
 
     /**
