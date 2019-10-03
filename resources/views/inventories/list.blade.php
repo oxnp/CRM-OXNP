@@ -31,7 +31,8 @@
             <td><input type="text" name="serial_number" value="{{$item['serial_number']}}"/></td>
             <td>
                 <select name="who_used">
-                    <option value="Склад">Склад</option>
+                    <option value="Общее пользование" @if('Общее пользование' == $item['who_used']) selected @endif>Общее пользование</option>
+                    <option value="Склад" @if('Склад' == $item['who_used']) selected @endif>Склад</option>
                     @foreach($users as $user)
                         <option value="{{$user['name']}}"  @if($user['name'] == $item['who_used']) selected @endif>{{$user['name']}}</option>
                     @endforeach
@@ -44,27 +45,67 @@
 
 @endforeach
     </table>
-добавить инвентарь
+--------------------------------------------------------------------------------<br>
+Добавить инвентарь
+<table>
+    <thead>
+    <tr>
+        <th>Категория</th>
+        <th>Название</th>
+        <th>Серийный номер</th>
+        <th>Где</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tr>
 <form action="{{route('inventories.store')}}" method="POST" name="add_inventory">
     {{csrf_field()}}
-<input type="text" name="name"/>
-<input type="text" name="serial_number"/>
-    <select name="categories">
-        @foreach($inventory_categories as $id_main_cat=>$item)
-            <optgroup label="{{$item['name']}}">
-            @if(is_array($item['sub_cats']))
-                @foreach($item['sub_cats'] as $id_sub_cat=>$sub_cat)
-                    <option value="{{$id_sub_cat}}">{{$sub_cat}}</option>
+    <td><select name="categories">
+            @foreach($inventory_categories as $id_main_cat=>$item)
+                <optgroup label="{{$item['name']}}">
+                    @if(is_array($item['sub_cats']))
+                        @foreach($item['sub_cats'] as $id_sub_cat=>$sub_cat)
+                            <option value="{{$id_sub_cat}}">{{$sub_cat}}</option>
+                        @endforeach
+                    @endif
+                </optgroup>
+            @endforeach
+        </select>
+    </td>
+    <td><input type="text" name="name"/></td>
+    <td><input type="text" name="serial_number"/></td>
+
+        <td>
+            <select name="who_used">
+            <option value="Общее пользование">Общее пользование</option>
+            <option value="Склад">Склад</option>
+                @foreach($users as $user)
+                    <option value="{{$user['name']}}">{{$user['name']}}</option>
                 @endforeach
-            @endif
-            </optgroup>
-        @endforeach
-    </select>
-    <select name="who_used">
-        <option value="Склад">Склад</option>
-        @foreach($users as $user)
-            <option value="{{$user['name']}}">{{$user['name']}}</option>
-        @endforeach
-    </select>
-    <input type="submit" value="добавить" \>
+            </select>
+
+        </td>
+    <td><input type="submit" value="добавить" \></td>
+    </form>
+    </tr>
+</table>
+--------------------------------------------------------------------------------<br>
+Добавить категорию
+<table>
+    <thead>
+    <tr>
+        <th>Категория</th>
+        <th>Подкатегория</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tr>
+<form action="{{route('inventorycategories.store')}}" method="POST" name="add_category">
+    {{csrf_field()}}
+    <td><input type="text" name="cat_name" required/></td>
+    <td><input type="text" name="sub_cat_name"required/></td>
+    <td><input type="submit" value="добавить" \></td>
 </form>
+</tr>
+</table>

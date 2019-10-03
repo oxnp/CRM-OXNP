@@ -53,7 +53,17 @@
             <label class="control-label">who join</label>
             <select class="form-control" name="who_join_user_id">
                 @foreach($users as $user)
-                    <option value="{{$user['id']}}" @if($user['id'] == $client['who_join_user_id']) selected @endif>{{$user['name']}}</option>
+                    @if ($user['role_id'] == env('SALES_ID'))
+                        <option value="{{$user['id']}}" @if($user['id'] == $client['who_join_user_id']) selected @endif>{{$user['name']}}</option>
+                    @endif
+                @endforeach
+            </select>
+            <label class="control-label">manager</label>
+            <select class="form-control" name="manager_id">
+                @foreach($users as $user)
+                    @if ($user['role_id'] == env('MANAGER_ID'))
+                        <option value="{{$user['id']}}" @if($user['id'] == $client['manager_id']) selected @endif>{{$user['name']}}</option>
+                    @endif
                 @endforeach
             </select>
             <input name="_method" type="hidden" value="PUT">

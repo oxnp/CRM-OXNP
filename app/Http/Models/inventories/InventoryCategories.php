@@ -6,6 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class InventoryCategories extends Model
 {
+    protected $fillable = ['name','main'];
+    public $timestamps = false;
+    public static function addCategory($request){
+        $main_cat = InventoryCategories::where('name',$request->cat_name)->where('main',0)->get()->toArray();
+        if (empty($main_cat)){
+            $create_cat = InventoryCategories::create([
+                'name'=> $request->cat_name,
+                'main'=> 0
+            ])->toArray();
+
+            $create_sub_cat = InventoryCategories::create([
+                'name'=> $request->sub_cat_name,
+                'main'=> $create_cat['id']
+            ]);
+        }else{
+            $create_sub_cat = InventoryCategories::create([
+                'name'=> $request->sub_cat_name,
+                'main'=> $main_cat[0]['id']
+            ]);
+
+        }
+    }
+
     public static function getMainCategories(){
         $main_cat = InventoryCategories::where('main',0)->get()->toArray();
        return $main_cat;

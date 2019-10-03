@@ -24,9 +24,11 @@ class clientsController extends Controller
     {
         $projects = Projects::getProjects();
         $clients = Clients::getClients();
+         dd($clients);
         $clients_statuses = ClientsStatuses::getClientsStatuses();
         $clients_trust = ClientsTrust::getTrustStatuses();
         $users = User::getUsers();
+
         return view('clients.clients')->with([
             'clients'=>$clients,
             'projects'=>$projects,

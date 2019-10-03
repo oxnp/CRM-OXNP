@@ -57,5 +57,6 @@ Route::post('/projects/{project_id}/task/{task_id}/tracker/type/{type}/start', '
 
 /*inventory*/
 Route::resource('inventories', 'inventories\inventoriesController');
+Route::resource('inventorycategories', 'inventories\inventoryCategoriesController');
 /*inventory*/
 

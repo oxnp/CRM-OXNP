@@ -7,13 +7,23 @@ use Carbon\Carbon;
 
 class Clients extends Model
 {
-    protected $fillable = ['first_name','last_name','country','timezone','email','messanger','description_client','other_info','comm_status_id','trust_id','who_join_user_id','updated_at'];
+    protected $fillable = ['first_name','last_name','country','timezone','email','messanger','description_client','other_info','comm_status_id','trust_id','who_join_user_id','manager_id','updated_at'];
     /*get clients
     * @param
     * @return array
     */
     public static function getClients():array{
-        $clients = Clients::all()->toArray();
+      //  $clients = Clients::all()->toArray();
+        $clients = Clients::leftjoin('clients_statuses','clients_statuses.id','clients.comm_status_id')
+            ->leftjoin('clients_trust','clients_trust.id','clients.trust_id')
+            ->leftjoin('users',function($join){
+                $join->on('users.id','clients.who_join_user_id');
+                $join->orOn('users.id','clients.manager_id');
+            })
+            ->select('clients.id','clients.first_name as first_name','clients.last_name as last_name','clients.country','clients.timezone','clients_statuses.name as status','users.name as who_joined')
+
+            ->get()
+            ->toArray();
         return $clients;
     }
     /*get clients by ID
@@ -40,7 +50,8 @@ class Clients extends Model
             'other_info'=> $request->other_info,
             'comm_status_id'=> $request->comm_status_id,
             'trust_id'=> $request->trust_id,
-            'who_join_user_id'=> $request->who_join_user_id
+            'who_join_user_id'=> $request->who_join_user_id,
+            'manager_id'=> $request->manager_id
         ]);
         if($create){
             return $create->toArray();
@@ -66,6 +77,7 @@ class Clients extends Model
             'comm_status_id'=> $request->comm_status_id,
             'trust_id'=> $request->trust_id,
             'who_join_user_id'=> $request->who_join_user_id,
+            'manager_id'=> $request->manager_id,
             'updated_at'=> Carbon::now()
         ));
 

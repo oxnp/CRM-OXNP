@@ -21,14 +21,18 @@
             <label class="control-label">director_id</label>
             <select type="text" name="director_id"  class="form-control">
                 @foreach($users as $user)
-                    <option value="{{$user['id']}}" @if($bug['director_id'] == $user['id']) selected @endif >{{$user['name']}} - {{$user['role_name']}}</option>
+                    @if ($user['role_id'] == env('MANAGER_ID'))
+                        <option value="{{$user['id']}}" @if($bug['director_id'] == $user['id']) selected @endif >{{$user['name']}} - {{$user['role_name']}}</option>
+                    @endif
                 @endforeach
             </select>
 
             <label class="control-label">executor_id</label>
             <select type="text" name="executor_id"  class="form-control">
                 @foreach($users_by_project as $user)
-                    <option value="{{$user['id']}}" @if($bug['executor_id'] == $user['id']) selected @endif >{{$user['name']}} - {{$user['role_name']}}</option>
+                    @if ($user['role_id'] != env('MANAGER_ID') && $user['role_id'] != env('SALES_ID'))
+                        <option value="{{$user['id']}}" @if($bug['executor_id'] == $user['id']) selected @endif >{{$user['name']}} - {{$user['role_name']}}</option>
+                    @endif
                 @endforeach
             </select>
 
