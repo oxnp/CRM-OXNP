@@ -12,6 +12,7 @@ use App\Http\Models\projects\Projects;
 use App\Http\Models\users\User;
 
 
+
 class clientsController extends Controller
 {
     /**
@@ -24,7 +25,7 @@ class clientsController extends Controller
     {
         $projects = Projects::getProjects();
         $clients = Clients::getClients();
-         dd($clients);
+         //dd($clients);
         $clients_statuses = ClientsStatuses::getClientsStatuses();
         $clients_trust = ClientsTrust::getTrustStatuses();
         $users = User::getUsers();

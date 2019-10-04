@@ -13,9 +13,9 @@
         <select class="form-control" name="timezone">
             @for($i=-8;$i<=12;$i++)
                 @if($i<0)
-                    <option value="(GMT{{$i}})">(GMT{{$i}})</option>
+                    <option value="GMT{{$i}}">GMT{{$i}}</option>
                     @else
-                    <option value="(GMT+{{$i}})">(GMT+{{$i}})</option>
+                    <option value="GMT+{{$i}}">GMT+{{$i}}</option>
                 @endif
             @endfor
         </select>
@@ -61,10 +61,26 @@
     </form>
     </div>
     <div class="col-md-3">
-    <ul>
+        <table width="1000px">
+            <thead>
+            <tr><th>Имя</th>
+                <th>Страна</th>
+                <th>Таймзона</th>
+                <th>Сейлз</th>
+                <th>Проджект</th>
+                <th>Статус</th>
+            </tr>
+            </thead>
     @foreach($clients as $client)
-            <li><a href="{{route('clients.show',$client['id'])}}">{{$client['first_name']}} {{$client['last_name']}}</a></li>
+                <tr>
+                    <td><a href="{{route('clients.show',$client['id'])}}">{{$client['first_name']}} {{$client['last_name']}}</a></td>
+                    <td>{{$client['country']}}</td>
+                    <td>{{$client['timezone']}}</td>
+                    <td>{{$client['who_join']}}</td>
+                    <td>{{$client['manager']}}</td>
+                    <td>{{$client['status']}}</td>
+                </tr>
     @endforeach
-    </ul>
+        </table>
     </div>
 @stop

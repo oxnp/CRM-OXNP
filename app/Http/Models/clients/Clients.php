@@ -4,7 +4,7 @@ namespace App\Http\Models\clients;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-
+use DB;
 class Clients extends Model
 {
     protected $fillable = ['first_name','last_name','country','timezone','email','messanger','description_client','other_info','comm_status_id','trust_id','who_join_user_id','manager_id','updated_at'];
@@ -14,16 +14,25 @@ class Clients extends Model
     */
     public static function getClients():array{
       //  $clients = Clients::all()->toArray();
-        $clients = Clients::leftjoin('clients_statuses','clients_statuses.id','clients.comm_status_id')
-            ->leftjoin('clients_trust','clients_trust.id','clients.trust_id')
-            ->leftjoin('users',function($join){
+        $clients = Clients::
+            leftjoin('users',function($join){
                 $join->on('users.id','clients.who_join_user_id');
                 $join->orOn('users.id','clients.manager_id');
             })
-            ->select('clients.id','clients.first_name as first_name','clients.last_name as last_name','clients.country','clients.timezone','clients_statuses.name as status','users.name as who_joined')
-
-            ->get()
-            ->toArray();
+            ->leftjoin('clients_trust','clients_trust.id','clients.trust_id')
+            ->leftjoin('clients_statuses','clients_statuses.id','clients.comm_status_id')
+            ->select('clients.id',
+                'clients.first_name as first_name',
+                'clients.last_name as last_name',
+                'clients.country',
+                'clients.timezone',
+                'clients_statuses.name as status',
+                DB::raw('SUBSTRING_INDEX(group_concat(users.name), \',\', 1) as who_join'),
+                DB::raw('SUBSTRING_INDEX(group_concat(users.name), \',\', -1) as manager')
+            )
+            ->groupby('clients.id')
+            ->orderby('clients.country','asc')
+            ->get()->toArray();
         return $clients;
     }
     /*get clients by ID
