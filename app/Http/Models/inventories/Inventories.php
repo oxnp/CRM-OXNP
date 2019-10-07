@@ -19,7 +19,7 @@ class Inventories extends Model
                'inventories.who_used',
                DB::raw('SUBSTRING_INDEX(group_concat(inventory_categories.name), \',\', 1) as cat_name'),
                DB::raw('SUBSTRING_INDEX(group_concat(inventory_categories.name), \',\', -1) as sub_cat_name'))
-           ->groupby('inventories.id')->orderby('inventories.name','asc')->get()->toArray();
+           ->groupby('inventories.id')->orderby('inventories.id','DESC')->get()->toArray();
 
        return $list_inventories;
    }

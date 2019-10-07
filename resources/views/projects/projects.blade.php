@@ -67,5 +67,32 @@
                 @endforeach
             </select>
         </div>
+        <div class="col-md-4">
+            Projects list
+
+            <table width="1000px">
+                <thead>
+                <tr><th>Проект</th>
+                    <th>Имя клиента</th>
+                    <th>Страна</th>
+                    <th>Таймзона</th>
+                    <th>Сейлз</th>
+                    <th>Проджект</th>
+                    <th>Статус</th>
+                </tr>
+                </thead>
+                @foreach($projects as $project)
+                    <tr>
+                        <td><a href="{{route('projects.show',$project['project_id'])}}">{{$project['project_name']}}</a></td>
+                        <td>{{$project['client_first_name']}}</td>
+                        <td>{{$project['client_country']}}</td>
+                        <td>{{$project['client_timezone']}}</td>
+                        <td>{{$project['who_join']}}</td>
+                        <td>{{$project['manager']}}</td>
+                        <td>{{$project['project_status']}}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
     </div>
 @stop

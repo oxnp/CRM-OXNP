@@ -1,3 +1,6 @@
+@extends('layouts.default')
+@extends('layouts.projects-list-sidebar')
+@section('content')
 <table>
     <thead>
     <tr><th>Категория</th>
@@ -5,6 +8,7 @@
         <th>Название</th>
         <th>Серийный номер</th>
         <th>Где</th>
+        <th></th>
     </tr>
     </thead>
 @foreach($inventories_list as $item)
@@ -15,7 +19,7 @@
                 {{csrf_field()}}
             <td>{{$item['cat_name']}}</td>
             <td>
-                <select name="categories">
+                <select name="categories" class="form-control">
                     @foreach($inventory_categories as $id_main_cat=>$items)
                         <optgroup label="{{$items['name']}}">
                             @if(is_array($items['sub_cats']))
@@ -27,19 +31,25 @@
                     @endforeach
                 </select>
             </td>
-            <td><input type="text" name="name" value="{{$item['name']}}"/></td>
-            <td><input type="text" name="serial_number" value="{{$item['serial_number']}}"/></td>
+            <td><input type="text" name="name" value="{{$item['name']}}" class="form-control"/></td>
+            <td><input type="text" name="serial_number" value="{{$item['serial_number']}}" class="form-control"/></td>
             <td>
-                <select name="who_used">
-                    <option value="Общее пользование" @if('Общее пользование' == $item['who_used']) selected @endif>Общее пользование</option>
-                    <option value="Склад" @if('Склад' == $item['who_used']) selected @endif>Склад</option>
+                <select name="who_used" class="form-control">
+                    <optgroup label="Другое">
+                        <option value="Общее пользование" @if('Общее пользование' == $item['who_used']) selected @endif>Общее пользование</option>
+                        <option value="Склад" @if('Склад' == $item['who_used']) selected @endif>Склад</option>
+                    </optgroup>
+                    <optgroup label="Сотрудники">
                     @foreach($users as $user)
                         <option value="{{$user['name']}}"  @if($user['name'] == $item['who_used']) selected @endif>{{$user['name']}}</option>
                     @endforeach
+                    </optgroup>
                 </select>
-                <input type="submit" value="save">
-            </td>
 
+            </td>
+                <td>
+                <input type="submit" value="save" class="btn btn-primary">
+                </td>
             </form>
         </tr>
 
@@ -60,7 +70,7 @@
     <tr>
 <form action="{{route('inventories.store')}}" method="POST" name="add_inventory">
     {{csrf_field()}}
-    <td><select name="categories">
+    <td><select name="categories" class="form-control">
             @foreach($inventory_categories as $id_main_cat=>$item)
                 <optgroup label="{{$item['name']}}">
                     @if(is_array($item['sub_cats']))
@@ -72,16 +82,20 @@
             @endforeach
         </select>
     </td>
-    <td><input type="text" name="name"/></td>
-    <td><input type="text" name="serial_number"/></td>
+    <td><input type="text" name="name" class="form-control"/></td>
+    <td><input type="text" name="serial_number" class="form-control"/></td>
 
         <td>
-            <select name="who_used">
+            <select name="who_used" class="form-control">
+                <optgroup label="Другое">
             <option value="Общее пользование">Общее пользование</option>
             <option value="Склад">Склад</option>
+                </optgroup>
+                <optgroup label="Сотрудники">
                 @foreach($users as $user)
                     <option value="{{$user['name']}}">{{$user['name']}}</option>
                 @endforeach
+                </optgroup>
             </select>
 
         </td>
@@ -103,9 +117,10 @@
     <tr>
 <form action="{{route('inventorycategories.store')}}" method="POST" name="add_category">
     {{csrf_field()}}
-    <td><input type="text" name="cat_name" required/></td>
-    <td><input type="text" name="sub_cat_name"required/></td>
-    <td><input type="submit" value="добавить" \></td>
+    <td><input type="text" name="cat_name" class="form-control" required/></td>
+    <td><input type="text" name="sub_cat_name" class="form-control" required/></td>
+    <td><input type="submit" value="добавить" class="form-control" \></td>
 </form>
 </tr>
 </table>
+@stop

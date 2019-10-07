@@ -37,7 +37,7 @@
             <input class="form-control" name="old_website" value="{{$project['old_website']}}"/>
 
             <label class="control-label">accesses</label>
-            <input class="form-control" name="accesses" value="{{$project['accesses']}}"/>
+            <textarea class="form-control" name="accesses" >{{$project['accesses']}}</textarea>
 
          <!--   <input type="hidden" name="participants_id" value="{{$project['participants_id']}}"> -->
             <label class="control-label">participants</label>

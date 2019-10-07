@@ -4,6 +4,7 @@ namespace App\Http\Controllers\inventories;
 
 use App\Http\Models\inventories\Inventories;
 use App\Http\Models\inventories\InventoryCategories;
+use App\Http\Models\projects\Projects;
 use App\Http\Models\users\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -20,11 +21,13 @@ class inventoriesController extends Controller
     {
         $inventory_categories = InventoryCategories::getCategoriesTree();
         $users = User::getUsers();
+        $projects = Projects::getProjects();
         $inventories_list = Inventories::getInventories();
         return view('inventories.list')->with([
             'inventories_list'=>$inventories_list,
             'inventory_categories'=>$inventory_categories,
             'users'=>$users,
+            'projects'=>$projects
         ]);
     }
 

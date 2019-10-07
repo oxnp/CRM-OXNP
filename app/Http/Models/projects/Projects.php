@@ -50,7 +50,33 @@ class Projects extends Model
     */
     public static function getProjects():array
     {
-        $projects = Projects::where('status_id','!=',5)->select('name','id')->get()->toArray();
+       // $projects = Projects::where('status_id','!=',5)->select('name','id')->get()->toArray();
+        $projects = Projects::
+        leftjoin('projects_statuses',function($join){
+            $join->on('projects_statuses.id','projects.status_id');
+        })
+        ->leftjoin('clients',function($join){
+            $join->on('clients.id','projects.client_id');
+        })
+        ->leftjoin('users',function($join){
+            $join->on('users.id','clients.who_join_user_id');
+            $join->orOn('users.id','clients.manager_id');
+        })
+        ->select('projects.name as project_name',
+                'projects.id as project_id',
+                'projects_statuses.name_status as project_status',
+                'clients.id as client_id',
+                'clients.first_name as client_first_name',
+                'clients.last_name as client_last_name',
+                'clients.country as client_country',
+                'clients.timezone as client_timezone',
+                DB::raw('SUBSTRING_INDEX(group_concat(users.name), \',\', 1) as who_join'),
+                DB::raw('SUBSTRING_INDEX(group_concat(users.name), \',\', -1) as manager')
+            )
+            ->groupby('projects.id')
+            ->orderby('clients.country','asc')
+            ->get()->toArray();
+
         return $projects;
     }
     /*get detail project by ID

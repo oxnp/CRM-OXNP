@@ -19,9 +19,9 @@
             <select class="form-control" name="timezone">
                 @for($i=-8;$i<=12;$i++)
                     @if($i<0)
-                        <option value="(GMT{{$i}})" @if($client['timezone'] == '(GMT'.$i.')') selected @endif >(GMT{{$i}})</option>
+                        <option value="GMT{{$i}}" @if($client['timezone'] == 'GMT'.$i.'') selected @endif >GMT{{$i}}</option>
                     @else
-                        <option value="(GMT+{{$i}})" @if($client['timezone'] == '(GMT+'.$i.')') selected @endif >(GMT+{{$i}})</option>
+                        <option value="GMT+{{$i}}" @if($client['timezone'] == 'GMT+'.$i.'') selected @endif >GMT+{{$i}}</option>
                     @endif
                 @endfor
             </select>

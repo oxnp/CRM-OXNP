@@ -64,6 +64,7 @@ class SchedulesToUsers extends Model
 
     public static function sumTimeTrackForProject($times){
         $seconds = 0;
+        //dd($times);
         foreach ($times as $time)
         {
             list($hour,$minute,$second) = explode(':', $time);

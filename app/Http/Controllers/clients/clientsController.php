@@ -112,7 +112,9 @@ class clientsController extends Controller
     {
         try {
             Clients::updateClientById($id, $request);
-            return redirect()->route('clients.show', $id);
+           // return redirect()->route('clients.show', $id);
+            return redirect()->route('clients.index');
+
         } catch (QueryException $exception) {
             $this->err['errors'] = 'Not update client';
             return response()->json($this->err);
