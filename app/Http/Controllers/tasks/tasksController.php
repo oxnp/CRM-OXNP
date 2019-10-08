@@ -213,6 +213,7 @@ class tasksController extends Controller
                 $schedule_track_id = $schedule['id'];
             }
         }
+
         $this->result_action['files_added'] = Session::get('files_added');
 
         return view('tasks.showsubtask')->with([

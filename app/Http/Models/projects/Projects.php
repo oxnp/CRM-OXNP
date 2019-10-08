@@ -2,6 +2,7 @@
 
 namespace App\Http\Models\projects;
 
+use App\Http\Models\supporting_function\SupportTimer;
 use App\Http\Models\users\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -9,12 +10,17 @@ use App\Http\Models\tracker\SchedulesToUsers;
 use App\Http\Models\tracker\Tracker;
 use App\Http\Models\tasks\Tasks;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class Projects extends Model
 {
     protected $fillable =['status_id','client_id','name','date_start','date_end','price','description','curr_website','old_website','participants_id','accesses','updated_at'];
-
-    public static function getFullTimeForProjectById($id){
+    /**
+     * get list users and track time to project
+     * @param
+     * @return array
+     */
+    public static function getFullTimeForProjectById($id):array{
         $tasks = Tasks::where('tasks.project_id',$id)
             ->leftjoin('schedules_to_users','schedules_to_users.schedule_id','tasks.id')
             ->leftjoin('users','users.id','schedules_to_users.user_id')
@@ -28,23 +34,41 @@ class Projects extends Model
             ->leftjoin('users_role','users_role.role_id','users.role_id')
             ->where('schedules_to_users.type','bug')
             ->select('schedules_to_users.total_track_time','schedules_to_users.user_id','users.name','users_role.role_name')
-            ->union($tasks->orderBy('schedules_to_users.user_id','asc'))
+            ->union($tasks)
         ->get();
 
+
+        $schedule_in_progress =  SchedulesToUsers::leftjoin('schedule_track_history','schedule_track_history.schedule_to_users_id','schedules_to_users.id')
+            ->leftjoin('tasks','tasks.id','schedules_to_users.schedule_id')
+            ->where('tasks.project_id',$id)
+            ->where('schedule_track_history.flag_in_progress_th',1)
+            ->select('schedule_track_history.track_from','schedule_track_history.user_id')
+            ->get()->toArray();
 
         $data = array();
         foreach($bug->toArray() as $key=>$value){
             $data[$value['user_id']]['role'] = $value['role_name'];
             $data[$value['user_id']]['name'] = $value['name'];
             $data[$value['user_id']]['total_track_time'][] = $value['total_track_time'];
+            $data[$value['user_id']]['in_progress'] = 0;
         }
         foreach($data as $key=>$value) {
-            $data[$key]['total_track_time'] = SchedulesToUsers::sumTimeTrackForProject($data[$key]['total_track_time']);
+           // $data[$key]['total_track_time'] = SchedulesToUsers::sumTimeTrackForProject($data[$key]['total_track_time']);
+            $data[$key]['total_track_time'] = SupportTimer::sumTimer($data[$key]['total_track_time']);
+            foreach($schedule_in_progress as $value){
+                if  ($key == $value['user_id']){
+                    $curr_time_in_progress = SupportTimer::getTimeToTask($value['track_from']);
+                    $data[$key]['total_track_time'] = SupportTimer::sumTimer(array($data[$key]['total_track_time'],$curr_time_in_progress));
+                    $data[$value['user_id']]['in_progress'] = 1;
+                }
+            }
         }
+
       return $data;
     }
 
-    /*get projects
+    /**
+     * get projects
     * @param
     * @return array
     */
@@ -79,7 +103,8 @@ class Projects extends Model
 
         return $projects;
     }
-    /*get detail project by ID
+    /**
+     * get detail project by ID
     * @param int $id
     * @return array
     */
@@ -88,7 +113,8 @@ class Projects extends Model
         $project = Projects::findOrFail($id)->toArray();
         return $project;
     }
-    /*get project by clients ID
+    /**
+     * get project by clients ID
     * @param int $id
     * @return array
     */
@@ -97,7 +123,8 @@ class Projects extends Model
         $projects = Projects::where('client_id',$id)->get()->toArray();
         return $projects;
     }
-    /*get participants to project by IDs user 1,2,3...
+    /**
+     * get participants to project by IDs user 1,2,3...
     * @param string $participants_ids
     * @return array
     */
@@ -107,7 +134,8 @@ class Projects extends Model
             ->leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
         return $participants;
     }
-    /*add project
+    /**
+     * add project
     * @param Request $request
     * @return array or false
     */
@@ -133,7 +161,8 @@ class Projects extends Model
             return false;
         }
     }
-    /*update project by ID
+    /**
+     * update project by ID
     * @param int $id, Request $request
     * @return bool
     */

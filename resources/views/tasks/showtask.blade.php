@@ -78,7 +78,7 @@
         </form>
     </div>
     <div class="col-md-4">
-all my time to task {{$sum_my_time_for_task}}
+    all my time to task {{$sum_my_time_for_task}}
 
         @if ($flag_track)
             <form  method = "POST"  name = "stop_tracker" action = "{{route('stop_track',[$category_id,$task['id'],$schedule_track_id,'task'])}}">

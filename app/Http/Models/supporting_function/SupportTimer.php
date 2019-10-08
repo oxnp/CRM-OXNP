@@ -8,8 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class SupportTimer extends Model
 {
-    public static function getTimeToTask($date_time_task){
-        date_default_timezone_set('Europe/Kiev');
+    /**get current track time from date start track to now
+     * @param string(Y-m-d H:i:s)
+     * @return string (H:i:s)
+     */
+    public static function getTimeToTask($date_time_task):string {
+        date_default_timezone_set(env('TIMEZONE'));
         $curr_date = date_create(date('Y-m-d H:i:s'));
         $track_from  = date_create($date_time_task);
         $diff = date_diff($track_from, $curr_date);
@@ -18,12 +22,16 @@ class SupportTimer extends Model
         if ((int)$hours <10){
             $hours = sprintf("%02d", (int)$hours);
         }
+
         $result = $hours.':'.$diff->format('%I:%S');
         return $result;
     }
 
-
-    public static function sumTimeTrackByTaskByUserId($task_id, $user_id, $type){
+    /**get sum track time by task id and user id
+     * @param int $task_id, int $user_id, string $type
+     * @return string
+     */
+    public static function sumTimeTrackByTaskByUserId($task_id, $user_id, $type):string{
 
             $schedules_to_users = SchedulesToUsers::where('schedule_track_history.user_id', $user_id)
                 ->where('schedules_to_users.schedule_id', $task_id)
@@ -35,7 +43,10 @@ class SupportTimer extends Model
 
         return self::sumTimer($times);
     }
-
+    /**get sum track time by task id
+     * @param int $task_id, string $type
+     * @return string
+     */
     public static function getSumTimerByTaskId($task_id,$type){
             $schedules_to_users = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type)->select('total_track_time as total_time')->get();
             $times= $schedules_to_users->toArray();
@@ -48,7 +59,10 @@ class SupportTimer extends Model
 
         return self::sumTimer($times);
     }
-
+    /**get sum timer
+     * @param array $times
+     * @return string
+     */
     public static function sumTimer($times){
 
         $seconds = 0;

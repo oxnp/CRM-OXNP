@@ -15,6 +15,13 @@ class Tracker extends Model
 {
     protected $table = "schedule_track_history";
     protected $fillable =['id','schedule_to_users_id','user_id','track_from','track_to','flag_in_progress_th','total_time','created_at','updated_at'];
+
+    /**
+     * stop tracker
+     * @param int $category_id, int $task_id, int $track_id, string $type
+     * @return
+     */
+
     public static function stopTracker ($category_id = 0, $task_id, $track_id,$type){
 
        $track = Tracker::find($track_id);
@@ -34,9 +41,6 @@ class Tracker extends Model
         ]);
 
         $total_time_task = SupportTimer::getSumTimerByTaskId($task_id,$type);
-
-
-
         if ($type == 'task'){
             $task = Tasks::find($task_id);
             $task->update([
@@ -50,11 +54,14 @@ class Tracker extends Model
                 'time_tracker'=>$total_time_task
             ]);
         }
- 
 
-       return $track;
+       //return $track;
     }
-
+    /**
+     * start tracker
+     * @param int $category_id, int $task_id, string $type
+     * @return
+     */
     public static function startTracker ($category_id, $task_id,$type){
 
 

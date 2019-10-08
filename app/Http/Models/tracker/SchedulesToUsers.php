@@ -8,9 +8,15 @@ class SchedulesToUsers extends Model
 {
     protected $fillable =['id','schedule_id','user_id','flag_in_progress','total_track_time','type'];
     public $timestamps = false;
-    public static function getSchedulesToUserById($user_id,$schedule_id,$type){
+
+    /**
+     * get schedules by user id
+     * @param int $user_id, int $schedule_id, string $type
+     * @return array
+     */
+    public static function getSchedulesToUserById($user_id,$schedule_id,$type):array{
         $schedules = SchedulesToUsers::where('schedules_to_users.user_id',$user_id)
-            //->where('schedules_to_users.type',$type)
+            ->where('schedules_to_users.type',$type)
             ->where('schedules_to_users.schedule_id',$schedule_id)
             ->join('schedule_track_history','schedule_track_history.schedule_to_users_id','schedules_to_users.id')
             ->join('users','users.id','schedule_track_history.user_id')->select(
@@ -25,10 +31,11 @@ class SchedulesToUsers extends Model
                 'users.name'
             )
             ->get()->toArray();
-      //  dd($schedules);
+       // dd($schedules);
         return $schedules;
-    }
 
+    }
+/*
     public static function sumTimeTrackByTaskByUserId($task_id, $user_id, $type){
         $schedules_to_users = SchedulesToUsers::where('schedule_track_history.user_id',$user_id)
             ->where('schedules_to_users.schedule_id',$task_id)
@@ -61,7 +68,8 @@ class SchedulesToUsers extends Model
             }
             return "{$hours}:{$minutes}:{$seconds}";
     }
-
+    */
+/*
     public static function sumTimeTrackForProject($times){
         $seconds = 0;
         //dd($times);
@@ -88,4 +96,5 @@ class SchedulesToUsers extends Model
         }
         return "{$hours}:{$minutes}:{$seconds}";
     }
+*/
 }

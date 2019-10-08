@@ -103,7 +103,7 @@ Client data
     <div class="row">
     <div class="col-md-4">
         <div class="col-md-12">Attachment</div>
-        @foreach($project_attachemnts as $attach)
+        @foreach($project_attachments as $attach)
             @if($attach['type_file'] == 'jpg' || $attach['type_file'] == 'png' || $attach['type_file'] == 'jpeg')
                 <div class="col-md-3">
                     <img src="{{$attach['storage']}}" style="width:100%"/>

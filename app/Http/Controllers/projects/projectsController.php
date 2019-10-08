@@ -121,7 +121,7 @@ class projectsController extends Controller
 
         $project = Projects::getProjectById($id);
         $client = Clients::getClientById($project['client_id']);
-        $project_attachemnts = ProjectsAttachments::getAttachmentsByProjectId($id);
+        $project_attachments = ProjectsAttachments::getAttachmentsByProjectId($id);
         $participants_user =  Projects::ProjectsParticipants($project['participants_id']);
         $project_statuses = ProjectsStatuses::getProjectsStatuses();
         $users = User::getUsers();
@@ -136,7 +136,7 @@ class projectsController extends Controller
             'client'=>$client,
             'project'=>$project,
             'participants_user'=>$participants_user,
-            'project_attachemnts'=>$project_attachemnts,
+            'project_attachments'=>$project_attachments,
             'project_statuses'=>$project_statuses,
             'users'=>$users,
             'sprints'=>$sprints,

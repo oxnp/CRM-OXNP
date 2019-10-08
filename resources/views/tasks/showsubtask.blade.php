@@ -93,9 +93,6 @@
             </form>
         @endif
 
-
-
-
         <table>
             <thead>
             <th>Name</th>

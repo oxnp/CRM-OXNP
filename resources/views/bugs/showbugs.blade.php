@@ -21,18 +21,14 @@
             <label class="control-label">director_id</label>
             <select type="text" name="director_id"  class="form-control">
                 @foreach($users as $user)
-                    @if ($user['role_id'] == env('MANAGER_ID'))
                         <option value="{{$user['id']}}" @if($bug['director_id'] == $user['id']) selected @endif >{{$user['name']}} - {{$user['role_name']}}</option>
-                    @endif
                 @endforeach
             </select>
 
             <label class="control-label">executor_id</label>
             <select type="text" name="executor_id"  class="form-control">
                 @foreach($users_by_project as $user)
-                    @if ($user['role_id'] != env('MANAGER_ID') && $user['role_id'] != env('SALES_ID'))
                         <option value="{{$user['id']}}" @if($bug['executor_id'] == $user['id']) selected @endif >{{$user['name']}} - {{$user['role_name']}}</option>
-                    @endif
                 @endforeach
             </select>
 
@@ -93,7 +89,6 @@
     </div>
     <div class="col-md-4">
         all my time to task {{$sum_my_time_for_task}}
-
         @if ($flag_track)
             <form  method = "POST"  name = "stop_tracker" action = "{{route('stop_track',[$category_id,$bug['id'],$schedule_track_id,'bug'])}}">
                 {{csrf_field()}}
