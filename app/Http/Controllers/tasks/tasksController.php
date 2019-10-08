@@ -201,10 +201,16 @@ class tasksController extends Controller
         $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(), $task_id,'task');
 
         $curr_track_for_task = '';
+        $flag_track = 0;
+        $schedule_track_id = 0;
+        $sum_my_time_for_task = SupportTimer::getSumTimerByTaskIdAndUserId($task_id,'task');
 
         foreach($schedules as $schedule){
             if ($schedule['flag_in_progress_th'] == 1){
                 $curr_track_for_task = SupportTimer::getTimeToTask($schedule['track_from']);
+                $sum_my_time_for_task = SupportTimer::sumTimer(array($sum_my_time_for_task,$curr_track_for_task));
+                $flag_track = true;
+                $schedule_track_id = $schedule['id'];
             }
         }
         $this->result_action['files_added'] = Session::get('files_added');
@@ -226,6 +232,9 @@ class tasksController extends Controller
             'tree_by_sprints'=>$tree_by_sprints,
             'schedules'=>$schedules,
             'curr_track_for_task'=>$curr_track_for_task,
+            'sum_my_time_for_task'=>$sum_my_time_for_task,
+            'flag_track'=>$flag_track,
+            'schedule_track_id'=>$schedule_track_id,
             'result_action'=>$this->result_action
         ]);
     }
@@ -251,13 +260,20 @@ class tasksController extends Controller
         $schedules = SchedulesToUsers::getSchedulesToUserById(Auth::ID(),$task_id,'task');
 
         $curr_track_for_task = '';
+        $flag_track = 0;
+        $schedule_track_id = 0;
+        $sum_my_time_for_task = SupportTimer::getSumTimerByTaskIdAndUserId($task_id,'task');
 
         foreach($schedules as $schedule){
             if ($schedule['flag_in_progress_th'] == 1){
                 $curr_track_for_task = SupportTimer::getTimeToTask($schedule['track_from']);
+                $sum_my_time_for_task = SupportTimer::sumTimer(array($sum_my_time_for_task,$curr_track_for_task));
+                $flag_track = true;
+                $schedule_track_id = $schedule['id'];
             }
         }
 
+        //dd($sum_my_time_for_task);
         $this->result_action['files_added'] = Session::get('files_added');
 
 
@@ -278,6 +294,9 @@ class tasksController extends Controller
             'tree_by_sprints'=>$tree_by_sprints,
             'schedules'=>$schedules,
             'curr_track_for_task'=>$curr_track_for_task,
+            'sum_my_time_for_task'=>$sum_my_time_for_task,
+            'flag_track'=>$flag_track,
+            'schedule_track_id'=>$schedule_track_id,
             'result_action'=>$this->result_action
         ]);
     }

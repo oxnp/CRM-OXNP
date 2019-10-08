@@ -9,8 +9,8 @@ class SchedulesToUsers extends Model
     protected $fillable =['id','schedule_id','user_id','flag_in_progress','total_track_time','type'];
     public $timestamps = false;
     public static function getSchedulesToUserById($user_id,$schedule_id,$type){
-        $schedules = SchedulesToUsers::/*where('schedules_to_users.user_id',$user_id) uncomment if need show only my track time in task
-            ->*/where('schedules_to_users.type',$type)
+        $schedules = SchedulesToUsers::where('schedules_to_users.user_id',$user_id)
+            //->where('schedules_to_users.type',$type)
             ->where('schedules_to_users.schedule_id',$schedule_id)
             ->join('schedule_track_history','schedule_track_history.schedule_to_users_id','schedules_to_users.id')
             ->join('users','users.id','schedule_track_history.user_id')->select(

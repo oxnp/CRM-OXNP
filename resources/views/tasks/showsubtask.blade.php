@@ -78,6 +78,23 @@
         </form>
     </div>
     <div class="col-md-4">
+        all my time to task {{$sum_my_time_for_task}}
+
+        @if ($flag_track)
+            <form  method = "POST"  name = "stop_tracker" action = "{{route('stop_track',[$category_id,$task['id'],$schedule_track_id,'task'])}}">
+                {{csrf_field()}}
+                <input name="_method" type="hidden" value="PUT">
+                <input type="submit" value="stop">
+            </form>
+        @else
+            <form  method = "POST"  name = "start_tracker" action = "{{route('start_track',[$project_id,$task['id'],'task'])}}">
+                {{csrf_field()}}
+                <input type="submit" value="start">
+            </form>
+        @endif
+
+
+
 
         <table>
             <thead>
@@ -88,21 +105,18 @@
             @foreach($schedules as $schedule)
                 <tr>
                     <td width="80px">{{$schedule['name']}}</td>
-                    <td width="80px">{{$schedule['total_time']}}</td>
-                    <td>@if($schedule['user_id'] == Auth::user()->id && $schedule['flag_in_progress_th'] == 1) {{$curr_track_for_task}}
-                        <form  method = "POST"  name = "stop_tracker" action = "{{route('stop_track',[$category_id,$task['id'],$schedule['id'],'task'])}}">
-                            {{csrf_field()}}
-                            <input name="_method" type="hidden" value="PUT">
-                            <input type="submit" value="stop">
-                        </form>
+                    <td width="80px">@if($schedule['user_id'] == Auth::id() && $schedule['flag_in_progress_th'] == 1) {{$curr_track_for_task}} @else {{$schedule['total_time']}}@endif</td>
+                    <td>@if($schedule['user_id'] == Auth::id() && $schedule['flag_in_progress_th'] == 1)
+                        <!--<form  method = "POST"  name = "stop_tracker" action = "{{route('stop_track',[$category_id,$task['id'],$schedule['id'],'task'])}}">
+                                {{csrf_field()}}
+                                <input name="_method" type="hidden" value="PUT">
+                                <input type="submit" value="stop">
+                            </form> -->
 
                         @endif</td>
                 </tr>
             @endforeach
         </table>
-        <form  method = "POST"  name = "start_tracker" action = "{{route('start_track',[$project_id,$task['id'],'task'])}}">
-            {{csrf_field()}}
-            <input type="submit" value="start">
-        </form>
+
     </div>
 @stop

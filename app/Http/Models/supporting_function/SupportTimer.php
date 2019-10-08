@@ -4,6 +4,7 @@ namespace App\Http\Models\supporting_function;
 
 use App\Http\Models\tracker\SchedulesToUsers;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class SupportTimer extends Model
 {
@@ -41,14 +42,25 @@ class SupportTimer extends Model
 
         return self::sumTimer($times);
     }
+    public static function getSumTimerByTaskIdAndUserId($task_id,$type){
+            $schedules_to_users = SchedulesToUsers::where('schedule_id',$task_id)->where('type',$type)->where('user_id',Auth::id())->select('total_track_time as total_time')->get();
+            $times= $schedules_to_users->toArray();
+
+        return self::sumTimer($times);
+    }
 
     public static function sumTimer($times){
+
         $seconds = 0;
         foreach ($times as $time)
         {
-            list($hour,$minute,$second) = explode(':', $time['total_time']);
-            $seconds += $hour*3600;
-            $seconds += $minute*60;
+            if(isset( $time['total_time'])) {
+                list($hour, $minute, $second) = explode(':', $time['total_time']);
+            }else{
+                list($hour, $minute, $second) = explode(':', $time);
+            }
+            $seconds += $hour * 3600;
+            $seconds += $minute * 60;
             $seconds += $second;
         }
         $hours = floor($seconds/3600);
