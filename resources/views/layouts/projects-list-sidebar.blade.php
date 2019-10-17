@@ -8,6 +8,7 @@
   <li class="list-group-item"><a href="{{route('projects.index')}}">Projects</a></li>
   <li class="list-group-item"><a href="{{route('clients.index')}}">Clients</a></li>
   <li class="list-group-item"><a href="{{route('inventories.index')}}">Inventories</a></li>
+  <li class="list-group-item"><a href="{{route('users.index')}}">Users</a></li>
  </ul>
 
 

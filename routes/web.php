@@ -11,8 +11,8 @@
 |
 */
 Auth::routes();
+Route::group(['middleware' => ['auth']], function () {
 
-//Route::get('/home', 'HomeController@index')->name('home');
 /*projects*/
 Route::resource('projects', 'projects\projectsController');
 
@@ -60,3 +60,7 @@ Route::resource('inventories', 'inventories\inventoriesController');
 Route::resource('inventorycategories', 'inventories\inventoryCategoriesController');
 /*inventory*/
 
+/*clients*/
+ Route::resource('users', 'users\usersController');
+/*clients*/
+});

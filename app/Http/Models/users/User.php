@@ -4,9 +4,11 @@ namespace App\Http\Models\users;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\Http\Models\users\UsersCalendar;
+use DB;
 class User extends Authenticatable
 {
+
     use Notifiable;
 
     /**
@@ -15,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','status_id','role_id','birthday','avatar','description','date_interview','description_candidate','start_work_date','stop_work_date','reason_for_dismissal'
     ];
 
     /**
@@ -26,7 +28,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-   /* get all users
+   /**
+    * get all users
     * @param
     * @return array
     */
@@ -34,7 +37,37 @@ class User extends Authenticatable
         $users = User::leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
         return $users;
     }
-    /* get user by ID
+    /**
+     * get user
+     * @param
+     * @return array
+     */
+    public static  function getUser($id){
+        $users = User::whereId($id)->leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
+        return $users;
+    }
+    public static function getCalendarUserById(){
+
+    }
+    public static function getSumDaysUserById($id,$year_from,$year_to,$month_from,$month_to,$day_from,$day_to){
+        $days = UsersCalendar::whereUserId($id)
+            ->where('year','>=',$year_from)
+            ->where('year','<=',$year_to)
+            ->where('month','>=',$month_from)
+            ->where('month','<=',$month_to)
+            ->where('date','>=',$day_from)
+            ->where('date','<=',$day_to)
+            ->leftjoin('users_absent_list','users_absent_list.id','users_calendar.type_absent_id')
+            ->select(DB::raw('sum(sum_days) as sum'),'users_absent_list.name')->groupby('type_absent_id')->get()->toArray();
+
+        $absents_array = array();
+        foreach($days as $item){
+            $absents_array[$item['name']] = $item['sum'];
+        }
+        dd($absents_array);
+    }
+    /**
+     * get user by ID
      * @param int $participant_id
      * @return array
      */
