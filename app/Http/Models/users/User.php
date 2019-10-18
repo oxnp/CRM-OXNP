@@ -2,9 +2,11 @@
 
 namespace App\Http\Models\users;
 
+use App\Http\Models\users\UsersStatuses;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Http\Models\users\UsersCalendar;
+use App\Http\Models\users\UsersRole;
 use DB;
 class User extends Authenticatable
 {
@@ -17,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','status_id','role_id','birthday','avatar','description','date_interview','description_candidate','start_work_date','stop_work_date','reason_for_dismissal'
+        'name', 'email', 'password','status_id','role_id','birthday','avatar','description','date_interview','description_candidate','start_work_date','stop_work_date','reason_for_dismissal','salary'
     ];
 
     /**
@@ -43,11 +45,18 @@ class User extends Authenticatable
      * @return array
      */
     public static  function getUser($id){
-        $users = User::whereId($id)->leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
+        $users = User::where('users.id',$id)
+            ->leftjoin('users_statuses','users_statuses.id','users.status_id')
+            ->leftjoin('users_role','users_role.role_id','users.role_id')->get()->toArray();
         return $users;
     }
-    public static function getCalendarUserById(){
-
+    public static function getRolesUsers(){
+        $roles = UsersRole::all()->toArray();
+        return $roles;
+    }
+    public static function getUsersStatuses(){
+        $roles = UsersStatuses::all()->toArray();
+        return $roles;
     }
     public static function getSumDaysUserById($id,$year_from,$year_to,$month_from,$month_to,$day_from,$day_to){
         $days = UsersCalendar::whereUserId($id)
@@ -64,7 +73,7 @@ class User extends Authenticatable
         foreach($days as $item){
             $absents_array[$item['name']] = $item['sum'];
         }
-        dd($absents_array);
+        return $absents_array;
     }
     /**
      * get user by ID

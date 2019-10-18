@@ -60,11 +60,13 @@ class usersController extends Controller
         $day_from = date('d');
         $day_to  = date('d');
 
-       // dd($month_to);
+        $roles = User::getRolesUsers();
+        $statuses = User::getUsersStatuses();
+       // dd($user);
         $d = User::getSumDaysUserById($id,$year_from,$year_to,$month_from,$month_to,$day_from,$day_to);
 
 
-        return view('users.user')->with(['user'=>$user,'projects'=>$projects]);
+        return view('users.user')->with(['user'=>$user,'projects'=>$projects,'roles'=>$roles,'statuses'=>$statuses]);
     }
 
     /**

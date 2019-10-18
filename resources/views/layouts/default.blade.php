@@ -15,6 +15,11 @@
     <div class="col-md-3">
         @yield('left-sidebar')
     </div>
+
+    <div class="col-md-9">
+        @yield('header')
+    </div>
+
     <div class="col-md-9">
         @yield('content')
     </div>

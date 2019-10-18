@@ -1,6 +1,6 @@
 @extends('layouts.default')
 @extends('layouts.projects-list-sidebar')
-
+@extends('layouts.header')
 @section('content')
     <div class="col-md-6">
         Info Client

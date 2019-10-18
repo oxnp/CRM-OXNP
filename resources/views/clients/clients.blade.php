@@ -1,5 +1,6 @@
 @extends('layouts.default')
 @extends('layouts.projects-list-sidebar')
+@extends('layouts.header')
 @section('content')
     <div class="col-md-3">
     <form action="{{route('clients.store')}}" name="client_add" method="POST">

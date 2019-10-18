@@ -1,5 +1,6 @@
 @extends('layouts.default')
 @extends('layouts.projects-list-sidebar')
+@extends('layouts.header')
 @section('content')
     <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
         <li class="nav-item active">
@@ -17,29 +18,47 @@
     </ul>
     <div class="tab-content card pt-5" id="myTabContentMD">
         <div class="tab-pane fade show active in" id="home-md" role="tabpanel" aria-labelledby="home-tab-md">
-            <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua,
-                retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica.
-                Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry
-                richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american
-                apparel, butcher voluptate nisi qui.</p>
+            <form action="{{route('users.store')}}" method="POST">
+                <input type="file" name="avatar"/>
+                <label>Name</label>
+                <input type="text" name="name" value="{{$user[0]['name']}}" class="form-control"/>
+                <label>Role</label>
+                <select name="role_id" class="form-control">
+                    @foreach($roles as $role)
+                        <option value="{{$role['role_id']}}" @if($user[0]['role_id'] == $role['role_id']) selected @endif>{{$role['role_name']}}</option>
+                    @endforeach
+                </select>
+                <label>Status</label>
+                <select name="status_id" class="form-control">
+                    @foreach($statuses as $status)
+                        <option value="{{$status['id']}}" @if($user[0]['status_id'] == $status['id']) selected @endif>{{$status['name_status']}}</option>
+                    @endforeach
+                </select>
+                <label>Birthday</label>
+                <input type="date" name="birthday" value="{{$user[0]['birthday']}}" class="form-control"/>
+                <label>Description</label>
+                <input type="text" name="description" value="{{$user[0]['description']}}" class="form-control"/>
+                <label>Date_interview</label>
+                <input type="date" name="birthday" value="{{$user[0]['date_interview']}}" class="form-control"/>
+                <label>Description_candidate</label>
+                <input type="text" name="description" value="{{$user[0]['description_candidate']}}" class="form-control"/>
+                <label>Start_work_date</label>
+                <input type="date" name="start_work_date" value="{{$user[0]['start_work_date']}}" class="form-control"/>
+                <label>Stop_work_date</label>
+                <input type="date" name="stop_work_date" value="{{$user[0]['stop_work_date']}}" class="form-control"/>
+
+                <label>Reason_for_dismissal</label>
+                <input type="text" name="reason_for_dismissal" value="{{$user[0]['description']}}" class="form-control"/>
+            <input type="submit" value="save"/>
+            </form>
         </div>
+
         <div class="tab-pane fade" id="profile-md" role="tabpanel" aria-labelledby="profile-tab-md">
-            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
-                Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
-                farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip
-                jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna
-                delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan
-                fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry
-                richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus
-                tattooed echo park.</p>
+        Зарплата {{$user[0]['salary']}}
         </div>
+
         <div class="tab-pane fade" id="contact-md" role="tabpanel" aria-labelledby="contact-tab-md">
-            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo
-                retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer,
-                iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony.
-                Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles
-                pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of
-                them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+
         </div>
     </div>
 @stop
