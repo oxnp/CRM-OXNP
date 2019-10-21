@@ -10,6 +10,7 @@
         </ul>
     </div>
     <div class="user_menu">
+        <div class="add_but"><i class="fas fa-plus-circle" data-toggle="modal" data-target="#mod"></i></div>
         <div class="user_profile">
             <a href="#"><img src="/images/no-avatar.png"></a>
         </div>
