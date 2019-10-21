@@ -1,5 +1,6 @@
 @extends('layouts.default')
 @extends('layouts.projects-list-sidebar')
+@extends('layouts.header')
 @section('content')
     <table width="500px">
         <thead>

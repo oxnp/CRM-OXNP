@@ -1,5 +1,6 @@
 @extends('layouts.default')
 @extends('layouts.projects-list-sidebar')
+@extends('layouts.header')
 @section('content')
 <table>
     <thead>
@@ -36,12 +37,12 @@
             <td>
                 <select name="who_used" class="form-control">
                     <optgroup label="Другое">
-                        <option value="Общее пользование" @if('Общее пользование' == $item['who_used']) selected @endif>Общее пользование</option>
-                        <option value="Склад" @if('Склад' == $item['who_used']) selected @endif>Склад</option>
+                        <option value="Общее пользование,0" @if('Общее пользование' == $item['who_used']) selected @endif>Общее пользование</option>
+                        <option value="Склад,0" @if('Склад' == $item['who_used']) selected @endif>Склад</option>
                     </optgroup>
                     <optgroup label="Сотрудники">
                     @foreach($users as $user)
-                        <option value="{{$user['name']}}"  @if($user['name'] == $item['who_used']) selected @endif>{{$user['name']}}</option>
+                        <option value="{{$user['name']}},{{$user['id']}}"  @if($user['name'] == $item['who_used']) selected @endif>{{$user['name']}}</option>
                     @endforeach
                     </optgroup>
                 </select>
@@ -88,12 +89,12 @@
         <td>
             <select name="who_used" class="form-control">
                 <optgroup label="Другое">
-            <option value="Общее пользование">Общее пользование</option>
-            <option value="Склад">Склад</option>
+            <option value="Общее пользование,0">Общее пользование</option>
+            <option value="Склад,0">Склад</option>
                 </optgroup>
                 <optgroup label="Сотрудники">
                 @foreach($users as $user)
-                    <option value="{{$user['name']}}">{{$user['name']}}</option>
+                    <option value="{{$user['name']}},{{$user['id']}}">{{$user['name']}}</option>
                 @endforeach
                 </optgroup>
             </select>

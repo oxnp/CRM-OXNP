@@ -57,4 +57,7 @@ class InventoryCategories extends Model
         }
         return $result;
     }
+
+
+
 }

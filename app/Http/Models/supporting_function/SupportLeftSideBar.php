@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SupportLeftSideBar extends Model
 {
-    /*get left tree menu
+    /**
+     * get left tree menu
     * @param array $categories_to_project, array $tasks, array $bugs
     * @return array
     */
@@ -35,7 +36,8 @@ class SupportLeftSideBar extends Model
         }
         return $tree_category_and_task;
     }
-    /*get different category on list category and project category
+    /**
+     * get different category on list category and project category
     * @param array $categories_to_project, array $projects_categories
     * @return array
     */
@@ -48,7 +50,8 @@ class SupportLeftSideBar extends Model
         }
         return $projects_categories;
     }
-    /*get left tree menu by sprint
+    /**
+    *get left tree menu by sprint
     * @param array $categories_to_project, array $tasks, array $bugs, array $sprints
     * @return array
     */

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\users;
 
+use App\Http\Models\inventories\Inventories;
 use App\Http\Models\projects\Projects;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -50,6 +51,7 @@ class usersController extends Controller
      */
     public function show($id)
     {
+
         $user = User::getUser($id);
         $projects = Projects::getProjects();
 
@@ -62,11 +64,10 @@ class usersController extends Controller
 
         $roles = User::getRolesUsers();
         $statuses = User::getUsersStatuses();
-       // dd($user);
+        //dd($user);
         $d = User::getSumDaysUserById($id,$year_from,$year_to,$month_from,$month_to,$day_from,$day_to);
-
-
-        return view('users.user')->with(['user'=>$user,'projects'=>$projects,'roles'=>$roles,'statuses'=>$statuses]);
+        $inventories = Inventories::getInventoriesByUserId($id);
+        return view('users.user')->with(['user'=>$user,'projects'=>$projects,'roles'=>$roles,'statuses'=>$statuses,'inventories'=>$inventories]);
     }
 
     /**
@@ -89,7 +90,22 @@ class usersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       // dd($request->all());
+        $avatar = '';
+        if (isset($request->avatar)){
+            $avatar = $this->storeUserAvatar($request->file('avatar'), $id);
+            User::updateUserById($request, $avatar, $id);
+        }else{
+            User::updateUserById($request,$avatar, $id);
+        }
+
+        return redirect()->route('users.show',$id);
+    }
+    public function storeUserAvatar($file, $id){
+        $storage = $file->store('public/users/' . $id);
+        $name_file = explode('/', $storage);
+        $storage = '/storage/app/public/users/' . $id . '/' . $name_file[3];
+        return $storage;
     }
 
     /**
