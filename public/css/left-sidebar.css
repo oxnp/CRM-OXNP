@@ -1,3 +1,137 @@
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+.leftfix{
+    width:320px;
+    position:fixed;
+    left:0;
+    top:0;
+    height:100%;
+    padding:10px;
+    background: linear-gradient(180deg, #042454 0%, #00060E 100%);
+}
+.leftfix ul{
+    margin:0;
+    padding:0;
+}
+.leftfix ul li a{
+    font-weight:500;
+    font-size:17px;
+    color:#fff;
+    text-decoration:none;
+    margin:0 20px;
+    display:flex;
+    align-items:center;
+    height:58px;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    border-bottom: 1px solid #3FA3FF;
+    position:relative;
+}
+.leftfix ul li a i{
+    margin-right:15px;
+    width:20px;
+    color:#3FA3FF;
+    display:inline-block;
+    text-align:center;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+.leftfix ul li a:after,
+.leftfix ul li a:before{
+    content:'';
+    position:absolute;
+    top:-1px;
+    height:calc(100% + 2px);
+    width:20px;
+    background:#3FA3FF;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    opacity:0;
+}
+.leftfix ul li a:hover:after,
+.leftfix ul li a:hover:before{
+    opacity:1;
+}
+.leftfix ul li a:after{
+    right:-20px;
+    border-radius:0 10px 10px 0;
+}
+.leftfix ul li a:before{
+    left:-20px;
+    border-radius:10px 0 0 10px;
+}
+.leftfix ul li a:hover{
+    background:#3FA3FF;
+}
+.leftfix ul li a:hover i{
+    color:#fff;
+}
+.leftfix ul li:first-child a{
+    border-top:1px solid #3FA3FF;
+}
+.logo{
+    padding:30px 30px 60px;
+}
+.maincont{
+    width:calc(100% - 320px);
+    margin-left:320px;
+    padding:0 50px;
+}
+.header{
+    padding:45px 0;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+}
+.top_menu ul{
+    padding:0;
+    margin:0;
+    display:flex;
+    align-items:center;
+}
+.top_menu ul li{
+    display: inline-block;
+    margin-right:60px;
+}
+.top_menu i{
+    font-size:20px;
+    color:#3FA3FF;
+}
+.top_menu ul li:first-child{
+    margin-right: 30px;
+}
+.header .user_profile img{
+    width:36px;
+    height:36px;
+    border-radius:100%;
+}
+.top_menu ul li a{
+    color:#363636;
+    font-weight:600;
+    font-size:16px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 ul.menu {
     padding: 0;
     list-style: none;

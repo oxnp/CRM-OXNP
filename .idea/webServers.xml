@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="e0d3132a-09a7-4afb-9acb-385865ee9525" name="OXNP-CRM" url="http://oxnp.com">
-        <fileTransfer host="oxnp.com" port="21">
+      <webServer id="e0d3132a-09a7-4afb-9acb-385865ee9525" name="OXNP-CRM" url="http://crm.oxnp.com">
+        <fileTransfer host="oxnp.com" port="21" rootFolder="/crm.oxnp.com">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
