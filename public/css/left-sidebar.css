@@ -95,8 +95,8 @@ body{
     margin-right: 30px;
 }
 .header .user_profile img{
-    width:36px;
-    height:36px;
+    width:50px;
+    height:50px;
     border-radius:100%;
 }
 .top_menu ul li a{
@@ -183,6 +183,94 @@ body{
     font-size:26px;
     cursor:pointer;
 }
+.whbg{
+    margin-bottom:30px;
+}
+.whbg .inner{
+    background: #FFFFFF;
+    box-shadow: 7px 7px 12px rgba(193, 193, 193, 0.21);
+    border-radius: 10px;
+    height:100%;
+    padding:30px;
+    position:relative;
+}
+.whbg .inner a.edit_fields i{
+    color:#3FA3FF;
+    font-size:22px;
+}
+.whbg .inner a.edit_fields{
+    position: absolute;
+    top:30px;
+    right:30px;
+}
+.divided{
+    display:flex;
+    flex-wrap: wrap;
+}
+.inp{
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+    clear:both;
+}
+.inp:last-child{
+    margin-bottom: 0;
+}
+.inp label{
+    color: #363636;
+    font-size:15px;
+    font-weight:600;
+}
+.inp textarea,
+.inp select,
+.inp input{
+    border:0;
+    color: #676767;
+    font-size:15px;
+    width:100%;
+    background:none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    resize:none;
+}
+.inp textarea:focus,
+.inp select:focus,
+.inp input:focus{
+    outline:none;
+}
+.inp_head{
+    color: #363636;
+    font-size:17px;
+    font-weight:600;
+    margin-bottom:40px;
+}
+.inp textarea{
+    border: 1px solid #DCDCDC;
+    box-shadow: 4px 4px 7px rgba(196, 196, 196, 0.18);
+    border-radius: 10px;
+    padding:10px 15px;
+    margin-top:15px;
+}
+ul.cl_projects{
+    margin:0;
+    padding:0 15px;
+}
+ul.cl_projects li{
+    display:block;
+    margin-bottom:20px;
+}
+ul.cl_projects li a{
+    font-size:15px;
+    color:#676767;
+}
+
+
+
+
+
+
 
 
 
@@ -194,7 +282,7 @@ body{
 ul.menu {
     padding: 0;
     list-style: none;
-    width: 400px;
+    width: 100%;
     margin: 20px auto;
     font-family: 'Roboto';
     box-shadow: 0px 0px 25px #00000070;
