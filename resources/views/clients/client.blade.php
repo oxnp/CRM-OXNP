@@ -11,15 +11,18 @@
         <div class="divided row">
             <div class="whbg col-lg-4 col-md-6">
                 <div class="inner">
-                    <a class="edit_fields">
-                        <i class="far fa-edit"></i>
-                    </a>
+                    <a class="edit_fields"><i class="far fa-edit"></i></a>
+                    <a class="loader"><i class="fas fa-spinner"></i></a>
+                    <a class="save_fields"><i class="far fa-save"></i></a>
+                    <div class="inp_head col-md-12">
+                        Основные данные
+                    </div>
                     <div class="inp">
                         <div class="col-md-5">
                             <label>first_name</label>
                         </div>
                         <div class="col-md-7">
-                            <input disabled="disabled" name="first_name" value="{{$client['first_name']}}"/>
+                            <input readonly="readonly" name="first_name" value="{{$client['first_name']}}"/>
                         </div>
                     </div>
                     <div class="inp">
@@ -27,7 +30,7 @@
                             <label>last_name</label>
                         </div>
                         <div class="col-md-7">
-                            <input disabled="disabled" name="last_name" value="{{$client['last_name']}}"/>
+                            <input readonly="readonly" name="last_name" value="{{$client['last_name']}}"/>
                         </div>
                     </div>
                     <div class="inp">
@@ -35,7 +38,7 @@
                             <label>country</label>
                         </div>
                         <div class="col-md-7">
-                            <input disabled="disabled" name="country" value="{{$client['country']}}"/>
+                            <input readonly="readonly" name="country" value="{{$client['country']}}"/>
                         </div>
                     </div>
                     <div class="inp">
@@ -43,7 +46,7 @@
                             <label>timezone</label>
                         </div>
                         <div class="col-md-7">
-                            <select disabled="disabled" name="timezone">
+                            <select readonly="readonly" disabled="disabled" name="timezone">
                                 @for($i=-8;$i<=12;$i++)
                                     @if($i<0)
                                         <option value="GMT{{$i}}"
@@ -63,7 +66,7 @@
                             <label>manager</label>
                         </div>
                         <div class="col-md-7">
-                            <select disabled="disabled" name="manager_id">
+                            <select readonly="readonly" disabled="disabled" name="manager_id">
                                 @foreach($users as $user)
                                     @if ($user['role_id'] == env('MANAGER_ROLE_ID'))
                                         <option value="{{$user['id']}}"
@@ -78,7 +81,7 @@
                             <label>comm_status</label>
                         </div>
                         <div class="col-md-7">
-                            <select disabled="disabled" name="comm_status_id">
+                            <select readonly="readonly" disabled="disabled" name="comm_status_id">
                                 @foreach($clients_statuses as $status)
                                     <option value="{{$status['id']}}"
                                             @if($status['id'] == $client['comm_status_id']) selected @endif>{{$status['name']}}</option>
@@ -91,7 +94,7 @@
                             <label>trust</label>
                         </div>
                         <div class="col-md-7">
-                            <select disabled="disabled" name="trust_id">
+                            <select readonly="readonly" disabled="disabled" name="trust_id">
                                 @foreach($clients_trust as $trust)
                                     <option value="{{$trust['id']}}"
                                             @if($trust['id'] == $client['trust_id']) selected @endif>{{$trust['name']}}</option>
@@ -104,7 +107,7 @@
                             <label>who join</label>
                         </div>
                         <div class="col-md-7">
-                            <select disabled="disabled" name="who_join_user_id">
+                            <select readonly="readonly" disabled="disabled" name="who_join_user_id">
                                 @foreach($users as $user)
                                     <option value="{{$user['id']}}"
                                             @if($user['id'] == $client['who_join_user_id']) selected @endif>{{$user['name']}}</option>
@@ -116,9 +119,9 @@
             </div>
             <div class="whbg col-lg-4 col-md-6">
                 <div class="inner">
-                    <a class="edit_fields">
-                        <i class="far fa-edit"></i>
-                    </a>
+                    <a class="edit_fields"><i class="far fa-edit"></i></a>
+                    <a class="loader"><i class="fas fa-spinner"></i></a>
+                    <a class="save_fields"><i class="far fa-save"></i></a>
                     <div class="inp_head col-md-12">
                         Контактные данные
                     </div>
@@ -127,7 +130,7 @@
                             <label>email</label>
                         </div>
                         <div class="col-md-7">
-                            <input disabled="disabled" name="email" value="{{$client['email']}}"/>
+                            <input readonly="readonly" name="email" value="{{$client['email']}}"/>
                         </div>
                     </div>
                     <div class="inp">
@@ -135,7 +138,7 @@
                             <label>messanger</label>
                         </div>
                         <div class="col-md-7">
-                            <input disabled="disabled" name="messanger" value="{{$client['messanger']}}"/>
+                            <input readonly="readonly" name="messanger" value="{{$client['messanger']}}"/>
                         </div>
                     </div>
                     <div class="inp">
@@ -143,22 +146,22 @@
                             <label>description_client</label>
                         </div>
                         <div class="col-md-12">
-                            <textarea rows="5" disabled="disabled" name="description_client">{{$client['description_client']}}</textarea>
+                            <textarea rows="8" readonly="readonly" name="description_client">{{$client['description_client']}}</textarea>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="whbg col-lg-4 col-md-6">
                 <div class="inner">
-                    <a class="edit_fields">
-                        <i class="far fa-edit"></i>
-                    </a>
+                    <a class="edit_fields"><i class="far fa-edit"></i></a>
+                    <a class="loader"><i class="fas fa-spinner"></i></a>
+                    <a class="save_fields"><i class="far fa-save"></i></a>
                     <div class="inp">
                         <div class="col-md-12">
                             <label>other_info</label>
                         </div>
                         <div class="col-md-12">
-                            <textarea rows="13" disabled="disabled" name="other_info">{{$client['other_info']}}</textarea>
+                            <textarea rows="16" readonly="readonly" name="other_info">{{$client['other_info']}}</textarea>
                         </div>
                     </div>
                 </div>
