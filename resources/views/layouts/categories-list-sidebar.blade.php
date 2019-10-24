@@ -84,6 +84,36 @@
         @endforeach
         @endif
         @endforeach
+        <li class="list">
+            <a href="#"><i class="fa fa-plus" aria-hidden="true"></i>Add category</a>
+            <ul class="items">
+                <a class="goback"><i class="fas fa-chevron-left"></i> Go back</a>
+                <!--Select category
+                @if($projects_categories)
+                    <form name="add-category-to-project" action="{{route('add_category_to_project',$project['id'])}}"
+                          method="POST">
+                        <select name="categoriestoproject" class="form-control">
+                            @foreach($projects_categories as $category)
+                                <option value="{{$category['name']}}">{{$category['name']}}</option>
+                            @endforeach
+                        </select>
+                        {{csrf_field()}}
+                        <input type="submit" class="form-control btn btn-primary" value="Add category"/>
+                    </form>
+                @endif
+                New category-->
+                <form name="add-category" action="{{route('add_category_to_project',$project['id'])}}" method="POST">
+                    <input list="catlist" autocomplete="off" type="text" name="categoriestoproject" class="form-control"/>
+                    <datalist id="catlist">
+                        @foreach($projects_categories as $category)
+                            <option>{{$category['name']}}</option>
+                        @endforeach
+                    </datalist>
+                    {{csrf_field()}}
+                    <input type="submit" class="form-control btn btn-primary" value="Add category"/>
+                </form>
+            </ul>
+        </li>
     </ul>
 
 
@@ -136,40 +166,22 @@
 
             </li>
         @endforeach
+        <li class="item">
+            <a href="#"><i class="fa fa-plus" aria-hidden="true"></i>Add sprint</a>
+            <ul class="items">
+                <a class="goback"><i class="fas fa-chevron-left"></i> Go back</a>
+                <form name="add-sprint" action="{{route('sprints_add',$project['id'])}}" method="POST">
+                    <label class="control-label">name</label>
+                    <input type="text" name="name" class="form-control"/>
+                    <label class="control-label">date_from</label>
+                    <input type="date" name="date_from" class="form-control"/>
+                    <label class="control-label">date_to</label>
+                    <input type="date" name="date_to" class="form-control"/>
+
+                    {{csrf_field()}}
+                    <input type="submit" class="form-control btn btn-primary" value="Add Sprint"/>
+                </form>
+            </ul>
+        </li>
     </ul>
-
-    <!--
-    Select category
-@if($projects_categories)
-        <form name="add-category-to-project" action="{{route('add_category_to_project',$project['id'])}}" method="POST">
-        <select name="categoriestoproject" class="form-control">
-            @foreach($projects_categories as $category)
-            <option value="{{$category['id']}}">{{$category['name']}}</option>
-            @endforeach
-                </select>
-{{csrf_field()}}
-                <input type="submit" class="form-control btn btn-primary" value="Add category"/>
-            </form>
-@endif
-            New category
-            <form name="add-category" action="{{route('add_category_to_project',$project['id'])}}" method="POST">
-        <input type="text" name="categoriestoproject" class="form-control"/>
-        {{csrf_field()}}
-            <input type="submit" class="form-control btn btn-primary" value="Add category"/>
-        </form>
-
-        Add sprint
-        <form name="add-sprint" action="{{route('sprints_add',$project['id'])}}" method="POST">
-        <label class="control-label">name</label>
-        <input type="text" name="name" class="form-control"/>
-        <label class="control-label">date_from</label>
-        <input type="text" name="date_from" class="form-control"/>
-        <label class="control-label">date_to</label>
-        <input type="text" name="date_to" class="form-control"/>
-
-        {{csrf_field()}}
-            <input type="submit" class="form-control btn btn-primary" value="Add Sprint"/>
-        </form>
--->
-
 @stop
