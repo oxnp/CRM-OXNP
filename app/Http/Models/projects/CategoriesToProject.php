@@ -12,39 +12,47 @@ class CategoriesToProject extends Model
     public $timestamps = false;
     protected $fillable = ['project_id','category_id'];
 
-    /* Add category to project and to list category
+    /**
+     * Add category to project and to list category
     * @param int $id, string $name
-    * @return array or false
+    * @return array
     */
     public static function addCategoryToProject($id,$name){
         $add_category = ProjectsCategories::create([
             'name'=> $name
-        ]);
-        if ($add_category){
-            $category_data = $add_category->toArray();
-            $add_category_to_project = parent::addCategoryToProjectById($id,$category_data['id']);
-            return $add_category_to_project;
-        }else{
-            return false;
-        }
+        ])->toArray();
+    return  $add_category;
     }
 
-    /* Add category to project and to list category by id
+    /**
+     * Add category to project and to list category by id
     * @param int $id, int $category_id
     * @return array or false
     */
-    public static function addCategoryToProjectById($id,$category_id){
+    public static function addCategoryToProjectById($project_id,$name){
+
+        $category_id = ProjectsCategories::whereName($name)->get()->toArray();
+
+        if(empty($category_id)){
+            $search_cat = parent::addCategoryToProject($project_id,$name);
+            $category_id = $search_cat['id'];
+        }else{
+            $category_id = $category_id[0]['id'];
+        }
+
         $add_category_to_project = CategoriesToProject::create([
-            'project_id'=>$id,
+            'project_id'=>$project_id,
             'category_id'=>$category_id
         ]);
+
         if($add_category_to_project ){
             return $add_category_to_project->toArray();
         }else{
             return false;
         }
     }
-    /* get categories by project ID
+    /**
+     * get categories by project ID
     * @param int $id
     * @return array
     */
@@ -55,7 +63,8 @@ class CategoriesToProject extends Model
          return $categories_to_project;
 
     }
-    /* get table name
+    /**
+     * get table name
     * @param
     * @return string
     */

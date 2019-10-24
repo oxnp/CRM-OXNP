@@ -43,11 +43,7 @@ class projectsController extends Controller
     public function addCategoryToProjectById(Request $request, $id)
     {
         try {
-            if (is_numeric($request->categoriestoproject)) {
-                $add_caegory_to_project = CategoriesToProject::addCategoryToProjectById($id, $request->categoriestoproject);
-            } else {
-                $add_caegory_to_project = CategoriesToProject::addCategoryToProject($id, $request->categoriestoproject);
-            }
+            CategoriesToProject::addCategoryToProjectById($id, $request->categoriestoproject);
             return redirect()->route('projects.show', $id);
         } catch (QueryException $exception) {
             $this->err['errors'] = 'No add category to project';
