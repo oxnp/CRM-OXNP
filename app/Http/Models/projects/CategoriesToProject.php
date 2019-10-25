@@ -17,7 +17,7 @@ class CategoriesToProject extends Model
     * @param int $id, string $name
     * @return array
     */
-    public static function addCategoryToProject($id,$name){
+    public static function addCategoryToProject($name){
         $add_category = ProjectsCategories::create([
             'name'=> $name
         ])->toArray();
@@ -34,7 +34,7 @@ class CategoriesToProject extends Model
         $category_id = ProjectsCategories::whereName($name)->get()->toArray();
 
         if(empty($category_id)){
-            $search_cat = parent::addCategoryToProject($project_id,$name);
+            $search_cat = parent::addCategoryToProject($name);
             $category_id = $search_cat['id'];
         }else{
             $category_id = $category_id[0]['id'];
