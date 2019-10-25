@@ -45,7 +45,7 @@ class tasksController extends Controller
 
                 $storage = '/storage/app/public/projects/'.$project_id.'/tasks/'. $task_id .'/'. $name_file[5];
 
-                $type_file = $file->getClientOriginalExtension();
+                $type_file = strtolower($file->getClientOriginalExtension());
                 $project_attach = TasksAttachments::setAttachmentsByTaskId($task_id, $type_file, $storage);
                 if ($project_attach) {
                     $files_added++;

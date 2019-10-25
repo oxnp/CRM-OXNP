@@ -84,7 +84,7 @@ class projectsController extends Controller
                 $storage = $file->store('public/projects/' . $id);
                 $name_file = explode('/', $storage);
                 $storage = '/storage/app/public/projects/' . $id . '/' . $name_file[3];
-                $type_file = $file->getClientOriginalExtension();
+                $type_file =  strtolower($file->getClientOriginalExtension());
                 $project_attach = ProjectsAttachments::setAttachmentsByProjectId($id, $type_file, $storage);
                 if ($project_attach) {
                     $files_added++;
@@ -123,7 +123,7 @@ class projectsController extends Controller
         $users = User::getUsers();
 
         $total_time_for_project = Projects::getFullTimeForProjectById($id);
-       // dd($total_time_for_project);
+
         $this->result_action['files_added'] = Session::get('files_added');
 
         return view('projects.project')->with([
