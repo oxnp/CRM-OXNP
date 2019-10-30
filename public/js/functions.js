@@ -5,6 +5,7 @@ $(document).ready(function(){
         var bl = $(this).closest('.whbg');
         bl.find('a.save_fields').show();
         bl.find('input').removeAttr('readonly');
+        bl.find('input[type="radio"]').removeAttr('disabled');
         bl.find('select').removeAttr('readonly');
         bl.find('select').removeAttr('disabled');
         bl.find('textarea').removeAttr('readonly');
@@ -24,6 +25,7 @@ $(document).ready(function(){
             },
             success: function(data){
                 form.find('select').attr('disabled','disabled');
+                form.find('input[type="radio"]').attr('disabled','disabled');
                 $('.global_success').addClass('vis');
                 bl.find('a.loader').hide();
                 bl.find('a.edit_fields').show();
@@ -86,4 +88,12 @@ $(document).ready(function(){
         e.preventDefault();
     });
     /*End global*/
+    
+    /*Attachment buttons*/
+    $('a.show_attach').click(function () {
+       $(this).next().slideToggle();
+    });
+    /*End attachment button*/
+    
+    
 })
