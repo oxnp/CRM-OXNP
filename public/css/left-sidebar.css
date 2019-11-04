@@ -554,7 +554,35 @@ a.show_attach{
     font-weight: 500;
     font-size: 15px;
 }
-
-
-
-
+.realtime{
+    color: #363636;
+    font-weight: 500;
+    font-size: 30px;
+    margin-bottom:30px;
+}
+form[name='stop_tracker'] label[for='submit'] i{
+    color:red;
+}
+label[for='submit'] i{
+    font-size:27px;
+    color:#7CBC4A;
+    cursor:pointer;
+}
+label[for='submit']+input[type='submit']{
+    display: none;
+}
+.gradline.full{
+    background: linear-gradient(180deg, #FFA194 0%, #C45546 100%);
+    height:12px;
+    width:100%;
+    margin-right: 15px;
+}
+.gradline.left{
+    background: linear-gradient(180deg, #6287E9 0%, #3356B1 100%);
+    height:12px;
+    margin-right: 15px;
+}
+.flexed{
+    display:flex;
+    align-items: center;
+}

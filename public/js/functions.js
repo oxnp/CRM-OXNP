@@ -94,6 +94,33 @@ $(document).ready(function(){
        $(this).next().slideToggle();
     });
     /*End attachment button*/
-    
+
+
+    /*Timer live tracking*/
+    function timer(){
+        var $worked = $("#tracking_time");
+        var myTime = $worked.html();
+        var ss = myTime.split(":");
+        var dt = new Date();
+        dt.setHours(ss[0]);
+        dt.setMinutes(ss[1]);
+        dt.setSeconds(ss[2]);
+        var dt2 = new Date(dt.valueOf() + 1000);
+        var ts = dt2.toTimeString().split(" ")[0];
+        $worked.html(ts);
+    };
+    if($('#tracking_time').length) {
+        setInterval(function () {
+            timer();
+        }, 1000);
+    }
+    /*End timer*/
+
+    /*Lefted time graph width*/
+    let init_width = $('.gradline.full').width();
+    let left_perc = $('.leftperc').text();
+    let left_width = init_width/100*left_perc;
+    $('.gradline.left').css('width',left_width);
+    /*End Lefted time graph width*/
     
 })
