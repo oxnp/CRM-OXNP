@@ -201,7 +201,7 @@
                         <div class="gradline full"></div>
                         <span class="fulltime">{{$task['time_estimate']}}</span>
                         <?php $minutes = date('i', strtotime($task['time_estimate']));
-                        $hours = date('h', strtotime($task['time_estimate']));
+                        $hours = date('H', strtotime($task['time_estimate']));
                         $h_to_min = $hours * 60;
                         $sum = $minutes + $h_to_min;
                         $perc = $sum / 100;?>
@@ -215,7 +215,7 @@
                         <?php $datetime1 = date_create($task['time_estimate']);
                         $datetime2 = date_create($task['time_tracker']);
                         $lefted = date_diff($datetime1, $datetime2);
-                        $leftmins = $lefted->h + $lefted->i;?>
+                        $leftmins = $lefted->h*60 + $lefted->i;?>
                         <span class="hide leftperc"><?php echo $left_perc = round($leftmins / $perc);?></span>
                         <div class="gradline left"></div>
                         <div class="lefttime">

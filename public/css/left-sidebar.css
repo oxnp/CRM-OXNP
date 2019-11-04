@@ -252,7 +252,7 @@ a.loader{
     display:flex;
     align-items:center;
     flex-wrap:wrap;
-    margin-bottom:20px;
+    margin-bottom:25px;
     clear:both;
 }
 .inp:last-child{
@@ -262,6 +262,7 @@ a.loader{
     color: #363636;
     font-size:15px;
     font-weight:600;
+    margin-bottom:0;
 }
 .inp input,
 .inp textarea,
@@ -586,3 +587,14 @@ label[for='submit']+input[type='submit']{
     display:flex;
     align-items: center;
 }
+
+
+
+
+
+
+
+
+
+
+
