@@ -1,6 +1,17 @@
 @extends('layouts.default')
 @extends('layouts.categories-list-sidebar')
+@extends('layouts.header')
 @section('content')
+
+    <div class="top_panel">
+        <div class="heading"><i class="fas fa-rocket"></i>
+            Баг <span>{{$bug['name']}}</span>
+        </div>
+    </div>
+    
+
+
+
     <div class="col-md-4">
         <form action="{{route('update_bug',[$project_id,$category_id,$bug['id']])}}" method="POST">
             <label class="control-label">name</label>
