@@ -255,9 +255,6 @@ a.loader{
     margin-bottom:25px;
     clear:both;
 }
-.inp:last-child{
-    margin-bottom: 0;
-}
 .inp label{
     color: #363636;
     font-size:15px;
