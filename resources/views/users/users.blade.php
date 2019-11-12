@@ -2,18 +2,25 @@
 @extends('layouts.projects-list-sidebar')
 @extends('layouts.header')
 @section('content')
-    <table width="500px">
-        <thead>
-        <tr>
-            <th>Имя</th>
-            <th>Должность</th>
-        </tr>
-        </thead>
-        @foreach($users as $user)
-            <tr>
-                <td><a href="{{route('users.show',$user['id'])}}">{{$user['name']}}</a></td>
-                <td>{{$user['role_name']}}</td>
-            </tr>
+    <div class="top_panel">
+        <div class="heading"><i class="fas fa-user-circle"></i>Сотрудники</div>
+    </div>
+    <div class="t_content">
+        <div class="thead">
+            <div class="col-md-6">Имя</div>
+            <div class="col-md-6">Должность</div>
+        </div>
+        <div class="tbody">
+            @foreach($users as $user)
+                <div class="t_row">
+                    <div class="col-md-6">
+                        <a href="{{route('users.show',$user['id'])}}">{{$user['name']}}</a>
+                    </div>
+                    <div class="col-md-6">
+                        {{$user['role_name']}}
+                    </div>
+                </div>
             @endforeach
-    </table>
+        </div>
+    </div>
 @stop

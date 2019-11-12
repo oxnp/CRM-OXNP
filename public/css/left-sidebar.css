@@ -584,10 +584,31 @@ label[for='submit']+input[type='submit']{
     display:flex;
     align-items: center;
 }
-
-
-
-
+.user_ava{
+    height:50px;
+}
+.nav-tabs{
+    border:0;
+}
+.nav-tabs>li{
+    margin-left:10px;
+}
+.nav-tabs>li>a{
+    color: #363636;
+    background: #FFFFFF;
+    border: 1px solid #DCDCDC;
+    border-radius: 10px;
+    padding:7px 15px;
+    font-size: 15px;
+    margin:0;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover,
+.nav-tabs>li>a:hover{
+    background: #3FA3FF;
+    box-shadow: 2px 2px 12px #50ABFF;
+    border:1px solid #3FA3FF;
+    color:#fff;
+}
 
 
 
